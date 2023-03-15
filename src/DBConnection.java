@@ -1,32 +1,30 @@
 import java.sql.*;
 //Db Conn
- public class DBConnection {
+public class DBConnection {
 
 
-     //create connection
-     Connection con = DriverManager.getConnection("jdbc:mysql://smcse-stuproj00.city.ac.uk:3306/in2018g04");
 
-     //create statements
-     Statement stm = con.createStatement();
+        public static void main(String[] args) {
+            Connection conn = null;
 
-     //insert statements
-     String s = "INSERT INTO STUDENT VALUES(/* data from sql */)";
-
-     //update statements
-     String a = "UPDATE STUDENT SET  /*blah blah */ WHERE /*blah blah*/ ";
-
-     //delete statements
-     String x = "DELETE STUDENT */ WHERE /*blah blah*/ ";
-
-     //execute statement
-     //stm.execute(s);
-     //stm.execute(a);
-     //stm.execute(x);
-
-     //close connection
-     //con.close();
-
-     public DBConnection() throws SQLException {
-     }
- }
-
+            try {
+                // Load the MySQL JDBC driver
+                // Establish a connection to the MySQL database
+                conn = DriverManager.getConnection("jdbc:mysql://smcse-stuproj00.city.ac.uk:3306/in2018g04","in2018g04_d","1Lzc6IUm");
+                System.out.println("wokred");
+                // Do something with the connection
+                // ...
+            }  catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                // Close the connection
+                try {
+                    if (conn != null) {
+                        conn.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }

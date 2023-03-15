@@ -1,17 +1,24 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Login extends JFrame {
 
     private JTextField asdasdTextField;
     private JPasswordField passwordField1;
     private JPanel Hello;
+
     private JButton resetButton;
     private JButton loginButton;
     private Admin ad;
-//Change made testing 2
+
 
     public Login() {
         this.setContentPane(this.Hello);
@@ -27,7 +34,6 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Objects.equals(asdasdTextField.getText(), "Admin") && Objects.equals(passwordField1.getText(), "Admin")) {
-                    System.out.println("hi");
                     Admin ad = new Admin();
                     ad.setContentPane(ad.getAplane());
                     ad.setVisible(true);
@@ -43,13 +49,9 @@ public class Login extends JFrame {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Login h = new Login();
 
-    }
 
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
+}
 }
