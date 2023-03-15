@@ -9,23 +9,22 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Login extends JFrame {
+    public class Login extends JFrame {
 
-    private JTextField asdasdTextField;
-    private JPasswordField passwordField1;
-    private JPanel Hello;
+        private JTextField asdasdTextField;
+        private JPasswordField passwordField1;
+        private JPanel Hello;
 
-    private JButton resetButton;
-    private JButton loginButton;
-    private Admin ad;
+        private JButton resetButton;
+        private JButton loginButton;
+        private Admin ad;
 
 
     public Login() {
         this.setContentPane(this.Hello);
 
-        this.setVisible(true
-        );
-        this.setSize(400, 400);
+        this.setVisible(true);
+        this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -37,7 +36,7 @@ public class Login extends JFrame {
                     Admin ad = new Admin();
                     ad.setContentPane(ad.getAplane());
                     ad.setVisible(true);
-                    ad.setSize(400, 400);
+                    ad.setSize(800, 600);
                     ad.setLocationRelativeTo(null);
                     ad.setDefaultCloseOperation(EXIT_ON_CLOSE);
                     dispose();
