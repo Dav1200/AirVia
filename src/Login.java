@@ -3,13 +3,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-    public class Login extends JFrame {
+public class Login extends JFrame {
 
         private JTextField asdasdTextField;
         private JPasswordField passwordField1;
@@ -17,7 +15,7 @@ import java.util.logging.Logger;
 
         private JButton resetButton;
         private JButton loginButton;
-        private Admin ad;
+        private AdminMenu ad;
 
 
     public Login() {
@@ -32,8 +30,8 @@ import java.util.logging.Logger;
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Objects.equals(asdasdTextField.getText(), "Admin") && Objects.equals(passwordField1.getText(), "Admin")) {
-                    Admin ad = new Admin();
+               // if (Objects.equals(asdasdTextField.getText(), "Admin") && Objects.equals(passwordField1.getText(), "Admin")) {
+                    AdminMenu ad = new AdminMenu();
                     ad.setContentPane(ad.getAplane());
                     ad.setVisible(true);
                     ad.setSize(800, 600);
@@ -41,14 +39,32 @@ import java.util.logging.Logger;
                     ad.setDefaultCloseOperation(EXIT_ON_CLOSE);
                     dispose();
 
-                }
+              //  }
             }
 
         });
     }
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        try (//Get connection to the database
+             Connection con = DBConnection.getConnection();
+        ){
+
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM `Staff`");
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+            {
+                System.out.println(  rs.getString(1));
+            }
+        }
+        catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex);
+        }
+
+
+
         Login h = new Login();
 
 
