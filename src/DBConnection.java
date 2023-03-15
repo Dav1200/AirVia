@@ -9,7 +9,6 @@ import java.sql.*;
      //create statements
      Statement stm = con.createStatement();
 
-     //execute statement
      //insert statements
      String s = "INSERT INTO STUDENT VALUES(/* data from sql */)";
 
@@ -19,9 +18,13 @@ import java.sql.*;
      //delete statements
      String x = "DELETE STUDENT */ WHERE /*blah blah*/ ";
 
+     //execute statement
+     //stm.execute(s);
+     //stm.execute(a);
+     //stm.execute(x);
 
      //close connection
-     con.close();
+     //con.close();
 
      public DBConnection() throws SQLException {
      }
