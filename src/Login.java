@@ -31,6 +31,7 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                // if (Objects.equals(asdasdTextField.getText(), "Admin") && Objects.equals(passwordField1.getText(), "Admin")) {
+
                     AdminMenu ad = new AdminMenu();
                     ad.setContentPane(ad.getAplane());
                     ad.setVisible(true);
@@ -46,7 +47,8 @@ public class Login extends JFrame {
     }
 
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args )  {
+/*
         try (//Get connection to the database
              Connection con = DBConnection.getConnection();
         ){
@@ -63,6 +65,8 @@ public class Login extends JFrame {
             System.out.println(ex);
         }
 
+
+ */
 
 
         Login h = new Login();
