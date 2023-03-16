@@ -87,5 +87,8 @@ public class AdminMenu extends JFrame {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+
     }
+
 }

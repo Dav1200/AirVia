@@ -1,9 +1,13 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 public class AdvisorMenu extends JFrame {
     public AdvisorMenu() {
+
+        showCustomer();
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -39,8 +43,55 @@ public class AdvisorMenu extends JFrame {
     private JButton registerTicketButton;
     private JButton createIndividualReportButton;
     private JLabel registerTicketLabel;
+    private JTable CustomerTable;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+    public void showCustomer() {
+        try (
+                Connection con = DBConnection.getConnection();
+        ) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM Customer");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) CustomerTable.getModel();
+            CustomerTable.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID;
+            while (resultSet.next()) {
+                ID = resultSet.getString(1);
+                Firstname = resultSet.getString(2);
+                Lastname = resultSet.getString(3);
+                Email = resultSet.getString(4);
+                CustomerType = resultSet.getString(5);
+                DiscountType = resultSet.getString(6);
+                DiscountAmount = resultSet.getString(7);
+                Address = resultSet.getString(8);
+                TotalTickets = resultSet.getString(9);
+                StaffID = resultSet.getString(10);
+
+                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        //search customer
+
     }
 }
