@@ -12,6 +12,7 @@ public class DBConnection {
                 // Do something with the connection
                 // ...
             }  catch (SQLException e) {
+
                 e.printStackTrace();
             } finally {
                 // Close the connection

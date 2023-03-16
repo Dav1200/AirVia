@@ -4,14 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class AdminMenu extends JFrame{
-    public AdminMenu()  {
+public class AdminMenu extends JFrame {
+    public AdminMenu() {
 
         //manual input
         //createTable();
         shows();
 
-                workButton.addActionListener(new ActionListener() {
+        workButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Login a = new Login();
@@ -39,7 +39,7 @@ public class AdminMenu extends JFrame{
     private JTabbedPane TabMenu;
     private JButton userlistButton;
     private JTable DB;
-private DBConnection db;
+    private DBConnection db;
 
     //manual input
     /*
@@ -60,9 +60,9 @@ private DBConnection db;
 
         try (
                 Connection con = DBConnection.getConnection();
-                ) {
+        ) {
 
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM `Staff`");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM Staff");
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) DB.getModel();
@@ -71,13 +71,13 @@ private DBConnection db;
             int col = resultSetMetaData.getColumnCount();
             String[] colName = new String[col];
             for (int i = 1; i <= col; i++) {
-                colName[i-1] = resultSetMetaData.getColumnName(i);
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
             }
 
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String StaffID, Firstname, Lastname, Email, Address,Role, Password;
+            String StaffID, Firstname, Lastname, Email, Address, Role, Password;
             while (resultSet.next()) {
                 StaffID = resultSet.getString(1);
                 Firstname = resultSet.getString(2);
@@ -87,7 +87,7 @@ private DBConnection db;
                 Role = resultSet.getString(6);
                 Password = resultSet.getString(7);
 
-                String[] row = {StaffID, Firstname, Lastname, Email, Address, Role ,Password};
+                String[] row = {StaffID, Firstname, Lastname, Email, Address, Role, Password};
                 model.addRow(row);
             }
 
