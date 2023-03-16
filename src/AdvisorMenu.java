@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.sql.*;
 
 public class AdvisorMenu extends JFrame {
@@ -16,6 +17,7 @@ public class AdvisorMenu extends JFrame {
                 dispose();
             }
         });
+
     }
 
     public JPanel getAdPlane() {
@@ -85,13 +87,45 @@ public class AdvisorMenu extends JFrame {
 
                 String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID};
                 model.addRow(row);
+
+
+                // row filter
+                TableRowSorter tableRowSorter = new TableRowSorter(model);
+                CustomerTable.setRowSorter(tableRowSorter);
+
+                //search customer
+                searchCustomerButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String searchText = searchCustomerTextField.getText();
+                        tableRowSorter.setRowFilter(new myRowFilter(searchText));
+                    }
+                });
+
             }
 
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        //search customer
-
     }
+
+    /*
+    //search customer
+    public void searchCustomer(String query){
+        //connect to DB
+        try (
+                Connection con = DBConnection.getConnection();
+        ) {
+
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+     */
+    //}
 }
+
