@@ -1,6 +1,23 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AdvisorMenu extends JFrame {
+    public AdvisorMenu() {
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Login a = new Login();
+                dispose();
+            }
+        });
+    }
+
+    public JPanel getAdPlane() {
+        return adPlane;
+    }
+
     private JPanel adPlane;
     private JTabbedPane TabMenu;
     private JButton logoutButton;

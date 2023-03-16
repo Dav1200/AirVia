@@ -6,7 +6,6 @@ import java.sql.*;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
-
         //manual input
         //createTable();
         shows();
@@ -16,12 +15,6 @@ public class AdminMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Login a = new Login();
                 dispose();
-            }
-        });
-        userlistButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("hi");
             }
         });
     }
@@ -37,7 +30,6 @@ public class AdminMenu extends JFrame {
     private JPanel aplane;
     private JButton workButton;
     private JTabbedPane TabMenu;
-    private JButton userlistButton;
     private JTable DB;
     private DBConnection db;
 
@@ -66,6 +58,7 @@ public class AdminMenu extends JFrame {
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) DB.getModel();
+            DB.setRowHeight(25);
 
             //getting column names
             int col = resultSetMetaData.getColumnCount();
