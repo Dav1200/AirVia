@@ -16,5 +16,16 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
+          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
