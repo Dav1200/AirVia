@@ -89,7 +89,13 @@ public class Login extends JFrame {
 
                             case "office manager":
                                 OfficeManagerMenu manager = new OfficeManagerMenu();
-
+                                manager.setContentPane(manager.getoPlane());
+                                manager.setVisible(true);
+                                manager.setSize(800, 600);
+                                manager.setLocationRelativeTo(null);
+                                manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                dispose();
+                                break;
                         }
 
                     } else {

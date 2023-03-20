@@ -25,6 +25,7 @@
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
       </library>
     </orderEntry>
   </component>
