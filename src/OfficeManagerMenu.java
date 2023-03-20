@@ -1,8 +1,8 @@
 import javax.swing.*;
 
 public class OfficeManagerMenu {
-    private JPanel oPlane;
-    private JTabbedPane TabMenu;
+
+    private JTabbedPane tabbedPane1;
 
     public OfficeManagerMenu() {
     }
