@@ -45,13 +45,13 @@ public class AdvisorMenu extends JFrame {
     private JButton createIndividualReportButton;
     private JLabel registerTicketLabel;
     private JTable CustomerTable;
-    private JComboBox comboBox1;
     private JComboBox comboBox2;
     private JTextField textField1;
     private JTextField textField2;
     private JTextField textField4;
     private JSpinner spinner1;
     private JButton printButton;
+    private JComboBox comboBox1;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
