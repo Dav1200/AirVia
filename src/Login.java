@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Random;
+
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 public class Login extends JFrame {
 
@@ -20,9 +28,19 @@ public class Login extends JFrame {
     private JButton resetButton;
     private JButton loginButton;
     private AdminMenu ad;
-
+    private String role;
+    private int code;
+    private String codestr;
+private boolean check;
 
     public Login() {
+        Random rnd = new Random();
+         code = rnd.nextInt(999999);
+        // this will convert any number sequence into 6 character.
+         codestr = String.format("%06d", code);
+        System.out.println(codestr);
+        check = false;
+        role = "";
         error.setVisible(false);
         this.setContentPane(this.Hello);
 
@@ -31,35 +49,30 @@ public class Login extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+
 // testing Taha
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String password = passwordField1.getText();
                 String userName = userNameText.getText();
-                String encrpPass = "";
+                String encrpPass = null;
+
                 try (Connection con = DBConnection.getConnection();) {
                     //SQL QUERY WHICH WILL BE USED GET ROLE FROM LOGIN
 
-                    if (!userName.isEmpty()) {
-                        PreparedStatement ps1 = con.prepareStatement("SELECT Password FROM `Staff` WHERE StaffID = ?");
-
-                        ps1.setString(1, userName);
-
-                        ResultSet rs1 = ps1.executeQuery();
-                        rs1.next();
-                        try {
-                            encrpPass = encryptString(rs1.getString(1));
-                        } catch (NoSuchAlgorithmException ex) {
-                            System.out.println(ex);
-                        }
-
+                    try {
+                        encrpPass = encryptString(password);
+                    } catch (NoSuchAlgorithmException ex) {
+                        System.out.println(ex);
                     }
 
+
+//Encryption
                     PreparedStatement ps = con.prepareStatement("SELECT Role FROM `Staff` WHERE Password = ? and StaffID = ?");
                     //assigns the userName and Password for the Password and userName field in SQL
 
-                    ps.setString(1, password);
+                    ps.setString(1, encrpPass);
 
                     ps.setString(2, userName);
                     //Gets the result from QUERY
@@ -67,36 +80,84 @@ public class Login extends JFrame {
 
 
                     if (rs.next() && encryptString(password).equals(encrpPass)) {
-                        switch (rs.getString("role")) {
-                            case "admin":
-                                AdminMenu admin = new AdminMenu();
-                                admin.setContentPane(admin.getAplane());
-                                admin.setVisible(true);
-                                admin.setSize(800, 600);
-                                admin.setLocationRelativeTo(null);
-                                admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                dispose();
-                                break;
-                            case "travel advisor":
-                                AdvisorMenu advisor = new AdvisorMenu();
-                                advisor.setContentPane(advisor.getAdPlane());
-                                advisor.setVisible(true);
-                                advisor.setSize(800, 600);
-                                advisor.setLocationRelativeTo(null);
-                                advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                dispose();
-                                break;
+                        Authentication auth = new Authentication();
+                        role = (rs.getString("role"));
+                        auth.setContentPane(auth.getAuthPanel());
+                        auth.setVisible(true);
+                        auth.setSize(200, 100);
+                        auth.setLocationRelativeTo(null);
+                        auth.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+/*
+                        Twilio.init("AC2b2098fa2669b835feb2b72bf50c01b0", "2628c89c04b3fc37188b2c927dd2c95a");
+                        Message message = Message.creator(
+                                        new com.twilio.type.PhoneNumber("+447487555892"),
+                                        new com.twilio.type.PhoneNumber("+14752629030"),
+                                        codestr)
+                                .create();
 
-                            case "office manager":
-                                OfficeManagerMenu manager = new OfficeManagerMenu();
-                                manager.setContentPane(manager.getoPlane());
-                                manager.setVisible(true);
-                                manager.setSize(800, 600);
-                                manager.setLocationRelativeTo(null);
-                                manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                dispose();
-                                break;
-                        }
+                        System.out.println(message.getSid());
+
+
+
+ */
+
+                        auth.getSubmitButton().addActionListener(new ActionListener() {
+                             @Override
+                           public void actionPerformed(ActionEvent e) {
+                               if (auth.getCodeTextField().getText().equals(codestr)) {
+                                   System.out.println(auth.getCodeTextField().getText());
+                                   check = true;
+                                   dispose();
+                                   auth.dispose();
+
+                               } else {
+                                   //If 2fa code is wrong somethign happens?
+                                   //CODE HERE
+
+                               }
+
+                               if (check) {
+                                   switch (role) {
+
+                                       case "admin":
+                                           AdminMenu admin = new AdminMenu();
+                                           admin.setContentPane(admin.getAplane());
+                                           admin.setVisible(true);
+                                           admin.setSize(800, 600);
+                                           admin.setLocationRelativeTo(null);
+                                           admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                           dispose();
+
+                                           break;
+                                       case "travel advisor":
+                                           AdvisorMenu advisor = new AdvisorMenu();
+                                           advisor.setContentPane(advisor.getAdPlane());
+                                           advisor.setVisible(true);
+                                           advisor.setSize(800, 600);
+                                           advisor.setLocationRelativeTo(null);
+                                           advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                           dispose();
+
+                                           break;
+
+                                       case "office manager":
+                                           OfficeManagerMenu manager = new OfficeManagerMenu();
+                                           manager.setContentPane(manager.getoPlane());
+                                           manager.setVisible(true);
+                                           manager.setSize(800, 600);
+                                           manager.setLocationRelativeTo(null);
+                                           manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                           dispose();
+                                           break;
+                                   }
+
+
+                               }
+
+                           }
+                       }
+
+);
 
                     } else {
                         if (!error.isVisible()) {
@@ -104,7 +165,6 @@ public class Login extends JFrame {
                         }
                         //Add error code for when you username or password is wrong
                         //add in GUI manner, so it should be displayed on the form
-
 
                     }
 
@@ -142,6 +202,9 @@ public class Login extends JFrame {
         return null;
     }
 
+    public void onExit() {
+        this.dispose();
+    }
 
     public static void main(String[] args) {
 /*
