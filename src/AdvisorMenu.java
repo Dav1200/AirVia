@@ -30,9 +30,8 @@ public class AdvisorMenu extends JFrame {
     private JTextField firstNameTextField;
     private JTextField lastNameTextField;
     private JTextField addressTextField;
-    private JTextField emailTextField;
     private JButton registerButton;
-    private JButton resetButton;
+    private JButton clearButton;
     private JLabel searchCustomerLabel;
     private JTextField searchCustomerTextField;
     private JButton searchCustomerButton;
@@ -46,6 +45,13 @@ public class AdvisorMenu extends JFrame {
     private JButton createIndividualReportButton;
     private JLabel registerTicketLabel;
     private JTable CustomerTable;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField4;
+    private JSpinner spinner1;
+    private JButton printButton;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here

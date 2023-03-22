@@ -23,10 +23,15 @@ public class OfficeManagerMenu extends JFrame{
 
     private JPanel oPlane;
     private JTextField tfComRate;
-    private JButton generateReportButton1;
-    private JTable globalReport;
     private JButton generateReportButton2;
     private JTable salesReport;
+    private JButton setRateButton;
+    private JButton setRateButton1;
+    private JTabbedPane tabbedPane2;
+    private JButton generateReportButton1;
+    private JTable table1;
+    private JButton generateReportButton3;
+    private JTable table2;
 
     public OfficeManagerMenu() {
     }

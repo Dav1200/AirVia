@@ -31,6 +31,9 @@ public class AdminMenu extends JFrame {
     private JButton workButton;
     private JTabbedPane TabMenu;
     private JTable DB;
+    private JButton restoreDatabaseButton;
+    private JButton backupDatabaseButton;
+    private JButton updateDatabaseButton;
     private DBConnection db;
 
     //manual input
