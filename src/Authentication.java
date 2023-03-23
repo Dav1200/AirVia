@@ -32,18 +32,7 @@ public class Authentication extends JFrame {
 
     private JTextField codeTextField;
 
-
-
-
-
-
-
-
-
     public Authentication() {
-
-
-
     }
 }
 

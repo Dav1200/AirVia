@@ -7,25 +7,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="jar://$USER_HOME$/Downloads/mysql-connector-j-8.0.32.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
-          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
