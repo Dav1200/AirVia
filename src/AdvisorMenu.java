@@ -10,6 +10,7 @@ public class AdvisorMenu extends JFrame {
 
 
         showCustomer();
+        registerCustomer();
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -18,48 +19,9 @@ public class AdvisorMenu extends JFrame {
                 dispose();
             }
         });
-
-
-        registerButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // Takes in what the advisor has entered
-                    String customerID = customerIDTf.getText();
-                    String firstName =  firstNameTextField.getText();
-                    String lastName = lastNameTextField.getText();
-                    String email =  emailTextField.getText();
-                    String customerType = customerTypeTf.getText();
-                    String discountType = discountTypeTf.getText();
-                    String discountAmount = discountAmountTf.getText();
-                    String address = addressTf.getText();
-                    String totalTickets = totalTicketsTf.getText();
-                    String staffID = staffIDTf.getText();
-                    // Establishes a connection the database
-                    Connection con = DBConnection.getConnection();
-                    // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO Customer(ID, FirstName, LastName, Email, " +
-                            "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID) VALUES(?,?,?,?,?,?,?,?,?,?)");
-                    ps.setString(1,customerID);
-                    ps.setString(2,firstName);
-                    ps.setString(3,lastName);
-                    ps.setString(4,email);
-                    ps.setString(5,customerType);
-                    ps.setString(6,discountType);
-                    ps.setString(7,discountAmount);
-                    ps.setString(8,address);
-                    ps.setString(9,totalTickets);
-                    ps.setString(10,staffID);
-                    // When Button is pressed PHP MY ADMIN should update
-                    ps.executeUpdate();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-
-            }
-        });
     }
+
+
 
     public JPanel getAdPlane() {
         return adPlane;
@@ -79,7 +41,6 @@ public class AdvisorMenu extends JFrame {
     private JTextField ticketTypeTextField;
     private JTextField customerTypeTextField;
     private JTextField commissionAmountTextField;
-    private JTextField reportTypeTextField;
     private JTextField recordPaymentTextField;
     private JTextField recordDiscountAmountTextField;
     private JButton registerTicketButton;
@@ -93,7 +54,10 @@ public class AdvisorMenu extends JFrame {
     private JTextField totalTicketsTf;
     private JTextField customerTypeTf;
     private JTextField discountTypeTf;
-    private JTextField customerIDTf;
+    private JRadioButton cashRadioButton;
+    private JRadioButton cardRadioButton;
+    private JRadioButton chequeRadioButton;
+    private JTextField textField1;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
@@ -155,6 +119,68 @@ public class AdvisorMenu extends JFrame {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void clearRegisterCustomer(){
+        firstNameTextField.setText(null);
+        lastNameTextField.setText(null);
+        emailTextField.setText(null);
+        customerTypeTf.setText(null);
+        discountTypeTf.setText(null);
+        discountAmountTf.setText(null);
+        addressTf.setText(null);
+        totalTicketsTf.setText(null);
+        staffIDTf.setText(null);
+    }
+
+    public void registerCustomer(){
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearRegisterCustomer();
+            }
+        });
+
+        registerButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Takes in what the advisor has entered
+                    String firstName =  firstNameTextField.getText();
+                    String lastName = lastNameTextField.getText();
+                    String email =  emailTextField.getText();
+                    String customerType = customerTypeTf.getText();
+                    String discountType = discountTypeTf.getText();
+                    String discountAmount = discountAmountTf.getText();
+                    String address = addressTf.getText();
+                    String totalTickets = totalTicketsTf.getText();
+                    String staffID = staffIDTf.getText();
+                    // Establishes a connection the database
+                    Connection con = DBConnection.getConnection();
+                    // INSERT INTO statement with values from JTextFields
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO Customer(FirstName, LastName, Email, " +
+                            "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID) VALUES(?,?,?,?,?,?,?,?,?)");
+                    ps.setString(1,firstName);
+                    ps.setString(2,lastName);
+                    ps.setString(3,email);
+                    ps.setString(4,customerType);
+                    ps.setString(5,discountType);
+                    ps.setString(6,discountAmount);
+                    ps.setString(7,address);
+                    ps.setString(8,totalTickets);
+                    ps.setString(9,staffID);
+                    // When Button is pressed PHP MY ADMIN should update
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Customer Successfully Registered");
+                    //Clears form once submitted
+                    clearRegisterCustomer();
+
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     /*

@@ -9,6 +9,7 @@ public class AdminMenu extends JFrame {
         //manual input
         //createTable();
         shows();
+        registerMember();
 
         workButton.addActionListener(new ActionListener() {
             @Override
@@ -34,6 +35,16 @@ public class AdminMenu extends JFrame {
     private JButton restoreDatabaseButton;
     private JButton backupDatabaseButton;
     private JButton updateDatabaseButton;
+    private JTextField fnameTf;
+    private JTextField lnameTf;
+    private JTextField emailTf;
+    private JTextField addressTf;
+    private JRadioButton adminRadioButton;
+    private JRadioButton officeManagerRadioButton;
+    private JRadioButton travelAdvisorRadioButton;
+    private JTextField passwordTf;
+    private JButton registerStaffBtn;
+    private JButton clearButton;
     private DBConnection db;
 
     //manual input
@@ -92,6 +103,59 @@ public class AdminMenu extends JFrame {
         }
 
 
+    }
+
+    private void clearRegisterStaffField() {
+        fnameTf.setText(null);
+        lnameTf.setText(null);
+        emailTf.setText(null);
+        addressTf.setText(null);
+        passwordTf.setText(null);
+    }
+
+    public void registerMember(){
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearRegisterStaffField();
+            }
+        });
+        registerStaffBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    String firstName = fnameTf.getText();
+                    String lastName = lnameTf.getText();
+                    String email = emailTf.getText();
+                    String address = addressTf.getText();
+                    String password = passwordTf.getText();
+                    // Establishes a connection
+                    Connection con = DBConnection.getConnection();
+                    // INSERT INTO statement with values from JTextFields
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(FirstName, LastName, Email, Address," +
+                            " Role, Password) VALUES(?,?,?,?,?,?)");
+                    ps.setString(1,firstName);
+                    ps.setString(2,lastName);
+                    ps.setString(3,email);
+                    ps.setString(4,address);
+                    if(adminRadioButton.isSelected()){
+                        ps.setString(5,adminRadioButton.getText());
+                    } else if (officeManagerRadioButton.isSelected()) {
+                        ps.setString(5, officeManagerRadioButton.getText());
+                    }
+                    else
+                        ps.setString(5,travelAdvisorRadioButton.getText());
+                    ps.setString(6,password);
+                    //When Add staff member button is pressed
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Staff Member Added");
+                    //Clears once form is submitted
+                    clearRegisterStaffField();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
 }
