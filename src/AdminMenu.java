@@ -2,11 +2,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
         //manual input
+
+        
+
+
         //createTable();
         shows();
         registerMember();
@@ -18,6 +26,39 @@ public class AdminMenu extends JFrame {
                 dispose();
             }
         });
+        restoreDatabaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        backupDatabaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+
+
+
+
+                try (Connection con = DBConnection.getConnection();) {
+
+
+                }
+
+
+                catch (SQLException | RuntimeException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+
+
+
+
     }
 
     public JPanel getAplane() {

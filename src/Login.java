@@ -31,9 +31,20 @@ public class Login extends JFrame {
     private String role;
     private int code;
     private String codestr;
+
+
+
 private boolean check;
 
     public Login() {
+
+        GEmailSender gEmailSender = new GEmailSender();
+        String to = "ttechttonic@gmail.com";
+        String from = "davsuper4@gmaill.com";
+        String subject = "2FA Code";
+
+
+
         Random rnd = new Random();
          code = rnd.nextInt(999999);
         // this will convert any number sequence into 6 character.
@@ -42,6 +53,7 @@ private boolean check;
         check = false;
         role = "";
         error.setVisible(false);
+
         this.setContentPane(this.Hello);
 
         this.setVisible(true);
@@ -81,13 +93,27 @@ private boolean check;
 
                     if (rs.next() && encryptString(password).equals(encrpPass)) {
                         Authentication auth = new Authentication();
+                        auth.setName("2FA");
                         role = (rs.getString("role"));
                         auth.setContentPane(auth.getAuthPanel());
                         auth.setVisible(true);
-                        auth.setSize(200, 100);
+                        auth.setSize(300, 210);
                         auth.setLocationRelativeTo(null);
                         auth.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-/*
+
+                        auth.getEmailButton().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //to send email line below
+                                boolean b = gEmailSender.sendEmail(to, from, subject, codestr);
+                                auth.getCodeSentTxt().setVisible(true);
+                            }
+                        });
+
+                        auth.getsMSButton().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                /* to send mobile text
                         Twilio.init("AC2b2098fa2669b835feb2b72bf50c01b0", "2628c89c04b3fc37188b2c927dd2c95a");
                         Message message = Message.creator(
                                         new com.twilio.type.PhoneNumber("+447487555892"),
@@ -97,9 +123,19 @@ private boolean check;
 
                         System.out.println(message.getSid());
 
-
+auth.getCodeSentTxt().setVisible(true);
 
  */
+                            }
+                        });
+
+
+
+
+
+
+
+
 
                         auth.getSubmitButton().addActionListener(new ActionListener() {
                              @Override

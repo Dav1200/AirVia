@@ -1,10 +1,4 @@
-import com.mysql.cj.log.Log;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class Authentication extends JFrame {
 
@@ -30,9 +24,33 @@ public class Authentication extends JFrame {
         return codeTextField;
     }
 
+    public Login getLogin() {
+        return login;
+    }
+
     private JTextField codeTextField;
 
+
+
+    private JButton sMSButton;
+    private JButton emailButton;
+
+    public JLabel getCodeSentTxt() {
+        return codeSentTxt;
+    }
+
+    private JLabel codeSentTxt;
+
+    public JButton getsMSButton() {
+        return sMSButton;
+    }
+
+    public JButton getEmailButton() {
+        return emailButton;
+    }
     public Authentication() {
+        codeSentTxt.setVisible(false);
+
     }
 }
 

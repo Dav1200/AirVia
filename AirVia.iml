@@ -25,22 +25,28 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
-          <root url="file://$USER_HOME$/OneDrive/Documents/jar" />
+          <root url="jar://$USER_HOME$/Downloads/jakarta.mail-2.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/OneDrive/Documents/jar" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/twilio-9.2.5-jar-with-dependencies.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/jakarta.activation-api-2.1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/angus-activation-2.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
