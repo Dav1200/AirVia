@@ -11,6 +11,10 @@ public class AdvisorMenu extends JFrame {
 
         showCustomer();
         registerCustomer();
+        registerSalesReport();
+
+        errorLabel.setVisible(false);
+        incompleteEntry.setVisible(false);
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -19,6 +23,7 @@ public class AdvisorMenu extends JFrame {
                 dispose();
             }
         });
+
     }
 
 
@@ -38,11 +43,8 @@ public class AdvisorMenu extends JFrame {
     private JLabel searchCustomerLabel;
     private JTextField searchCustomerTextField;
     private JButton searchCustomerButton;
-    private JTextField ticketTypeTextField;
-    private JTextField customerTypeTextField;
-    private JTextField commissionAmountTextField;
     private JTextField recordPaymentTextField;
-    private JTextField recordDiscountAmountTextField;
+    private JTextField commissionAmountField;
     private JButton registerTicketButton;
     private JButton createIndividualReportButton;
     private JLabel registerTicketLabel;
@@ -54,10 +56,25 @@ public class AdvisorMenu extends JFrame {
     private JTextField totalTicketsTf;
     private JTextField customerTypeTf;
     private JTextField discountTypeTf;
-    private JRadioButton cashRadioButton;
-    private JRadioButton cardRadioButton;
-    private JRadioButton chequeRadioButton;
-    private JTextField textField1;
+    private JTextField departureTextField;
+    private JTextField ticketQuantityTextField;
+    private JLabel errorLabel;
+    private JLabel incompleteEntry;
+    private JComboBox discType;
+    private JComboBox cusType;
+    private JComboBox ticketType;
+    private JComboBox paymentType;
+    private JComboBox reportType;
+    private JTextField departureField;
+    private JTextField destinationTextField;
+    private JTextField ticketPriceField;
+    private JTextField subTotalField;
+    private JTextField grandTotalField;
+    private JComboBox latePayment;
+    private JTextField exchangeRateField;
+    private JTextField ticketDateField;
+    private JTextField customerIDField;
+    private JTextField staffIDField;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
@@ -125,8 +142,6 @@ public class AdvisorMenu extends JFrame {
         firstNameTextField.setText(null);
         lastNameTextField.setText(null);
         emailTextField.setText(null);
-        customerTypeTf.setText(null);
-        discountTypeTf.setText(null);
         discountAmountTf.setText(null);
         addressTf.setText(null);
         totalTicketsTf.setText(null);
@@ -146,16 +161,21 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
+
+                    //set discount amount to 0
+
                     // Takes in what the advisor has entered
                     String firstName =  firstNameTextField.getText();
                     String lastName = lastNameTextField.getText();
                     String email =  emailTextField.getText();
-                    String customerType = customerTypeTf.getText();
-                    String discountType = discountTypeTf.getText();
+                    String customerType = cusType.getSelectedItem().toString();
+                    String discountType = discType.getSelectedItem().toString();
                     String discountAmount = discountAmountTf.getText();
                     String address = addressTf.getText();
                     String totalTickets = totalTicketsTf.getText();
                     String staffID = staffIDTf.getText();
+
                     // Establishes a connection the database
                     Connection con = DBConnection.getConnection();
                     // INSERT INTO statement with values from JTextFields
@@ -170,9 +190,21 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(7,address);
                     ps.setString(8,totalTickets);
                     ps.setString(9,staffID);
+
+                    System.out.println(ticketType);
+
+                    //showing error message if any of the text fields are empty
+                    if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || customerType.isEmpty() || totalTickets.isEmpty() || staffID.isEmpty()){
+
+                        errorLabel.setVisible(true);
+                    }
+
+
                     // When Button is pressed PHP MY ADMIN should update
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null,"Customer Successfully Registered");
+
+
                     //Clears form once submitted
                     clearRegisterCustomer();
 
@@ -181,7 +213,77 @@ public class AdvisorMenu extends JFrame {
                 }
             }
         });
+
     }
+
+
+    public void registerSalesReport(){
+        registerTicketButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (
+                        Connection con = DBConnection.getConnection();
+                ) {
+
+                    //column names
+                    String ticType = ticketType.getSelectedItem().toString();
+                    String payType = paymentType.getSelectedItem().toString();
+                    String repType = reportType.getSelectedItem().toString();
+                    String departure = departureField.getText();
+                    String destination = destinationTextField.getText();
+                    String comAmount = commissionAmountField.getText();
+                    String ticketQuantity = ticketQuantityTextField.getText();
+                    String ticketPrice = ticketPriceField.getText();
+                    String subTotal = subTotalField.getText();
+                    String grandTotal = grandTotalField.getText();
+                    String latePay = latePayment.getSelectedItem().toString();
+                    String exchangeRate = exchangeRateField.getText();
+                    String ticketDate = ticketDateField.getText();
+                    String customerID = customerIDField.getText();
+                    String staffID = staffIDField.getText();
+
+
+                    // INSERT INTO statement with values from JTextFields
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO SalesReport(TicketType, PaymentType, ReportType, departure, destination, CommissionAmount, " +
+                            "TicketQuantity, ticketPrice, subTotal, grandTotal, LatePayment, exchangeRate, ticketDate, ID, staffID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    ps.setString(1,ticType);
+                    ps.setString(2,payType);
+                    ps.setString(3, repType);
+                    ps.setString(4,departure);
+                    ps.setString(5,destination);
+                    ps.setString(6,comAmount);
+                    ps.setString(7,ticketQuantity);
+                    ps.setString(8,ticketPrice);
+                    ps.setString(9,subTotal);
+                    ps.setString(10,grandTotal);
+                    ps.setString(11, latePay);
+                    ps.setString(12,exchangeRate);
+                    ps.setString(13,ticketDate);
+                    ps.setString(14,customerID);
+                    ps.setString(15,staffID);
+
+
+                    //showing error message if any of the text fields are empty
+                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || subTotal.isEmpty()|| grandTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
+                            || customerID.isEmpty()|| staffID.isEmpty()){
+
+                        incompleteEntry.setVisible(true);
+                    }
+
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Ticket added to sales report");
+
+
+
+                } catch (ClassNotFoundException | SQLException exc) {
+                    exc.printStackTrace();
+                }
+
+
+            }
+        });
+    }
+
 
     /*
     //search customer
