@@ -2,17 +2,25 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import java.time.LocalDate;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
         //manual input
-
-        
 
 
         //createTable();
@@ -37,29 +45,62 @@ public class AdminMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
-
-
-
-
-
-                try (Connection con = DBConnection.getConnection();) {
-
-
-                }
-
-
-                catch (SQLException | RuntimeException | ClassNotFoundException ex) {
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm");
+                String formattedDateTime = now.format(formatter);
+                Path path = Paths.get(formattedDateTime);
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
+
+
+                Properties properties = new Properties();
+                properties.setProperty("user", "in2018g04_d");
+                properties.setProperty("password", "1Lzc6IUm");
+                properties.setProperty("useSSL", "false");
+
+                // Set up backup file path and name
+                String backupFolderPath = formattedDateTime+"\\";
+
+                try (Connection conn = DriverManager.getConnection("jdbc:mysql://smcse-stuproj00.city.ac.uk:3306/in2018g04", properties)) {
+                    // Create a ZipOutputStream to write the backup data to a zip file
+                    String query = "SHOW TABLES";
+                    try (Statement stmt = conn.createStatement();
+                         ResultSet rs = stmt.executeQuery(query)) {
+                        while (rs.next()) {
+                            String tableName = rs.getString(1);
+
+                            // Write the table data to a CSV file in the backup folder
+                            String backupFilePath = backupFolderPath + tableName + ".csv";
+                            try (FileWriter writer = new FileWriter(new File(backupFilePath))) {
+                                String selectQuery = "SELECT * FROM " + tableName;
+                                try (Statement selectStmt = conn.createStatement();
+                                     ResultSet selectRs = selectStmt.executeQuery(selectQuery)) {
+                                    while (selectRs.next()) {
+                                        // Write each row to the CSV file
+                                        for (int i = 1; i <= selectRs.getMetaData().getColumnCount(); i++) {
+                                            writer.write("\"" + selectRs.getString(i) + "\",");
+                                        }
+                                        writer.write("\n");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("Backup created successfully");
+                } catch (SQLException | IOException a) {
+                    a.printStackTrace();
+                }
+
             }
         });
 
 
-
-
-
     }
+
+
 
     public JPanel getAplane() {
         return aplane;
