@@ -1,8 +1,11 @@
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import static com.sun.tools.javac.Main.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +42,7 @@ public class AdminMenu extends JFrame {
             // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileName = "backup.sql";
+                String fileName = "backup//backup.sql";
                 String host = "smcse-stuproj00.city.ac.uk";
                 String username = "in2018g04_a";
                 String password = "bx5jmkL5";
@@ -84,6 +87,22 @@ public class AdminMenu extends JFrame {
         backupDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //get date/time to add to file path
+                /*
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm");
+                String formattedDateTime = now.format(formatter);
+                Path path = Paths.get(formattedDateTime);
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+
+
+                 */
+
                 String host = "smcse-stuproj00.city.ac.uk";
                 int port = 3306;
                     String username = "in2018g04_a";
@@ -112,15 +131,7 @@ public class AdminMenu extends JFrame {
                 }
 
 /*
-                LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm");
-                String formattedDateTime = now.format(formatter);
-                Path path = Paths.get(formattedDateTime);
-                try {
-                    Files.createDirectories(path);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+
 
 
                 Properties properties = new Properties();
@@ -197,6 +208,7 @@ public class AdminMenu extends JFrame {
     private JButton registerStaffBtn;
     private JButton clearButton;
     private DBConnection db;
+
 
     //manual input
     /*
@@ -280,6 +292,7 @@ public class AdminMenu extends JFrame {
                     String email = emailTf.getText();
                     String address = addressTf.getText();
                     String password = passwordTf.getText();
+                    password = Login.encryptString(password);
                     // Establishes a connection
                     Connection con = DBConnection.getConnection();
                     // INSERT INTO statement with values from JTextFields

@@ -224,7 +224,7 @@ auth.getCodeSentTxt().setVisible(true);
         });
     }
 
-    public String encryptString(String input) throws NoSuchAlgorithmException {
+    public static String encryptString(String input) throws NoSuchAlgorithmException {
 
         try {
             //messageDigest works with MD2, MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512
