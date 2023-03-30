@@ -35,16 +35,83 @@ public class AdminMenu extends JFrame {
             }
         });
         restoreDatabaseButton.addActionListener(new ActionListener() {
+            //running a script which works in terminal, to do it.  script is below i just made it into a processbuilder
+            // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
             @Override
             public void actionPerformed(ActionEvent e) {
+                String fileName = "backup.sql";
+                String host = "smcse-stuproj00.city.ac.uk";
+                String username = "in2018g04_a";
+                String password = "bx5jmkL5";
+                String database = "in2018g04";
 
-            }
-        });
+// Construct command for executing mysql
+                List<String> command = new ArrayList<>();
+                command.add("mysql");
+                command.add("-h" + host);
+                command.add("-u" + username);
+                command.add("-p" + password);
+                command.add(database);
+
+// Create a process builder to run the command
+                ProcessBuilder pb = new ProcessBuilder(command);
+                pb.redirectInput(ProcessBuilder.Redirect.from(new File(fileName)));
+
+                try {
+                    // Start the process
+                    Process p = pb.start();
+
+                    // Wait for the process to finish
+                    int exitCode = p.waitFor();
+
+                    // Check if the process completed successfully
+                    if (exitCode == 0) {
+                        System.out.println("Database restored successfully.");
+                    } else {
+                        System.out.println("Failed to restore database.");
+                    }
+
+                } catch (IOException ev) {
+                    System.err.println("Error starting the process: " + ev.getMessage());
+                } catch (InterruptedException ez) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Process interrupted: " + ez.getMessage());
+                } catch (Exception ex) {
+                    System.err.println("An unexpected error occurred: " + ex.getMessage());
+                }
+            }});
 
         backupDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String host = "smcse-stuproj00.city.ac.uk";
+                int port = 3306;
+                    String username = "in2018g04_a";
+                String password = "bx5jmkL5";
+                String database = "in2018g04";
+                String filepath = "backup\\backup.sql";
 
+                // Construct the command string
+                String[] cmd = new String[]{"mysqldump", "--skip-column-statistics", "-h" + host, "-P" + port, "-u" + username, "-p" + password, database, "-r" + filepath};
+
+                try {
+                    // Execute the command
+                    Process process = Runtime.getRuntime().exec(cmd);
+
+                    // Wait for the command to complete
+                    int exitCode = process.waitFor();
+
+                    // Check the exit code
+                    if (exitCode == 0) {
+                        System.out.println("Database backup completed successfully.");
+                    } else {
+                        System.err.println("Database backup failed. Exit code: " + exitCode);
+                    }
+                } catch (IOException | InterruptedException a) {
+                    a.printStackTrace();
+                }
+
+/*
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm");
                 String formattedDateTime = now.format(formatter);
@@ -93,6 +160,8 @@ public class AdminMenu extends JFrame {
                 } catch (SQLException | IOException a) {
                     a.printStackTrace();
                 }
+
+ */
 
             }
         });
