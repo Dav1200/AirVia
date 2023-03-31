@@ -298,20 +298,48 @@ public class AdminMenu extends JFrame {
                     // INSERT INTO statement with values from JTextFields
                     PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(FirstName, LastName, Email, Address," +
                             " Role, Password) VALUES(?,?,?,?,?,?)");
+
+                    PreparedStatement ps2 = con.prepareStatement("INSERT INTO Admin(StaffID) VALUES (?)");
+                    //PreparedStatement ps3 = con.prepareStatement("INSERT INTO TravelAdvisor(StaffID) VALUES (?)");
+                    //PreparedStatement ps4 = con.prepareStatement("INSERT INTO OfficeManager(StaffID) VALUES (?)");
+
+                    Statement stmt = con.createStatement();
+                    ResultSet rs = stmt.executeQuery("SHOW TABLE STATUS WHERE Name='Staff'");
+
+                    // Retrieve the next auto-increment value from the result set
+                    int nextAutoIncrement = -1;
+                    if (rs.next()) {
+                        nextAutoIncrement = rs.getInt("Auto_increment");
+
+                    }
+                    System.out.println(nextAutoIncrement);
+
                     ps.setString(1,firstName);
                     ps.setString(2,lastName);
                     ps.setString(3,email);
                     ps.setString(4,address);
                     if(adminRadioButton.isSelected()){
                         ps.setString(5,adminRadioButton.getText());
+                        ps2.setInt(1,nextAutoIncrement);
+
+
+
                     } else if (officeManagerRadioButton.isSelected()) {
                         ps.setString(5, officeManagerRadioButton.getText());
+                        //ps4.setInt(1,nextAutoIncrement);
+
                     }
-                    else
-                        ps.setString(5,travelAdvisorRadioButton.getText());
+                    else {
+                        ps.setString(5, travelAdvisorRadioButton.getText());
+                        //ps3.setInt(1,nextAutoIncrement);
+                    }
                     ps.setString(6,password);
-                    //When Add staff member button is pressed
+
+                    //exectue SQL queries
                     ps.executeUpdate();
+                    ps2.executeUpdate();
+                    //ps3.executeUpdate();
+                    //ps4.executeUpdate();
                     JOptionPane.showMessageDialog(null,"Staff Member Added");
                     //Clears once form is submitted
                     clearRegisterStaffField();

@@ -155,7 +155,7 @@ CREATE TABLE `Staff` (
   `Role` varchar(20) DEFAULT NULL,
   `Password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`StaffID`)
-) ENGINE=InnoDB AUTO_INCREMENT=422 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=424 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,7 +164,7 @@ CREATE TABLE `Staff` (
 
 LOCK TABLES `Staff` WRITE;
 /*!40000 ALTER TABLE `Staff` DISABLE KEYS */;
-INSERT INTO `Staff` VALUES (111,'frank','furter','frankfurter@ttechttonic.com','17 church road, blackpool','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(112,'holly','harper','hollyharper@ttechttonic.com','44 victoria road, london','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(113,'india','iris','indiairis@ttechttonic.com','51 green lane, birmingham','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(114,'jack','jenny','jackjenny@ttechttonic.com','11 manor road, manchester','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(115,'mia','mason','miamason@ttechttonic.com','32 park crescent, birmingham','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(311,'scarlet','stella','scarletstella@ttechttonic.com','8 chester road, cornwall','admin','fcef631eab0be0f69d940e737b136e0cbcf4f6f1de81f50822862002655af92e'),(411,'thiago','tucker','thiagotucker@ttechttonic.com','30 north road, birmingham','office manager','f3a25e124dea6889cd15ccbaf818c4cb7d7c035257b828f173a2384ab9b621ac'),(412,'Elon','Jones','elonjones@ttechttonic.com','12 Jump Street, Bradford','Travel Advisor','adv123'),(416,'a','a','a','a','Office Manager','a'),(417,'Marcus ','Rashford ','Marcus.rashford@ttehcttonic.com','83 London Road, London','Travel Advisor','adv123'),(418,'','','','','Travel Advisor',''),(419,'test1','test1','test1','test1','Travel Advisor','test1'),(420,'Test','test','test@gmail.com','testaddress.com','Travel Advisor','123pass'),(421,'','','','','Travel Advisor','');
+INSERT INTO `Staff` VALUES (111,'frank','furter','frankfurter@ttechttonic.com','17 church road, blackpool','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(112,'holly','harper','hollyharper@ttechttonic.com','44 victoria road, london','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(113,'india','iris','indiairis@ttechttonic.com','51 green lane, birmingham','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(114,'jack','jenny','jackjenny@ttechttonic.com','11 manor road, manchester','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(115,'mia','mason','miamason@ttechttonic.com','32 park crescent, birmingham','travel advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(311,'scarlet','stella','scarletstella@ttechttonic.com','8 chester road, cornwall','admin','fcef631eab0be0f69d940e737b136e0cbcf4f6f1de81f50822862002655af92e'),(411,'thiago','tucker','thiagotucker@ttechttonic.com','30 north road, birmingham','office manager','f3a25e124dea6889cd15ccbaf818c4cb7d7c035257b828f173a2384ab9b621ac'),(412,'Elon','Jones','elonjones@ttechttonic.com','12 Jump Street, Bradford','Travel Advisor','adv123'),(416,'a','a','a','a','Office Manager','a'),(417,'Marcus ','Rashford ','Marcus.rashford@ttehcttonic.com','83 London Road, London','Travel Advisor','adv123'),(418,'','','','','Travel Advisor',''),(419,'test1','test1','test1','test1','Travel Advisor','test1'),(420,'Test','test','test@gmail.com','testaddress.com','Travel Advisor','123pass'),(421,'','','','','Travel Advisor',''),(422,'encr','encr','encr','encr','Travel Advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865'),(423,'shush','shush','shush','shush','Travel Advisor','b892a25266fd13f4cab70dc40bf331c6fd6a5e625e607d6d135cdde83cbe865');
 /*!40000 ALTER TABLE `Staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,4 +233,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-30 10:55:33
+-- Dump completed on 2023-03-30 15:50:37
