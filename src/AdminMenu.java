@@ -300,8 +300,8 @@ public class AdminMenu extends JFrame {
                             " Role, Password) VALUES(?,?,?,?,?,?)");
 
                     PreparedStatement ps2 = con.prepareStatement("INSERT INTO Admin(StaffID) VALUES (?)");
-                    //PreparedStatement ps3 = con.prepareStatement("INSERT INTO TravelAdvisor(StaffID) VALUES (?)");
-                    //PreparedStatement ps4 = con.prepareStatement("INSERT INTO OfficeManager(StaffID) VALUES (?)");
+                    PreparedStatement ps3 = con.prepareStatement("INSERT INTO TravelAdvisor(StaffID) VALUES (?)");
+                    PreparedStatement ps4 = con.prepareStatement("INSERT INTO OfficeManager(StaffID) VALUES (?)");
 
                     Statement stmt = con.createStatement();
                     ResultSet rs = stmt.executeQuery("SHOW TABLE STATUS WHERE Name='Staff'");
@@ -326,20 +326,23 @@ public class AdminMenu extends JFrame {
 
                     } else if (officeManagerRadioButton.isSelected()) {
                         ps.setString(5, officeManagerRadioButton.getText());
-                        //ps4.setInt(1,nextAutoIncrement);
+                        ps4.setInt(1,nextAutoIncrement);
 
                     }
                     else {
                         ps.setString(5, travelAdvisorRadioButton.getText());
-                        //ps3.setInt(1,nextAutoIncrement);
+                        ps3.setInt(1,nextAutoIncrement);
                     }
                     ps.setString(6,password);
 
                     //exectue SQL queries
                     ps.executeUpdate();
-                    ps2.executeUpdate();
-                    //ps3.executeUpdate();
-                    //ps4.executeUpdate();
+                    if(adminRadioButton.isSelected())
+                        ps2.executeUpdate();
+                    else if(officeManagerRadioButton.isSelected())
+                        ps4.executeUpdate();
+                    else
+                        ps3.executeUpdate();
                     JOptionPane.showMessageDialog(null,"Staff Member Added");
                     //Clears once form is submitted
                     clearRegisterStaffField();
