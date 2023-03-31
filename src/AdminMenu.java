@@ -29,6 +29,7 @@ public class AdminMenu extends JFrame {
         //createTable();
         shows();
         registerMember();
+        errorLabel.setVisible(false);
 
         workButton.addActionListener(new ActionListener() {
             @Override
@@ -207,6 +208,7 @@ public class AdminMenu extends JFrame {
     private JTextField passwordTf;
     private JButton registerStaffBtn;
     private JButton clearButton;
+    private JLabel errorLabel;
     private DBConnection db;
 
 
@@ -333,19 +335,26 @@ public class AdminMenu extends JFrame {
                         ps.setString(5, travelAdvisorRadioButton.getText());
                         ps3.setInt(1,nextAutoIncrement);
                     }
-                    ps.setString(6,password);
+                    //showing error message if any of the text fields are empty
+                    if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || address.isEmpty() || !adminRadioButton.isSelected() && !officeManagerRadioButton.isSelected() && !travelAdvisorRadioButton.isSelected() || password.isEmpty()){
+                        errorLabel.setVisible(true);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Staff Member Added");
+                        ps.setString(6, password);
 
-                    //exectue SQL queries
-                    ps.executeUpdate();
-                    if(adminRadioButton.isSelected())
-                        ps2.executeUpdate();
-                    else if(officeManagerRadioButton.isSelected())
-                        ps4.executeUpdate();
-                    else
-                        ps3.executeUpdate();
-                    JOptionPane.showMessageDialog(null,"Staff Member Added");
-                    //Clears once form is submitted
-                    clearRegisterStaffField();
+                        //exectue SQL queries
+                        ps.executeUpdate();
+                        if (adminRadioButton.isSelected())
+                            ps2.executeUpdate();
+                        else if (officeManagerRadioButton.isSelected())
+                            ps4.executeUpdate();
+                        else
+                            ps3.executeUpdate();
+
+                        //Clears once form is submitted
+                        clearRegisterStaffField();
+                    }
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
