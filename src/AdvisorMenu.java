@@ -211,6 +211,7 @@ public class AdvisorMenu extends JFrame {
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
+                showCustomer();
             }
         });
 
