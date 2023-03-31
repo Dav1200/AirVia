@@ -358,6 +358,7 @@ public class AdminMenu extends JFrame {
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
+                shows();
             }
         });
     }
