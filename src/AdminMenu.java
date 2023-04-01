@@ -71,7 +71,7 @@ public class AdminMenu extends JFrame {
             // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                boolean cancel = false;
                 //Jfilechooser
                 String filePath = "";
                 JFileChooser fileChooser = new JFileChooser();
@@ -82,7 +82,9 @@ public class AdminMenu extends JFrame {
                     filePath = fileChooser.getSelectedFile().getAbsolutePath();
 
                 }
-
+                if(result == JFileChooser.CANCEL_OPTION){
+                    cancel = true;
+                }
 
                 String fileName = filePath;
                 String host = "smcse-stuproj00.city.ac.uk";
@@ -99,6 +101,8 @@ public class AdminMenu extends JFrame {
                 command.add(database);
 
 // Create a process builder to run the command
+
+                if(!cancel) {
                 ProcessBuilder pb = new ProcessBuilder(command);
                 pb.redirectInput(ProcessBuilder.Redirect.from(new File(fileName)));
 
@@ -136,13 +140,14 @@ public class AdminMenu extends JFrame {
                 } catch (Exception ex) {
                     System.err.println("An unexpected error occurred: " + ex.getMessage());
                 }
-            }
+            }}
         });
 
         //backup DB functionality
         backupDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean cancel = false;
                 String filePath = "";
                 JFileChooser fileChooser = new JFileChooser();
                 File defaultDirectory = new File(System.getProperty("user.dir"));
@@ -151,6 +156,10 @@ public class AdminMenu extends JFrame {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     filePath = fileChooser.getSelectedFile().getAbsolutePath();
 
+                }
+
+                if(result == JFileChooser.CANCEL_OPTION){
+                    cancel = true;
                 }
                 //get date/time to add to file path
 
@@ -168,7 +177,8 @@ public class AdminMenu extends JFrame {
                 String filepath = filePath + "_" + formattedDateTime + ".sql";
 
                 // Construct the command string
-                String[] cmd = new String[]{"mysqldump", "--skip-column-statistics", "-h" + host, "-P" + port, "-u" + username, "-p" + password, database, "-r" + filepath};
+                if(!cancel) {
+                    String[] cmd = new String[]{"mysqldump", "--skip-column-statistics", "-h" + host, "-P" + port, "-u" + username, "-p" + password, database, "-r" + filepath};
 
                 try {
                     // Execute the command
@@ -197,7 +207,7 @@ public class AdminMenu extends JFrame {
                 } catch (IOException | InterruptedException a) {
                     a.printStackTrace();
                 }
-
+                }
 /*
 
 
