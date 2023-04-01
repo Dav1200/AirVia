@@ -4,15 +4,15 @@ AirVia is a user-friendly application designed to efficiently record and manage 
 Inorder for backup and restore functionality to work, Make sure you have mysqldump installed on your system
 mysqldump needs to added to your windows environment
 
-Open the Start menu and search for "Environment Variables".
+1) Open the Start menu and search for "Environment Variables".
 
-Click on "Edit the system environment variables".
+2) Click on "Edit the system environment variables".
 
-Click on the "Environment Variables" button.
+3) Click on the "Environment Variables" button.
 
-Under "System Variables", scroll down and find the "Path" variable and select it, then click the "Edit" button.
+4) Under "System Variables", scroll down and find the "Path" variable and select it, then click the "Edit" button.
 
-Click the "New" button and enter the full path to the bin directory of your MySQL installation, Location might look Similar to this -> C:\Program Files\MySQL\MySQL Server 8.0\bin
+5) Click the "New" button and enter the full path to the bin directory of your MySQL installation, Location might look Similar to this -> C:\Program Files\MySQL\MySQL Server 8.0\bin
 
-Click "OK" on all the open windows to close them.
+6) Click "OK" on all the open windows to close them.
 
