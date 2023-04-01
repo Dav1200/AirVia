@@ -5,7 +5,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+
 import static com.sun.tools.javac.Main.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +24,29 @@ import java.util.zip.ZipOutputStream;
 import java.time.LocalDate;
 
 public class AdminMenu extends JFrame {
+
+    //Fields
+    private JPanel aplane;
+    private JButton workButton;
+    private JTabbedPane TabMenu;
+    private JTable DB;
+    private JButton restoreDatabaseButton;
+    private JButton backupDatabaseButton;
+    private JButton updateDatabaseButton;
+    private JTextField fnameTf;
+    private JTextField lnameTf;
+    private JTextField emailTf;
+    private JTextField addressTf;
+    private JRadioButton adminRadioButton;
+    private JRadioButton officeManagerRadioButton;
+    private JRadioButton travelAdvisorRadioButton;
+    private JTextField passwordTf;
+    private JButton registerStaffBtn;
+    private JButton clearButton;
+    private JLabel errorLabel;
+    private DBConnection db;
+
+    //Constructor
     public AdminMenu() {
         //manual input
 
@@ -31,6 +56,7 @@ public class AdminMenu extends JFrame {
         registerMember();
         errorLabel.setVisible(false);
 
+        //logout button functionality
         workButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,24 +64,27 @@ public class AdminMenu extends JFrame {
                 dispose();
             }
         });
+
+        //Restore DB functionality
         restoreDatabaseButton.addActionListener(new ActionListener() {
             //running a script which works in terminal, to do it.  script is below i just made it into a processbuilder
             // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //Jfilechooser
                 String filePath = "";
                 JFileChooser fileChooser = new JFileChooser();
                 File defaultDirectory = new File(System.getProperty("user.dir"));
                 fileChooser.setCurrentDirectory(defaultDirectory);
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
-                     filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    filePath = fileChooser.getSelectedFile().getAbsolutePath();
 
                 }
 
 
-
-                String fileName = filePath ;
+                String fileName = filePath;
                 String host = "smcse-stuproj00.city.ac.uk";
                 String username = "in2018g04_a";
                 String password = "bx5jmkL5";
@@ -107,8 +136,10 @@ public class AdminMenu extends JFrame {
                 } catch (Exception ex) {
                     System.err.println("An unexpected error occurred: " + ex.getMessage());
                 }
-            }});
+            }
+        });
 
+        //backup DB functionality
         backupDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,15 +157,15 @@ public class AdminMenu extends JFrame {
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm.ss");
                 String formattedDateTime = now.format(formatter);
-                Path path = Paths.get(filePath+formattedDateTime);
+                Path path = Paths.get(filePath + formattedDateTime);
 
 
                 String host = "smcse-stuproj00.city.ac.uk";
                 int port = 3306;
-                    String username = "in2018g04_a";
+                String username = "in2018g04_a";
                 String password = "bx5jmkL5";
                 String database = "in2018g04";
-                String filepath = filePath+"_"+formattedDateTime+".sql";
+                String filepath = filePath + "_" + formattedDateTime + ".sql";
 
                 // Construct the command string
                 String[] cmd = new String[]{"mysqldump", "--skip-column-statistics", "-h" + host, "-P" + port, "-u" + username, "-p" + password, database, "-r" + filepath};
@@ -217,37 +248,6 @@ public class AdminMenu extends JFrame {
 
     }
 
-
-
-    public JPanel getAplane() {
-        return aplane;
-    }
-
-    public void setAplane(JPanel aplane) {
-        this.aplane = aplane;
-    }
-
-    private JPanel aplane;
-    private JButton workButton;
-    private JTabbedPane TabMenu;
-    private JTable DB;
-    private JButton restoreDatabaseButton;
-    private JButton backupDatabaseButton;
-    private JButton updateDatabaseButton;
-    private JTextField fnameTf;
-    private JTextField lnameTf;
-    private JTextField emailTf;
-    private JTextField addressTf;
-    private JRadioButton adminRadioButton;
-    private JRadioButton officeManagerRadioButton;
-    private JRadioButton travelAdvisorRadioButton;
-    private JTextField passwordTf;
-    private JButton registerStaffBtn;
-    private JButton clearButton;
-    private JLabel errorLabel;
-    private DBConnection db;
-
-
     //manual input
     /*
     private void createTable(){
@@ -265,9 +265,7 @@ public class AdminMenu extends JFrame {
     //Automate Jtable With Database Values
     public void shows() {
 
-        try (
-                Connection con = DBConnection.getConnection();
-        ) {
+        try (Connection con = DBConnection.getConnection();) {
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Staff");
             ResultSet resultSet = ps.executeQuery();
@@ -305,7 +303,7 @@ public class AdminMenu extends JFrame {
 
 
     }
-
+//Clear table fields
     private void clearRegisterStaffField() {
         fnameTf.setText(null);
         lnameTf.setText(null);
@@ -314,7 +312,8 @@ public class AdminMenu extends JFrame {
         passwordTf.setText(null);
     }
 
-    public void registerMember(){
+    //Register Customer
+    public void registerMember() {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -324,7 +323,7 @@ public class AdminMenu extends JFrame {
         registerStaffBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
+                try {
                     String firstName = fnameTf.getText();
                     String lastName = lnameTf.getText();
                     String email = emailTf.getText();
@@ -334,8 +333,7 @@ public class AdminMenu extends JFrame {
                     // Establishes a connection
                     Connection con = DBConnection.getConnection();
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(FirstName, LastName, Email, Address," +
-                            " Role, Password) VALUES(?,?,?,?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(FirstName, LastName, Email, Address," + " Role, Password) VALUES(?,?,?,?,?,?)");
 
                     PreparedStatement ps2 = con.prepareStatement("INSERT INTO Admin(StaffID) VALUES (?)");
                     PreparedStatement ps3 = con.prepareStatement("INSERT INTO TravelAdvisor(StaffID) VALUES (?)");
@@ -352,41 +350,35 @@ public class AdminMenu extends JFrame {
                     }
                     System.out.println(nextAutoIncrement);
 
-                    ps.setString(1,firstName);
-                    ps.setString(2,lastName);
-                    ps.setString(3,email);
-                    ps.setString(4,address);
-                    if(adminRadioButton.isSelected()){
-                        ps.setString(5,adminRadioButton.getText());
-                        ps2.setInt(1,nextAutoIncrement);
-
+                    ps.setString(1, firstName);
+                    ps.setString(2, lastName);
+                    ps.setString(3, email);
+                    ps.setString(4, address);
+                    if (adminRadioButton.isSelected()) {
+                        ps.setString(5, adminRadioButton.getText());
+                        ps2.setInt(1, nextAutoIncrement);
 
 
                     } else if (officeManagerRadioButton.isSelected()) {
                         ps.setString(5, officeManagerRadioButton.getText());
-                        ps4.setInt(1,nextAutoIncrement);
+                        ps4.setInt(1, nextAutoIncrement);
 
-                    }
-                    else {
+                    } else {
                         ps.setString(5, travelAdvisorRadioButton.getText());
-                        ps3.setInt(1,nextAutoIncrement);
+                        ps3.setInt(1, nextAutoIncrement);
                     }
                     //showing error message if any of the text fields are empty
-                    if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || address.isEmpty() || !adminRadioButton.isSelected() && !officeManagerRadioButton.isSelected() && !travelAdvisorRadioButton.isSelected() || password.isEmpty()){
+                    if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || address.isEmpty() || !adminRadioButton.isSelected() && !officeManagerRadioButton.isSelected() && !travelAdvisorRadioButton.isSelected() || password.isEmpty()) {
                         errorLabel.setVisible(true);
-                    }
-                    else {
+                    } else {
                         JOptionPane.showMessageDialog(null, "Staff Member Added");
                         ps.setString(6, password);
 
                         //exectue SQL queries
                         ps.executeUpdate();
-                        if (adminRadioButton.isSelected())
-                            ps2.executeUpdate();
-                        else if (officeManagerRadioButton.isSelected())
-                            ps4.executeUpdate();
-                        else
-                            ps3.executeUpdate();
+                        if (adminRadioButton.isSelected()) ps2.executeUpdate();
+                        else if (officeManagerRadioButton.isSelected()) ps4.executeUpdate();
+                        else ps3.executeUpdate();
 
                         //Clears once form is submitted
                         clearRegisterStaffField();
@@ -397,6 +389,15 @@ public class AdminMenu extends JFrame {
                 shows();
             }
         });
+    }
+
+    //Getters and Setters
+    public JPanel getAplane() {
+        return aplane;
+    }
+
+    public void setAplane(JPanel aplane) {
+        this.aplane = aplane;
     }
 
 }
