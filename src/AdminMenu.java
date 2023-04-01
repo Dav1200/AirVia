@@ -83,8 +83,20 @@ public class AdminMenu extends JFrame {
                     // Check if the process completed successfully
                     if (exitCode == 0) {
                         System.out.println("Database restored successfully.");
+                        JFrame frame = new JFrame("Example Frame");
+                        frame.setSize(300, 200);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                        JOptionPane.showMessageDialog(frame, "Successful");
+
+
                     } else {
                         System.out.println("Failed to restore database.");
+                        JFrame frame = new JFrame("Example Frame");
+                        frame.setSize(300, 200);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                        JOptionPane.showMessageDialog(frame, "Failed");
                     }
 
                 } catch (IOException ev) {
@@ -128,8 +140,19 @@ public class AdminMenu extends JFrame {
                     // Check the exit code
                     if (exitCode == 0) {
                         System.out.println("Database backup completed successfully.");
+                        JFrame frame = new JFrame("Example Frame");
+                        frame.setSize(300, 200);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                        JOptionPane.showMessageDialog(frame, "Successful");
                     } else {
                         System.err.println("Database backup failed. Exit code: " + exitCode);
+                        System.out.println("Failed to restore database.");
+                        JFrame frame = new JFrame("Example Frame");
+                        frame.setSize(300, 200);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                        JOptionPane.showMessageDialog(frame, "Failed");
                     }
                 } catch (IOException | InterruptedException a) {
                     a.printStackTrace();
