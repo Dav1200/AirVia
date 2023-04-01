@@ -5,9 +5,14 @@ Inorder for backup and restore functionality to work, Make sure you have mysqldu
 mysqldump needs to added to your windows environment
 
 Open the Start menu and search for "Environment Variables".
+
 Click on "Edit the system environment variables".
+
 Click on the "Environment Variables" button.
+
 Under "System Variables", scroll down and find the "Path" variable and select it, then click the "Edit" button.
+
 Click the "New" button and enter the full path to the bin directory of your MySQL installation, Location might look Similar to this -> C:\Program Files\MySQL\MySQL Server 8.0\bin
+
 Click "OK" on all the open windows to close them.
 
