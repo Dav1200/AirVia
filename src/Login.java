@@ -24,6 +24,8 @@ public class Login extends JFrame {
     private JPasswordField passwordField1;
     private JPanel Hello;
     private JLabel error;
+    private ImageIcon AirVia;
+    private JLabel ImgLabel;
 
     private JButton resetButton;
     private JButton loginButton;
@@ -42,6 +44,9 @@ private boolean check;
         String to = "ttechttonic@gmail.com";
         String from = "davsuper4@gmaill.com";
         String subject = "2FA Code";
+        AirVia = new ImageIcon("Airvia_image2.PNG");
+        ImgLabel.setIcon(AirVia);
+        ImgLabel.setSize(8, 6);
 
 
 
@@ -58,6 +63,7 @@ private boolean check;
 
         this.setVisible(true);
         this.setSize(800, 600);
+        //this.add(ImgLabel);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 

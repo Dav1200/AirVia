@@ -119,6 +119,7 @@ public class AdminMenu extends JFrame {
                         JFrame frame = new JFrame("Example Frame");
                         frame.setSize(300, 200);
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        shows();
 
                         JOptionPane.showMessageDialog(frame, "Successful");
 
