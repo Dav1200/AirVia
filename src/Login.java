@@ -44,10 +44,9 @@ private boolean check;
         String to = "ttechttonic@gmail.com";
         String from = "davsuper4@gmaill.com";
         String subject = "2FA Code";
-        AirVia = new ImageIcon("Airvia_image2.PNG");
+        AirVia = new ImageIcon("Images\\Airvia_image2.PNG");
         ImgLabel.setIcon(AirVia);
         ImgLabel.setSize(8, 6);
-
 
 
         Random rnd = new Random();
