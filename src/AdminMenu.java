@@ -43,7 +43,19 @@ public class AdminMenu extends JFrame {
             // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileName = "backup//backup.sql";
+                String filePath = "";
+                JFileChooser fileChooser = new JFileChooser();
+                File defaultDirectory = new File(System.getProperty("user.dir"),"backup");
+                fileChooser.setCurrentDirectory(defaultDirectory);
+                int result = fileChooser.showOpenDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                     filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    System.out.println("Selected file path: " + filePath);
+                }
+
+
+
+                String fileName = filePath ;
                 String host = "smcse-stuproj00.city.ac.uk";
                 String username = "in2018g04_a";
                 String password = "bx5jmkL5";
@@ -89,27 +101,19 @@ public class AdminMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //get date/time to add to file path
-                /*
+
                 LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh.mm.ss");
                 String formattedDateTime = now.format(formatter);
-                Path path = Paths.get(formattedDateTime);
-                try {
-                    Files.createDirectories(path);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                Path path = Paths.get("backup\\"+formattedDateTime);
 
-
-
-                 */
 
                 String host = "smcse-stuproj00.city.ac.uk";
                 int port = 3306;
                     String username = "in2018g04_a";
                 String password = "bx5jmkL5";
                 String database = "in2018g04";
-                String filepath = "backup\\backup.sql";
+                String filepath = "backup\\"+formattedDateTime+".sql";
 
                 // Construct the command string
                 String[] cmd = new String[]{"mysqldump", "--skip-column-statistics", "-h" + host, "-P" + port, "-u" + username, "-p" + password, database, "-r" + filepath};
