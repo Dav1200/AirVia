@@ -29,7 +29,12 @@ public class Login extends JFrame {
     private AdminMenu ad;
     private String role;
     private int code;
-    private String codestr;
+
+    public static String getCodestr() {
+        return codestr;
+    }
+
+    private static String codestr;
     private FileWriter myWriter;
 
 
@@ -41,15 +46,14 @@ public class Login extends JFrame {
         //designing
 
 
-
-
-
         //
 
         GEmailSender gEmailSender = new GEmailSender();
         String to = "ttechttonic@gmail.com";
         String from = "davsuper4@gmaill.com";
         String subject = "2FA Code";
+
+
         AirVia = new ImageIcon("Images\\Airvia_image2.PNG");
         ImgLabel.setIcon(AirVia);
         ImgLabel.setSize(8, 6);

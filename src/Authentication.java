@@ -1,3 +1,5 @@
+import com.mysql.cj.log.Log;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -52,6 +54,9 @@ public class Authentication extends JFrame {
     }
     public Authentication() {
         codeSentTxt.setVisible(false);
+        
+        //remove this AT THE END
+        codeTextField.setText(Login.getCodestr());
 
 
         codeTextField.addKeyListener(new KeyAdapter() {
