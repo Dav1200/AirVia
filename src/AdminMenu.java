@@ -1,34 +1,23 @@
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
-import static com.sun.tools.javac.Main.*;
-
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import java.time.LocalDate;
 
 public class AdminMenu extends JFrame {
 
     //Fields
     private JPanel aplane;
     private JButton workButton;
-    private JTabbedPane TabMenu;
+    private JTabbedPane logsjTable;
     private JTable DB;
     private JButton restoreDatabaseButton;
     private JButton backupDatabaseButton;
@@ -44,11 +33,16 @@ public class AdminMenu extends JFrame {
     private JButton registerStaffBtn;
     private JButton clearButton;
     private JLabel errorLabel;
+    private JTable logsTable;
+
+    private DefaultTableModel dTable;
     private DBConnection db;
 
     //Constructor
     public AdminMenu() {
         //manual input
+
+
 
 
         //createTable();
@@ -256,6 +250,10 @@ public class AdminMenu extends JFrame {
             }
         });
 
+       showLog();
+
+
+        // Read the login information from the file and add it to the table model
 
     }
 
@@ -270,6 +268,27 @@ public class AdminMenu extends JFrame {
 
      */
 
+    public void showLog(){
+        String[] columnNames = {"User", "Status", "Time"};
+        dTable = new DefaultTableModel(columnNames, 0);
+        dTable.setColumnIdentifiers(columnNames);
+        logsTable.setRowHeight(25);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("login_records.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" ");
+                String userName = parts[1];
+                String status = parts[2];
+                String time = parts[4] + " " + parts[5] + " " + parts[6] + " " + parts[7] + " " + parts[8];
+                dTable.addRow(new Object[]{userName, status, time});
+            }
+            reader.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        logsTable.setModel(dTable);
+    }
     //automated input
 
     //get connection

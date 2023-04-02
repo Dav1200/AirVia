@@ -3,6 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
@@ -33,6 +37,7 @@ public class Login extends JFrame {
     private String role;
     private int code;
     private String codestr;
+    private FileWriter   myWriter;
 
 
 
@@ -48,7 +53,11 @@ private boolean check;
         ImgLabel.setIcon(AirVia);
         ImgLabel.setSize(8, 6);
 
-
+        try {
+            myWriter = new FileWriter("login_records.txt", true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Random rnd = new Random();
          code = rnd.nextInt(999999);
         // this will convert any number sequence into 6 character.
@@ -71,6 +80,8 @@ private boolean check;
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
                 String password = passwordField1.getText();
                 String userName = userNameText.getText();
                 String encrpPass = null;
@@ -161,6 +172,15 @@ auth.getCodeSentTxt().setVisible(true);
                                    switch (role) {
 
                                        case "admin":
+                                           try {
+
+                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.flush();
+                                               myWriter.close();
+
+                                           } catch (IOException ex) {
+                                               throw new RuntimeException(ex);
+                                           }
                                            AdminMenu admin = new AdminMenu();
                                            admin.setContentPane(admin.getAplane());
                                            admin.setVisible(true);
@@ -168,9 +188,16 @@ auth.getCodeSentTxt().setVisible(true);
                                            admin.setLocationRelativeTo(null);
                                            admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
                                            dispose();
-
                                            break;
                                        case "travel advisor":
+                                           try {
+                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.flush();
+                                               myWriter.close();
+
+                                           } catch (IOException ex) {
+                                               throw new RuntimeException(ex);
+                                           }
                                            AdvisorMenu advisor = new AdvisorMenu();
                                            advisor.setContentPane(advisor.getAdPlane());
                                            advisor.setVisible(true);
@@ -182,6 +209,14 @@ auth.getCodeSentTxt().setVisible(true);
                                            break;
 
                                        case "office manager":
+                                           try {
+                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.flush();
+                                               myWriter.close();
+
+                                           } catch (IOException ex) {
+                                               throw new RuntimeException(ex);
+                                           }
                                            OfficeManagerMenu manager = new OfficeManagerMenu();
                                            manager.setContentPane(manager.getoPlane());
                                            manager.setVisible(true);
@@ -189,6 +224,8 @@ auth.getCodeSentTxt().setVisible(true);
                                            manager.setLocationRelativeTo(null);
                                            manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
                                            dispose();
+
+
                                            break;
                                    }
 
@@ -201,8 +238,17 @@ auth.getCodeSentTxt().setVisible(true);
 );
 
                     } else {
+
+
+                        myWriter.write("User " + userName + " Failed " + new Date() + "\n");
+                        myWriter.flush();
+
+
+
                         if (!error.isVisible()) {
+
                             error.setVisible(true);
+
                         }
                         //Add error code for when you username or password is wrong
                         //add in GUI manner, so it should be displayed on the form
@@ -210,7 +256,7 @@ auth.getCodeSentTxt().setVisible(true);
                     }
 
 
-                } catch (SQLException | NoSuchAlgorithmException | ClassNotFoundException ex) {
+                } catch (SQLException | NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
