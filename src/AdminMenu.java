@@ -46,7 +46,7 @@ public class AdminMenu extends JFrame {
 
 
         //createTable();
-        shows();
+        showStaff();
         registerMember();
         errorLabel.setVisible(false);
 
@@ -113,7 +113,7 @@ public class AdminMenu extends JFrame {
                         JFrame frame = new JFrame("Example Frame");
                         frame.setSize(300, 200);
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        shows();
+                        showStaff();
 
                         JOptionPane.showMessageDialog(frame, "Successful");
 
@@ -293,7 +293,7 @@ public class AdminMenu extends JFrame {
 
     //get connection
     //Automate Jtable With Database Values
-    public void shows() {
+    public void showStaff() {
 
         try (Connection con = DBConnection.getConnection();) {
 
@@ -416,7 +416,7 @@ public class AdminMenu extends JFrame {
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
-                shows();
+                showStaff();
             }
         });
     }

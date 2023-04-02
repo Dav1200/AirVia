@@ -1,6 +1,8 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class OfficeManagerMenu extends JFrame{
 
@@ -36,6 +38,7 @@ public class OfficeManagerMenu extends JFrame{
     private JTable table2;
 
     public OfficeManagerMenu() {
+        showTicketTurnoverReport();
 
 
         workButton.addActionListener(new ActionListener() {
@@ -45,6 +48,48 @@ public class OfficeManagerMenu extends JFrame{
                 dispose();
             }
         });
+    }
+
+    public void showTicketTurnoverReport() {
+
+        try (Connection con = DBConnection.getConnection();) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM TicketTurnoverReport");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) turnoverReport.getModel();
+            turnoverReport.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String BlankID, BlankType, RecievedBlanks, BlanksAssigned, TotalBlanks, StartDate, AdvisorID, StaffID;
+            while (resultSet.next()) {
+                BlankID = resultSet.getString(1);
+                BlankType = resultSet.getString(2);
+                RecievedBlanks = resultSet.getString(3);
+                BlanksAssigned = resultSet.getString(4);
+                TotalBlanks = resultSet.getString(5);
+                StartDate = resultSet.getString(6);
+                AdvisorID = resultSet.getString(7);
+                StaffID = resultSet.getString(8);
+
+                String[] row = {BlankID, BlankType, RecievedBlanks, BlanksAssigned, TotalBlanks, StartDate, AdvisorID, StaffID};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     private void createUIComponents() {
