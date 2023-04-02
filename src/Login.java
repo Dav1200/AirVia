@@ -174,7 +174,7 @@ auth.getCodeSentTxt().setVisible(true);
                                        case "admin":
                                            try {
 
-                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
                                                myWriter.flush();
                                                myWriter.close();
 
@@ -191,7 +191,7 @@ auth.getCodeSentTxt().setVisible(true);
                                            break;
                                        case "travel advisor":
                                            try {
-                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
                                                myWriter.flush();
                                                myWriter.close();
 
@@ -210,7 +210,7 @@ auth.getCodeSentTxt().setVisible(true);
 
                                        case "office manager":
                                            try {
-                                               myWriter.write("User " + userName + " successfully " + new Date() + "\n");
+                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
                                                myWriter.flush();
                                                myWriter.close();
 
