@@ -37,11 +37,10 @@ public class Login extends JFrame {
     private String role;
     private int code;
     private String codestr;
-    private FileWriter   myWriter;
+    private FileWriter myWriter;
 
 
-
-private boolean check;
+    private boolean check;
 
     public Login() {
 
@@ -59,9 +58,9 @@ private boolean check;
             throw new RuntimeException(e);
         }
         Random rnd = new Random();
-         code = rnd.nextInt(999999);
+        code = rnd.nextInt(999999);
         // this will convert any number sequence into 6 character.
-         codestr = String.format("%06d", code);
+        codestr = String.format("%06d", code);
         System.out.println(codestr);
         check = false;
         role = "";
@@ -146,103 +145,95 @@ auth.getCodeSentTxt().setVisible(true);
                         });
 
 
-
-
-
-
-
-
-
                         auth.getSubmitButton().addActionListener(new ActionListener() {
-                             @Override
-                           public void actionPerformed(ActionEvent e) {
-                               if (auth.getCodeTextField().getText().equals(codestr)) {
-                                   System.out.println(auth.getCodeTextField().getText());
-                                   check = true;
-                                   dispose();
-                                   auth.dispose();
+                                                                     @Override
+                                                                     public void actionPerformed(ActionEvent e) {
+                                                                         if (auth.getCodeTextField().getText().equals(codestr)) {
+                                                                             System.out.println(auth.getCodeTextField().getText());
+                                                                             check = true;
+                                                                             dispose();
+                                                                             auth.dispose();
 
-                               } else {
-                                   //If 2fa code is wrong somethign happens?
-                                   //CODE HERE
+                                                                         } else {
+                                                                             //If 2fa code is wrong somethign happens?
+                                                                             //CODE HERE
 
-                               }
+                                                                         }
 
-                               if (check) {
-                                   switch (role) {
+                                                                         if (check) {
+                                                                             switch (role) {
 
-                                       case "admin":
-                                           try {
+                                                                                 case "admin":
+                                                                                     try {
 
-                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                               myWriter.flush();
-                                               myWriter.close();
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
 
-                                           } catch (IOException ex) {
-                                               throw new RuntimeException(ex);
-                                           }
-                                           AdminMenu admin = new AdminMenu();
-                                           admin.setContentPane(admin.getAplane());
-                                           admin.setVisible(true);
-                                           admin.setSize(800, 600);
-                                           admin.setLocationRelativeTo(null);
-                                           admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                           dispose();
-                                           break;
-                                       case "travel advisor":
-                                           try {
-                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                               myWriter.flush();
-                                               myWriter.close();
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
+                                                                                     AdminMenu admin = new AdminMenu();
+                                                                                     admin.setContentPane(admin.getAplane());
+                                                                                     admin.setVisible(true);
+                                                                                     admin.setSize(800, 600);
+                                                                                     admin.setLocationRelativeTo(null);
+                                                                                     admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
+                                                                                     break;
+                                                                                 case "travel advisor":
+                                                                                     try {
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
 
-                                           } catch (IOException ex) {
-                                               throw new RuntimeException(ex);
-                                           }
-                                           AdvisorMenu advisor = new AdvisorMenu();
-                                           advisor.setContentPane(advisor.getAdPlane());
-                                           advisor.setVisible(true);
-                                           advisor.setSize(800, 600);
-                                           advisor.setLocationRelativeTo(null);
-                                           advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                           dispose();
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
+                                                                                     AdvisorMenu advisor = new AdvisorMenu();
+                                                                                     advisor.setContentPane(advisor.getAdPlane());
+                                                                                     advisor.setVisible(true);
+                                                                                     advisor.setSize(800, 600);
+                                                                                     advisor.setLocationRelativeTo(null);
+                                                                                     advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
 
-                                           break;
+                                                                                     break;
 
-                                       case "office manager":
-                                           try {
-                                               myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                               myWriter.flush();
-                                               myWriter.close();
+                                                                                 case "office manager":
+                                                                                     try {
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
 
-                                           } catch (IOException ex) {
-                                               throw new RuntimeException(ex);
-                                           }
-                                           OfficeManagerMenu manager = new OfficeManagerMenu();
-                                           manager.setContentPane(manager.getoPlane());
-                                           manager.setVisible(true);
-                                           manager.setSize(800, 600);
-                                           manager.setLocationRelativeTo(null);
-                                           manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                           dispose();
-
-
-                                           break;
-                                   }
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
+                                                                                     OfficeManagerMenu manager = new OfficeManagerMenu();
+                                                                                     manager.setContentPane(manager.getoPlane());
+                                                                                     manager.setVisible(true);
+                                                                                     manager.setSize(800, 600);
+                                                                                     manager.setLocationRelativeTo(null);
+                                                                                     manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
 
 
-                               }
+                                                                                     break;
+                                                                             }
 
-                           }
-                       }
 
-);
+                                                                         }
+
+                                                                     }
+                                                                 }
+
+                        );
 
                     } else {
 
 
                         myWriter.write("User " + userName + " Failed " + new Date() + "\n");
                         myWriter.flush();
-
 
 
                         if (!error.isVisible()) {

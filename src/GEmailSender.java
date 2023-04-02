@@ -20,7 +20,6 @@ public class GEmailSender {
         String username = "davsuper4@Gmail.com";
         String password = "kmgleqbsqbaccivt";
 
-
         //session
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
@@ -29,9 +28,7 @@ public class GEmailSender {
 
             }
         });
-
         try {
-
             Message message = new MimeMessage(session);
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setFrom(new InternetAddress(from));
@@ -42,7 +39,6 @@ public class GEmailSender {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return flag;
     }
