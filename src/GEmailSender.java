@@ -8,7 +8,6 @@ public class GEmailSender {
 
     public boolean sendEmail(String to, String from, String subject, String text) {
         boolean flag = false;
-
         //logic
         //smtp properties
         Properties properties = new Properties();
@@ -25,7 +24,6 @@ public class GEmailSender {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
-
             }
         });
         try {

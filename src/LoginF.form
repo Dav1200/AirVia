@@ -98,7 +98,7 @@
             <properties>
               <background color="-4540485"/>
               <font size="18"/>
-              <text value="Reset"/>
+              <text value="Setup"/>
             </properties>
           </component>
           <component id="74596" class="javax.swing.JButton" binding="loginButton" default-binding="true">

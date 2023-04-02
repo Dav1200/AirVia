@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -338,6 +340,35 @@ auth.getCodeSentTxt().setVisible(true);
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
                 resetButton.setFont((new Font("Helvetica ", Font.BOLD, 18)));
+            }
+        });
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] commands = {"cmd", "/c", "where", "mysqldump.exe"};
+                Process process = null;
+                try {
+                    process = Runtime.getRuntime().exec(commands);
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line = reader.readLine();
+
+                    if (line != null) {
+                        String mysqldumpPath = line.trim();
+                        String versionCommand = mysqldumpPath + " --version";
+                        process = Runtime.getRuntime().exec(versionCommand);
+                        reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        line = reader.readLine();
+
+                        if (line != null) {
+                            System.out.println(mysqldumpPath);
+                        }
+                    } else {
+                        System.err.println("Could not find mysqldump");
+                    }
+                }catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
