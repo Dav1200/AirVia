@@ -113,6 +113,9 @@ public class Login extends JFrame {
                     ResultSet rs = ps.executeQuery();
 
 
+
+
+
                     if (rs.next() && encryptString(password).equals(encrpPass)) {
                         Authentication auth = new Authentication();
                         auth.setName("2FA");
@@ -168,7 +171,7 @@ auth.getCodeSentTxt().setVisible(true);
                                 }
 
                                 if (check) {
-                                    switch (role) {
+                                    switch (role.toLowerCase()) {
                                         case "admin":
                                             try {
                                                 myWriter.write("User " + userName + " successful " + new Date() + "\n");
