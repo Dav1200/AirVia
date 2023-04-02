@@ -482,7 +482,9 @@
                 <children>
                   <component id="aa894" class="javax.swing.JTable" binding="CustomerTable">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <font size="16"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
