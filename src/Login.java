@@ -306,6 +306,33 @@ auth.getCodeSentTxt().setVisible(true);
 
             }
         });
+        loginButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                loginButton.setFont((new Font("Helvetica ", Font.BOLD, 18)));
+
+            }
+        });
+        resetButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                resetButton.setFont((new Font("Helvetica ", Font.BOLD, 18)));
+            }
+        });
     }
 
     public static String encryptString(String input) throws NoSuchAlgorithmException {
