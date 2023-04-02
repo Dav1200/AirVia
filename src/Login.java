@@ -1,9 +1,6 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -14,13 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Random;
-
-
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 
 public class Login extends JFrame {
 
@@ -33,6 +24,8 @@ public class Login extends JFrame {
 
     private JButton resetButton;
     private JButton loginButton;
+    private JLabel uNameJLabel;
+    private JLabel passJLabel;
     private AdminMenu ad;
     private String role;
     private int code;
@@ -43,6 +36,15 @@ public class Login extends JFrame {
     private boolean check;
 
     public Login() {
+
+
+        //designing
+
+
+
+
+
+        //
 
         GEmailSender gEmailSender = new GEmailSender();
         String to = "ttechttonic@gmail.com";
@@ -77,6 +79,7 @@ public class Login extends JFrame {
 
 // testing Taha
         loginButton.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -146,82 +149,71 @@ auth.getCodeSentTxt().setVisible(true);
 
 
                         auth.getSubmitButton().addActionListener(new ActionListener() {
-                                                                     @Override
-                                                                     public void actionPerformed(ActionEvent e) {
-                                                                         if (auth.getCodeTextField().getText().equals(codestr)) {
-                                                                             System.out.println(auth.getCodeTextField().getText());
-                                                                             check = true;
-                                                                             dispose();
-                                                                             auth.dispose();
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (auth.getCodeTextField().getText().equals(codestr)) {
+                                    System.out.println(auth.getCodeTextField().getText());
+                                    check = true;
+                                    dispose();
+                                    auth.dispose();
 
-                                                                         } else {
-                                                                             //If 2fa code is wrong somethign happens?
-                                                                             //CODE HERE
+                                } else {
+                                    //If 2fa code is wrong somethign happens?
+                                    //CODE HERE
 
-                                                                         }
+                                }
 
-                                                                         if (check) {
-                                                                             switch (role) {
-
-                                                                                 case "admin":
-                                                                                     try {
-
-                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                                                         myWriter.flush();
-                                                                                         myWriter.close();
-
-                                                                                     } catch (IOException ex) {
-                                                                                         throw new RuntimeException(ex);
-                                                                                     }
-                                                                                     AdminMenu admin = new AdminMenu();
-                                                                                     admin.setContentPane(admin.getAplane());
-                                                                                     admin.setVisible(true);
-                                                                                     admin.setSize(800, 600);
-                                                                                     admin.setLocationRelativeTo(null);
-                                                                                     admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                                                                     dispose();
-                                                                                     break;
-                                                                                 case "travel advisor":
-                                                                                     try {
-                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                                                         myWriter.flush();
-                                                                                         myWriter.close();
-
-                                                                                     } catch (IOException ex) {
-                                                                                         throw new RuntimeException(ex);
-                                                                                     }
-                                                                                     AdvisorMenu advisor = new AdvisorMenu();
-                                                                                     advisor.setContentPane(advisor.getAdPlane());
-                                                                                     advisor.setVisible(true);
-                                                                                     advisor.setSize(800, 600);
-                                                                                     advisor.setLocationRelativeTo(null);
-                                                                                     advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                                                                     dispose();
-
-                                                                                     break;
-
-                                                                                 case "office manager":
-                                                                                     try {
-                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                                                         myWriter.flush();
-                                                                                         myWriter.close();
-
-                                                                                     } catch (IOException ex) {
-                                                                                         throw new RuntimeException(ex);
-                                                                                     }
-                                                                                     OfficeManagerMenu manager = new OfficeManagerMenu();
-                                                                                     manager.setContentPane(manager.getoPlane());
-                                                                                     manager.setVisible(true);
-                                                                                     manager.setSize(800, 600);
-                                                                                     manager.setLocationRelativeTo(null);
-                                                                                     manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                                                                     dispose();
-
-
-                                                                                     break;
-                                                                             }
-
-
+                                if (check) {
+                                    switch (role) {
+                                        case "admin":
+                                            try {
+                                                myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                myWriter.flush();
+                                                myWriter.close();
+                                            } catch (IOException ex) {
+                                                throw new RuntimeException(ex);
+                                            }
+                                            AdminMenu admin = new AdminMenu();
+                                            admin.setContentPane(admin.getAplane());
+                                            admin.setVisible(true);
+                                            admin.setSize(800, 600);
+                                            admin.setLocationRelativeTo(null);
+                                            admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                            dispose();
+                                            break;
+                                            case "travel advisor":
+                                                try {
+                                                    myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                    myWriter.flush();
+                                                    myWriter.close();
+                                                } catch (IOException ex) {
+                                                    throw new RuntimeException(ex);
+                                                }
+                                                AdvisorMenu advisor = new AdvisorMenu();
+                                                advisor.setContentPane(advisor.getAdPlane());
+                                                advisor.setVisible(true);
+                                                advisor.setSize(800, 600);
+                                                advisor.setLocationRelativeTo(null);
+                                                advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                dispose();
+                                                break;
+                                                case "office manager":
+                                                    try {
+                                                        myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                        myWriter.flush();
+                                                        myWriter.close();
+                                                    } catch (IOException ex) {
+                                                        throw new RuntimeException(ex);
+                                                    }
+                                                    OfficeManagerMenu manager = new OfficeManagerMenu();
+                                                    manager.setContentPane(manager.getoPlane());
+                                                    manager.setVisible(true);
+                                                    manager.setSize(800, 600);
+                                                    manager.setLocationRelativeTo(null);
+                                                    manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                    dispose();
+                                                    break;
+                                    }
                                                                          }
 
                                                                      }
@@ -263,6 +255,56 @@ auth.getCodeSentTxt().setVisible(true);
             //  }
 
 
+        });
+        passwordField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButton.doClick();
+                }}
+        });
+        userNameText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                loginButton.doClick();
+            }}
+        });
+
+
+        userNameText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                uNameJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+                uNameJLabel.setForeground(new Color(40, 40, 40));
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                uNameJLabel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+            }
+        });
+
+        passwordField1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                passJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+                passJLabel.setForeground(new Color(40, 40, 40));
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                passJLabel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+
+            }
         });
     }
 

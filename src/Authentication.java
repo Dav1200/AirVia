@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Authentication extends JFrame {
 
@@ -51,6 +53,17 @@ public class Authentication extends JFrame {
     public Authentication() {
         codeSentTxt.setVisible(false);
 
+
+        codeTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    submitButton.doClick();
+                }}
+
+        });
     }
 }
 
