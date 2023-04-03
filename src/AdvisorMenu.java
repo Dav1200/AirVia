@@ -82,7 +82,7 @@ public class AdvisorMenu extends JFrame {
 
     public void showCustomer() {
         try (
-                Connection con = DBConnection.getConnection();
+                Connection con = DBConnection.getConnection()
         ) {
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Customer");
@@ -223,7 +223,7 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
-                        Connection con = DBConnection.getConnection();
+                        Connection con = DBConnection.getConnection()
                 ) {
 
                     //column names

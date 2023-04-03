@@ -1,6 +1,6 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing. * ;
+import java.awt. * ;
+import java.awt.event. * ;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,36 +17,26 @@ import java.util.Random;
 
 public class Login extends JFrame {
 
+    private static String codestr;
+    private final ImageIcon AirVia;
+    private final int code;
+    private final FileWriter myWriter;
     private JTextField userNameText;
     private JPasswordField passwordField1;
     private JPanel Hello;
     private JLabel error;
-    private ImageIcon AirVia;
     private JLabel ImgLabel;
-
     private JButton resetButton;
     private JButton loginButton;
     private JLabel uNameJLabel;
     private JLabel passJLabel;
     private AdminMenu ad;
     private String role;
-    private int code;
-
-    public static String getCodestr() {
-        return codestr;
-    }
-
-    private static String codestr;
-    private FileWriter myWriter;
-
-
     private boolean check;
 
     public Login() {
 
-
         //designing
-
 
         //
 
@@ -55,14 +45,13 @@ public class Login extends JFrame {
         String from = "davsuper4@gmaill.com";
         String subject = "2FA Code";
 
-
         AirVia = new ImageIcon("Images\\Airvia_image2.PNG");
         ImgLabel.setIcon(AirVia);
         ImgLabel.setSize(8, 6);
 
         try {
             myWriter = new FileWriter("login_records.txt", true);
-        } catch (IOException e) {
+        } catch(IOException e) {
             throw new RuntimeException(e);
         }
         Random rnd = new Random();
@@ -82,29 +71,26 @@ public class Login extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
-// testing Taha
+        // testing Taha
         loginButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
                 String password = passwordField1.getText();
                 String userName = userNameText.getText();
                 String encrpPass = null;
 
-                try (Connection con = DBConnection.getConnection();) {
+                try (Connection con = DBConnection.getConnection()) {
                     //SQL QUERY WHICH WILL BE USED GET ROLE FROM LOGIN
 
                     try {
                         encrpPass = encryptString(password);
-                    } catch (NoSuchAlgorithmException ex) {
+                    } catch(NoSuchAlgorithmException ex) {
                         System.out.println(ex);
                     }
 
-
-//Encryption
+                    //Encryption
                     PreparedStatement ps = con.prepareStatement("SELECT Role FROM `Staff` WHERE Password = ? and StaffID = ?");
                     //assigns the userName and Password for the Password and userName field in SQL
 
@@ -113,10 +99,6 @@ public class Login extends JFrame {
                     ps.setString(2, userName);
                     //Gets the result from QUERY
                     ResultSet rs = ps.executeQuery();
-
-
-
-
 
                     if (rs.next() && encryptString(password).equals(encrpPass)) {
                         Authentication auth = new Authentication();
@@ -130,17 +112,16 @@ public class Login extends JFrame {
 
                         auth.getEmailButton().addActionListener(new ActionListener() {
                             @Override
-                            public void actionPerformed(ActionEvent e) {
-                                //to send email line below
-                                boolean b = gEmailSender.sendEmail(to, from, subject, codestr);
-                                auth.getCodeSentTxt().setVisible(true);
-                            }
+                        public void actionPerformed(ActionEvent e) {
+                            //to send email line below
+                            boolean b = gEmailSender.sendEmail(to, from, subject, codestr);
+                            auth.getCodeSentTxt().setVisible(true);
+                        }
                         });
 
-                        auth.getsMSButton().addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                /* to send mobile text
+                        auth.getsMSButton().addActionListener(new ActionListener() {@Override
+                        public void actionPerformed(ActionEvent e) {
+                /* to send mobile text
                         Twilio.init("AC2b2098fa2669b835feb2b72bf50c01b0", "2628c89c04b3fc37188b2c927dd2c95a");
                         Message message = Message.creator(
                                         new com.twilio.type.PhoneNumber("+447487555892"),
@@ -153,89 +134,85 @@ public class Login extends JFrame {
 auth.getCodeSentTxt().setVisible(true);
 
  */
-                            }
+                        }
                         });
 
+                        auth.getSubmitButton().addActionListener(new ActionListener() {@Override
+                         public void actionPerformed(ActionEvent e) {
+                             if (auth.getCodeTextField().getText().equals(codestr)) {
+                                 System.out.println(auth.getCodeTextField().getText());
+                                 check = true;
+                                 dispose();
+                                 auth.dispose();
 
-                        auth.getSubmitButton().addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if (auth.getCodeTextField().getText().equals(codestr)) {
-                                    System.out.println(auth.getCodeTextField().getText());
-                                    check = true;
-                                    dispose();
-                                    auth.dispose();
+                             } else {
+                                 //If 2fa code is wrong somethign happens?
+                                 //CODE HERE
 
-                                } else {
-                                    //If 2fa code is wrong somethign happens?
-                                    //CODE HERE
+                             }
 
-                                }
+                             if (check) {
+                                 switch (role.toLowerCase()) {
+                                     case "admin":
+                                         try {
+                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                             myWriter.flush();
+                                             myWriter.close();
+                                         } catch(IOException ex) {
+                                             throw new RuntimeException(ex);
+                                         }
+                                         AdminMenu admin = new AdminMenu();
+                                         admin.setContentPane(admin.getAplane());
+                                         admin.setVisible(true);
+                                         admin.setSize(800, 600);
+                                         admin.setLocationRelativeTo(null);
+                                         admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                         dispose();
+                                         break;
+                                     case "travel advisor":
+                                         try {
+                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                             myWriter.flush();
+                                             myWriter.close();
+                                         } catch(IOException ex) {
+                                             throw new RuntimeException(ex);
+                                         }
+                                         AdvisorMenu advisor = new AdvisorMenu();
+                                         advisor.setContentPane(advisor.getAdPlane());
+                                         advisor.setVisible(true);
+                                         advisor.setSize(800, 600);
+                                         advisor.setLocationRelativeTo(null);
+                                         advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                         dispose();
+                                         break;
+                                     case "office manager":
+                                         try {
+                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                             myWriter.flush();
+                                             myWriter.close();
+                                         } catch(IOException ex) {
+                                             throw new RuntimeException(ex);
+                                         }
+                                         OfficeManagerMenu manager = new OfficeManagerMenu();
+                                         manager.setContentPane(manager.getoPlane());
+                                         manager.setVisible(true);
+                                         manager.setSize(800, 600);
+                                         manager.setLocationRelativeTo(null);
+                                         manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                         dispose();
+                                         break;
+                                 }
+                             }
 
-                                if (check) {
-                                    switch (role.toLowerCase()) {
-                                        case "admin":
-                                            try {
-                                                myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                myWriter.flush();
-                                                myWriter.close();
-                                            } catch (IOException ex) {
-                                                throw new RuntimeException(ex);
-                                            }
-                                            AdminMenu admin = new AdminMenu();
-                                            admin.setContentPane(admin.getAplane());
-                                            admin.setVisible(true);
-                                            admin.setSize(800, 600);
-                                            admin.setLocationRelativeTo(null);
-                                            admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                            dispose();
-                                            break;
-                                            case "travel advisor":
-                                                try {
-                                                    myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                    myWriter.flush();
-                                                    myWriter.close();
-                                                } catch (IOException ex) {
-                                                    throw new RuntimeException(ex);
-                                                }
-                                                AdvisorMenu advisor = new AdvisorMenu();
-                                                advisor.setContentPane(advisor.getAdPlane());
-                                                advisor.setVisible(true);
-                                                advisor.setSize(800, 600);
-                                                advisor.setLocationRelativeTo(null);
-                                                advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                                dispose();
-                                                break;
-                                                case "office manager":
-                                                    try {
-                                                        myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                                        myWriter.flush();
-                                                        myWriter.close();
-                                                    } catch (IOException ex) {
-                                                        throw new RuntimeException(ex);
-                                                    }
-                                                    OfficeManagerMenu manager = new OfficeManagerMenu();
-                                                    manager.setContentPane(manager.getoPlane());
-                                                    manager.setVisible(true);
-                                                    manager.setSize(800, 600);
-                                                    manager.setLocationRelativeTo(null);
-                                                    manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                                    dispose();
-                                                    break;
-                                    }
-                                                                         }
-
-                                                                     }
-                                                                 }
+                         }
+                         }
 
                         );
 
                     } else {
 
-
                         myWriter.write("User " + userName + " Failed " + new Date() + "\n");
                         myWriter.flush();
-
 
                         if (!error.isVisible()) {
 
@@ -247,15 +224,12 @@ auth.getCodeSentTxt().setVisible(true);
 
                     }
 
-
-                } catch (SQLException | NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
+                } catch(SQLException | NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
 
-
             // if (Objects.equals(asdasdTextField.getText(), "Admin") && Objects.equals(passwordField1.getText(), "Admin")) {
-
 
             /*
 
@@ -263,34 +237,31 @@ auth.getCodeSentTxt().setVisible(true);
              */
             //  }
 
-
         });
-        passwordField1.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    loginButton.doClick();
-                }}
-        });
-        userNameText.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        passwordField1.addKeyListener(new KeyAdapter() {@Override
+        public void keyPressed(KeyEvent e) {
+            super.keyPressed(e);
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 loginButton.doClick();
-            }}
+            }
+        }
+        });
+        userNameText.addKeyListener(new KeyAdapter() {@Override
+        public void keyPressed(KeyEvent e) {
+            super.keyPressed(e);
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                loginButton.doClick();
+            }
+        }
         });
 
+        userNameText.addFocusListener(new FocusAdapter() {@Override
+        public void focusGained(FocusEvent e) {
+            super.focusGained(e);
+            uNameJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+            uNameJLabel.setForeground(new Color(40, 40, 40));
 
-        userNameText.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                uNameJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
-                uNameJLabel.setForeground(new Color(40, 40, 40));
-
-            }
+        }
 
             @Override
             public void focusLost(FocusEvent e) {
@@ -299,14 +270,13 @@ auth.getCodeSentTxt().setVisible(true);
             }
         });
 
-        passwordField1.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                passJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
-                passJLabel.setForeground(new Color(40, 40, 40));
+        passwordField1.addFocusListener(new FocusAdapter() {@Override
+        public void focusGained(FocusEvent e) {
+            super.focusGained(e);
+            passJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+            passJLabel.setForeground(new Color(40, 40, 40));
 
-            }
+        }
 
             @Override
             public void focusLost(FocusEvent e) {
@@ -315,12 +285,11 @@ auth.getCodeSentTxt().setVisible(true);
 
             }
         });
-        loginButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
-            }
+        loginButton.addMouseListener(new MouseAdapter() {@Override
+        public void mouseEntered(MouseEvent e) {
+            super.mouseEntered(e);
+            loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+        }
 
             @Override
             public void mouseExited(MouseEvent e) {
@@ -329,12 +298,11 @@ auth.getCodeSentTxt().setVisible(true);
 
             }
         });
-        resetButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
-            }
+        resetButton.addMouseListener(new MouseAdapter() {@Override
+        public void mouseEntered(MouseEvent e) {
+            super.mouseEntered(e);
+            resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+        }
 
             @Override
             public void mouseExited(MouseEvent e) {
@@ -342,35 +310,43 @@ auth.getCodeSentTxt().setVisible(true);
                 resetButton.setFont((new Font("Helvetica ", Font.BOLD, 18)));
             }
         });
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String[] commands = {"cmd", "/c", "where", "mysqldump.exe"};
-                Process process = null;
-                try {
-                    process = Runtime.getRuntime().exec(commands);
+        resetButton.addActionListener(new ActionListener() {@Override
+        public void actionPerformed(ActionEvent e) {
+            String[] commands = {
+                    "cmd",
+                    "/c",
+                    "where",
+                    "mysqldump.exe"
+            };
+            Process process = null;
+            try {
+                process = Runtime.getRuntime().exec(commands);
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line = reader.readLine();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line = reader.readLine();
+
+                if (line != null) {
+                    String mysqldumpPath = line.trim();
+                    String versionCommand = mysqldumpPath + " --version";
+                    process = Runtime.getRuntime().exec(versionCommand);
+                    reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    line = reader.readLine();
 
                     if (line != null) {
-                        String mysqldumpPath = line.trim();
-                        String versionCommand = mysqldumpPath + " --version";
-                        process = Runtime.getRuntime().exec(versionCommand);
-                        reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        line = reader.readLine();
-
-                        if (line != null) {
-                            System.out.println(mysqldumpPath);
-                        }
-                    } else {
-                        System.err.println("Could not find mysqldump");
+                        System.out.println(mysqldumpPath);
                     }
-                }catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                } else {
+                    System.err.println("Could not find mysqldump");
                 }
+            } catch(IOException ex) {
+                throw new RuntimeException(ex);
             }
+        }
         });
+    }
+
+    public static String getCodestr() {
+        return codestr;
     }
 
     public static String encryptString(String input) throws NoSuchAlgorithmException {
@@ -381,18 +357,14 @@ auth.getCodeSentTxt().setVisible(true);
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger bigint = new BigInteger(1, messageDigest);
             return bigint.toString(16);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch(NoSuchAlgorithmException ex) {
             System.out.println(ex);
         }
         return null;
     }
 
-    public void onExit() {
-        this.dispose();
-    }
-
     public static void main(String[] args) {
-/*
+    /*
         try (//Get connection to the database
              Connection con = DBConnection.getConnection();
         ){
@@ -417,5 +389,9 @@ auth.getCodeSentTxt().setVisible(true);
 
 
          */
+    }
+
+    public void onExit() {
+        this.dispose();
     }
 }

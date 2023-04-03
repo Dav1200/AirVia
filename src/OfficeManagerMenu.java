@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class OfficeManagerMenu extends JFrame{
+public class OfficeManagerMenu extends JFrame {
 
     private JTabbedPane tabbedPane1;
     private JTextField tfSearchBlank;
@@ -36,6 +36,8 @@ public class OfficeManagerMenu extends JFrame{
     private JTable table1;
     private JButton generateReportButton3;
     private JTable table2;
+    private JComboBox blankComboBox;
+    private JLabel blankJlabel;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
@@ -48,11 +50,17 @@ public class OfficeManagerMenu extends JFrame{
                 dispose();
             }
         });
+        setRateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateCommissionRate();
+            }
+        });
     }
 
     public void showTicketTurnoverReport() {
 
-        try (Connection con = DBConnection.getConnection();) {
+        try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM TicketTurnoverReport");
             ResultSet resultSet = ps.executeQuery();
@@ -89,6 +97,45 @@ public class OfficeManagerMenu extends JFrame{
             throw new RuntimeException(e);
         }
 
+
+    }
+
+
+    public void updateCommissionRate() {
+
+        int blankType = 0;
+
+        try (Connection con = DBConnection.getConnection()) {
+            //Code for Updating Commission Rate
+            //Casting from object reference to integer
+
+            //ensure the txt field is not empty
+            if (!tfComRate.getText().isEmpty()) {
+
+                String blankTypes = blankComboBox.getSelectedItem().toString();
+                blankType = Integer.parseInt(blankTypes);
+
+                //Sql statement to update data.
+                PreparedStatement ps = con.prepareStatement("UPDATE CommissionRate SET CommissionRate = ? WHERE BlankType = ?");
+                ps.setString(1, tfComRate.getText());
+                ps.setString(2, String.valueOf(blankType));
+                //Execute query.
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Commission Rate Updated");
+                //Reset the Commissioon rate field to empty
+                tfComRate.setText("");
+
+            }
+            //If the txt field is empty display an error prompt
+            else {
+
+                JOptionPane.showMessageDialog(this, "Error: Please Enter the Commission Rate ");
+            }
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

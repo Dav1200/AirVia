@@ -2,7 +2,7 @@ import javax.swing.RowFilter;
 import java.security.KeyStore;
 
 public class myRowFilter extends RowFilter {
-    private String searchText;
+    private final String searchText;
 
     myRowFilter(String searchText){
         this.searchText = searchText;

@@ -295,7 +295,7 @@ public class AdminMenu extends JFrame {
     //Automate Jtable With Database Values
     public void showStaff() {
 
-        try (Connection con = DBConnection.getConnection();) {
+        try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT * FROM Staff");
             ResultSet resultSet = ps.executeQuery();
