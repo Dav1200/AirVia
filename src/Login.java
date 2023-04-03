@@ -99,6 +99,7 @@ public class Login extends JFrame {
                     ps.setString(2, userName);
                     //Gets the result from QUERY
                     ResultSet rs = ps.executeQuery();
+                    System.out.println(encrpPass);
 
                     if (rs.next() && encryptString(password).equals(encrpPass)) {
                         Authentication auth = new Authentication();
@@ -150,6 +151,8 @@ auth.getCodeSentTxt().setVisible(true);
                                  //CODE HERE
 
                              }
+                             role = role.toLowerCase();
+                            System.out.println(role);
 
                              if (check) {
                                  switch (role.toLowerCase()) {

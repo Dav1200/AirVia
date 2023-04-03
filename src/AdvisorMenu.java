@@ -13,7 +13,8 @@ public class AdvisorMenu extends JFrame {
         registerCustomer();
         registerSalesReport();
         commissionAmountField.setEditable(false);
-        commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
+       // commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
+        commissionAmountField.setText("0");
 
         errorLabel.setVisible(false);
         incompleteEntry.setVisible(false);
