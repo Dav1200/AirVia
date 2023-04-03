@@ -39,6 +39,7 @@ public class OfficeManagerMenu extends JFrame {
     private JComboBox blankComboBox;
     private JLabel blankJlabel;
     private JTable latePaymentTable;
+    private JButton assignBlanksButton;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();

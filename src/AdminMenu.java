@@ -34,6 +34,11 @@ public class AdminMenu extends JFrame {
     private JButton clearButton;
     private JLabel errorLabel;
     private JTable logsTable;
+    private JComboBox comboBox1;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JButton saveButton;
 
     private DefaultTableModel dTable;
     private DBConnection db;
