@@ -12,6 +12,8 @@ public class AdvisorMenu extends JFrame {
         showCustomer();
         registerCustomer();
         registerSalesReport();
+        commissionAmountField.setEditable(false);
+        commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
 
         errorLabel.setVisible(false);
         incompleteEntry.setVisible(false);
@@ -24,6 +26,47 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
+        ticketType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                switch (ticketType.getSelectedItem().toString()){
+                    case "444":
+                        commissionAmountField.setText(getCommissionRate("444"));
+                        break;
+
+                    case "440":
+                        commissionAmountField.setText(getCommissionRate("440"));
+                        break;
+                    case "420":
+                        commissionAmountField.setText(getCommissionRate("420"));
+                        break;
+                    case "101":
+                        commissionAmountField.setText(getCommissionRate("101"));
+                        break;
+
+                    case "201":
+                        commissionAmountField.setText(getCommissionRate("201"));
+                        break;
+
+
+                    default:
+                        commissionAmountField.setText(getCommissionRate("444"));
+
+
+
+                }
+
+
+                if(ticketType.getSelectedItem().toString().equals("444")){
+                    System.out.println("hi");
+                }
+
+                if(ticketType.getSelectedItem().toString().equals("440")){
+                    System.out.println("hi2");
+                }
+            }
+        });
     }
 
 
@@ -176,6 +219,14 @@ public class AdvisorMenu extends JFrame {
                     String totalTickets = totalTicketsTf.getText();
                     String staffID = staffIDTf.getText();
 
+
+
+                    if(ticketType.getSelectedItem().toString().equals("440")){
+                        System.out.println("hi");
+                    }
+
+
+
                     // Establishes a connection the database
                     Connection con = DBConnection.getConnection();
                     // INSERT INTO statement with values from JTextFields
@@ -217,6 +268,20 @@ public class AdvisorMenu extends JFrame {
 
     }
 
+    public String getCommissionRate(String blankType){
+        try (Connection con = DBConnection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT CommissionRate FROM CommissionRate WHERE BlankType = ?");
+            ps.setString(1, blankType);
+            ResultSet resultSet = ps.executeQuery();
+
+            resultSet.next();
+            return resultSet.getString(1);
+
+             } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+
+        }
+    }
 
     public void registerSalesReport(){
         registerTicketButton.addActionListener(new ActionListener() {

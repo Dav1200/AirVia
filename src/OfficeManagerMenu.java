@@ -38,6 +38,7 @@ public class OfficeManagerMenu extends JFrame {
     private JTable table2;
     private JComboBox blankComboBox;
     private JLabel blankJlabel;
+    private JTable latePaymentTable;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
@@ -138,6 +139,16 @@ public class OfficeManagerMenu extends JFrame {
         }
 
     }
+
+
+    public void showLatepaymentTable(){
+
+
+
+
+
+    }
+
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
