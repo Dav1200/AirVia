@@ -5,6 +5,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -96,9 +102,12 @@ public class AdvisorMenu extends JFrame {
                 }
                 if(!customerComboBox.getSelectedItem().equals("Select Type") && !customerComboBox.getSelectedItem().equals("Casual")){
                     try (Connection con = DBConnection.getConnection()
-                    ){
+                    ){ PreparedStatement ps1 = con.prepareStatement("SELECT ID,Alias FROM Customer");
+
+                        ResultSet rs1 = ps1.executeQuery();
+
                         String s  = (String) customerComboBox.getSelectedItem();
-                        char a = s.charAt(3);
+                        char a = s.charAt(s.length()-1);
 
                         PreparedStatement ps = con.prepareStatement("SELECT DiscountAmount FROM Customer WHERE ID =?");
                         ps.setString(1, String.valueOf(a));
@@ -122,6 +131,51 @@ public class AdvisorMenu extends JFrame {
 
 
             }
+        });
+
+        ((AbstractDocument) ticketDateField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d-]", "");
+
+                // Only allow "-" to be inserted at positions 3 and 6
+                if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.insertString(fb, offset, filteredString, attr);
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d-]", "");
+
+                // Only allow "-" to be inserted at positions 3 and 6
+                if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.replace(fb, offset, length, filteredString, attr);
+            }
+        });
+
+        ticketDateField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+                super.keyTyped(e);
+                if(!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)){
+
+                if(ticketDateField.getText().toString().length() == 2){
+
+                    ticketDateField.setText(ticketDateField.getText() + "-");
+                }
+                if(ticketDateField.getText().toString().length() == 5){
+                    ticketDateField.setText(ticketDateField.getText() + "-");
+                }
+            }}
         });
     }
 
@@ -189,12 +243,12 @@ public class AdvisorMenu extends JFrame {
     public void showCombobox(){
         try (Connection con = DBConnection.getConnection()
         ){
-            PreparedStatement ps = con.prepareStatement("SELECT Alias FROM Customer");
+            PreparedStatement ps = con.prepareStatement("SELECT ID,Alias FROM Customer");
 
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                customerComboBox.addItem(rs.getString("Alias"));
+                customerComboBox.addItem(rs.getString("Alias")+" "+rs.getString("ID"));
             }
 
 
@@ -367,7 +421,7 @@ public class AdvisorMenu extends JFrame {
 
     public void registerSalesReport(){
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
         ticketDateField.setText(formattedDateTime);
         staffIDField.setText(Login.getUserId());
@@ -459,7 +513,9 @@ public class AdvisorMenu extends JFrame {
 
 
             }
+
         });
+        clearRegisterCustomer();
     }
 
 
