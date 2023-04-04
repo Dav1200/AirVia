@@ -34,6 +34,11 @@ public class Login extends JFrame {
     private String role;
     private boolean check;
 
+    public static String getUserId() {
+        return userId;
+    }
+
+    private static String userId;
     public Login() {
 
         //designing
@@ -80,6 +85,7 @@ public class Login extends JFrame {
                 String password = passwordField1.getText();
                 String userName = userNameText.getText();
                 String encrpPass = null;
+                userId = userName;
 
                 try (Connection con = DBConnection.getConnection()) {
                     //SQL QUERY WHICH WILL BE USED GET ROLE FROM LOGIN

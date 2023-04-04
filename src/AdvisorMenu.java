@@ -6,6 +6,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AdvisorMenu extends JFrame {
     public AdvisorMenu() {
@@ -38,25 +40,31 @@ public class AdvisorMenu extends JFrame {
                 switch (ticketType.getSelectedItem().toString()){
                     case "444":
                         commissionAmountField.setText(getCommissionRate("444"));
+                        reportType.setSelectedIndex(0);
                         break;
 
                     case "440":
                         commissionAmountField.setText(getCommissionRate("440"));
+                        reportType.setSelectedIndex(0);
                         break;
                     case "420":
                         commissionAmountField.setText(getCommissionRate("420"));
+                        reportType.setSelectedIndex(0);
                         break;
                     case "101":
                         commissionAmountField.setText(getCommissionRate("101"));
+                        reportType.setSelectedIndex(1);
                         break;
 
                     case "201":
                         commissionAmountField.setText(getCommissionRate("201"));
+                        reportType.setSelectedIndex(1);
                         break;
 
 
                     default:
                         commissionAmountField.setText(getCommissionRate("444"));
+                        reportType.setSelectedIndex(0);
 
 
 
@@ -181,12 +189,12 @@ public class AdvisorMenu extends JFrame {
     public void showCombobox(){
         try (Connection con = DBConnection.getConnection()
         ){
-            PreparedStatement ps = con.prepareStatement("SELECT ID,Alias FROM Customer");
+            PreparedStatement ps = con.prepareStatement("SELECT Alias FROM Customer");
 
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                customerComboBox.addItem("ID:"+rs.getString("ID") + " Alias:" +rs.getString("Alias"));
+                customerComboBox.addItem(rs.getString("Alias"));
             }
 
 
@@ -358,15 +366,23 @@ public class AdvisorMenu extends JFrame {
     }
 
     public void registerSalesReport(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String formattedDateTime = now.format(formatter);
+        ticketDateField.setText(formattedDateTime);
+        staffIDField.setText(Login.getUserId());
+
         registerTicketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 try (
                         Connection con = DBConnection.getConnection()
                 ) {
 
                     String s  = (String) customerComboBox.getSelectedItem();
                     char a = s.charAt(3);
+
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
                     String blanktype = blankIdtxt.getText();
@@ -376,7 +392,7 @@ public class AdvisorMenu extends JFrame {
                     String destination = destinationTextField.getText();
                     String comAmount = commissionAmountField.getText();
                     String customer = customerComboBox.getSelectedItem().toString();
-                    customer = customer.substring(11, customer.length());
+
                     String discount = discountTxt.getText();
                     String ticketQuantity = ticketQuantityTextField.getText();
                     String ticketPrice = ticketPriceField.getText();
@@ -386,6 +402,12 @@ public class AdvisorMenu extends JFrame {
                     String exchangeRate = exchangeRateField.getText();
                     String ticketDate = ticketDateField.getText();
                     String staffID = staffIDField.getText();
+                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
+                            || staffID.isEmpty()){
+                        JOptionPane.showMessageDialog(null,"Fill Details");
+
+                    }
+                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
 
 
                     // INSERT INTO statement with values from JTextFields
@@ -396,7 +418,7 @@ public class AdvisorMenu extends JFrame {
 
 
 
-                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
+
 
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
                     grandTotal = String.valueOf(Float.parseFloat(grandTotal) - Float.parseFloat(dis));
@@ -424,11 +446,7 @@ public class AdvisorMenu extends JFrame {
 
 
                     //showing error message if any of the text fields are empty
-                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| grandTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
-                            || staffID.isEmpty()){
 
-                        incompleteEntry.setVisible(true);
-                    }
 
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(null,"Ticket added to sales report");
