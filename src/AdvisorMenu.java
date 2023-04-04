@@ -82,7 +82,7 @@ public class AdvisorMenu extends JFrame {
         customerComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(customerComboBox.getSelectedItem().equals("Casual")){
+                if(customerComboBox.getSelectedItem().equals("Casual")|| customerComboBox.getSelectedItem().equals("Select Type")){
                     discountTxt.setText("0");
 
                 }
@@ -99,7 +99,7 @@ public class AdvisorMenu extends JFrame {
                         ResultSet rs = ps.executeQuery();
                         rs.next();
                         discountTxt.setText(rs.getString("DiscountAmount"));
-                        customerIDField.setText(String.valueOf(s.charAt(3)));
+
 
 
 
@@ -159,14 +159,14 @@ public class AdvisorMenu extends JFrame {
     private JTextField departureField;
     private JTextField destinationTextField;
     private JTextField ticketPriceField;
-    private JTextField subTotalField;
+    private JTextField taxTotalField;
     private JTextField grandTotalField;
     private JComboBox latePayment;
     private JTextField exchangeRateField;
     private JTextField ticketDateField;
     private JTextField customerIDField;
     private JTextField staffIDField;
-    private JTextField textField1;
+    private JTextField blankIdtxt;
     private JTextField discountTxt;
     private JLabel discountLabel;
     private JComboBox customerComboBox;
@@ -369,53 +369,62 @@ public class AdvisorMenu extends JFrame {
                     char a = s.charAt(3);
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
+                    String blanktype = blankIdtxt.getText();
                     String payType = paymentType.getSelectedItem().toString();
                     String repType = reportType.getSelectedItem().toString();
                     String departure = departureField.getText();
                     String destination = destinationTextField.getText();
                     String comAmount = commissionAmountField.getText();
+                    String customer = customerComboBox.getSelectedItem().toString();
+                    String discount = discountTxt.getText();
                     String ticketQuantity = ticketQuantityTextField.getText();
                     String ticketPrice = ticketPriceField.getText();
-                    String subTotal = subTotalField.getText();
-                    String grandTotal = grandTotalField.getText();
+                    String TaxTotal = taxTotalField.getText();
+
                     String latePay = latePayment.getSelectedItem().toString();
                     String exchangeRate = exchangeRateField.getText();
                     String ticketDate = ticketDateField.getText();
-
-                    String customerID = String.valueOf(s.charAt(3));
                     String staffID = staffIDField.getText();
 
 
-
-                    PreparedStatement ps2 = con.prepareStatement("UPDATE Customer SET TotalTickets = ? WHERE ID = ? ;");
-                    ps2.setString(1,ticketQuantity);
-                    ps2.setString(2, String.valueOf(a));
-                    ps2.executeUpdate();
-
-
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO SalesReport(TicketType, PaymentType, ReportType, departure, destination, CommissionAmount, " +
-                            "TicketQuantity, ticketPrice, subTotal, grandTotal, LatePayment, exchangeRate, ticketDate, ID, staffID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                    ps.setString(1,ticType);
-                    ps.setString(2,payType);
-                    ps.setString(3, repType);
-                    ps.setString(4,departure);
-                    ps.setString(5,destination);
-                    ps.setString(6,comAmount);
-                    ps.setString(7,ticketQuantity);
-                    ps.setString(8,ticketPrice);
-                    ps.setString(9,subTotal);
-                    ps.setString(10,grandTotal);
-                    ps.setString(11, latePay);
-                    ps.setString(12,exchangeRate);
-                    ps.setString(13,ticketDate);
-                    ps.setString(14,customerID);
-                    ps.setString(15,staffID);
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, late_payment, exchange_rate, ticket_date, StaffID)\n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ");
+
+
+
+
+
+                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
+
+                    String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
+                    grandTotal = String.valueOf(Float.parseFloat(grandTotal) - Float.parseFloat(dis));
+                    grandTotal = String.valueOf(Float.parseFloat(grandTotal) + + Float.parseFloat(TaxTotal));
+
+
+
+                    ps.setString(1, ticType);
+                    ps.setString(2, blanktype);
+                    ps.setString(3, payType);
+                    ps.setString(4, repType);
+                    ps.setString(5, departure);
+                    ps.setString(6, destination);
+                    ps.setString(7, comAmount);
+                    ps.setString(8, customer);
+                    ps.setString(9, discount);
+                    ps.setString(10, ticketQuantity);
+                    ps.setString(11, ticketPrice);
+                    ps.setString(12, TaxTotal);
+                    ps.setString(13, grandTotal);
+                    ps.setString(14, latePay);
+                    ps.setString(15, exchangeRate);
+                    ps.setString(16, ticketDate);
+                    ps.setString(17, staffID);
 
 
                     //showing error message if any of the text fields are empty
-                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || subTotal.isEmpty()|| grandTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
-                            || customerID.isEmpty()|| staffID.isEmpty()){
+                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| grandTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
+                            || staffID.isEmpty()){
 
                         incompleteEntry.setVisible(true);
                     }
