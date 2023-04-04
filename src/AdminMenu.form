@@ -280,6 +280,7 @@
                 </constraints>
                 <properties>
                   <model>
+                    <item value="Select Type"/>
                     <item value="444"/>
                     <item value="440"/>
                     <item value="420"/>

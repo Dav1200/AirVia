@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.sql.*;
@@ -15,9 +17,11 @@ public class AdvisorMenu extends JFrame {
         commissionAmountField.setEditable(false);
        // commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
         commissionAmountField.setText("0");
-
+        showCombobox();
         errorLabel.setVisible(false);
         incompleteEntry.setVisible(false);
+        discountTxt.setEditable(false);
+        
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -66,6 +70,49 @@ public class AdvisorMenu extends JFrame {
                 if(ticketType.getSelectedItem().toString().equals("440")){
                     System.out.println("hi2");
                 }
+            }
+        });
+
+        CustomerTable.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                System.out.println(e.getFirstRow());
+            }
+        });
+        customerComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(customerComboBox.getSelectedItem().equals("Casual")){
+                    discountTxt.setText("0");
+
+                }
+                if(!customerComboBox.getSelectedItem().equals("Select Type") && !customerComboBox.getSelectedItem().equals("Casual")){
+                    try (Connection con = DBConnection.getConnection()
+                    ){
+                        String s  = (String) customerComboBox.getSelectedItem();
+                        char a = s.charAt(3);
+
+                        PreparedStatement ps = con.prepareStatement("SELECT DiscountAmount FROM Customer WHERE ID =?");
+                        ps.setString(1, String.valueOf(a));
+
+
+                        ResultSet rs = ps.executeQuery();
+                        rs.next();
+                        discountTxt.setText(rs.getString("DiscountAmount"));
+                        customerIDField.setText(String.valueOf(s.charAt(3)));
+
+
+
+
+                    }catch (SQLException | ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+
+                }
+                }
+
+
+
+
             }
         });
     }
@@ -119,9 +166,36 @@ public class AdvisorMenu extends JFrame {
     private JTextField ticketDateField;
     private JTextField customerIDField;
     private JTextField staffIDField;
+    private JTextField textField1;
+    private JTextField discountTxt;
+    private JLabel discountLabel;
+    private JComboBox customerComboBox;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+
+
+
+    public void showCombobox(){
+        try (Connection con = DBConnection.getConnection()
+        ){
+            PreparedStatement ps = con.prepareStatement("SELECT ID,Alias FROM Customer");
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                customerComboBox.addItem("ID:"+rs.getString("ID") + " Alias:" +rs.getString("Alias"));
+            }
+
+
+
+
+        }  catch (SQLException | ClassNotFoundException e) {
+        throw new RuntimeException(e);
+    }
+
     }
 
     public void showCustomer() {
@@ -145,7 +219,7 @@ public class AdvisorMenu extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID;
+            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID,Alias;
             while (resultSet.next()) {
                 ID = resultSet.getString(1);
                 Firstname = resultSet.getString(2);
@@ -157,8 +231,9 @@ public class AdvisorMenu extends JFrame {
                 Address = resultSet.getString(8);
                 TotalTickets = resultSet.getString(9);
                 StaffID = resultSet.getString(10);
+                Alias = resultSet.getString(11);
 
-                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID};
+                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID,Alias};
                 model.addRow(row);
 
 
@@ -222,14 +297,12 @@ public class AdvisorMenu extends JFrame {
 
 
 
-                    if(ticketType.getSelectedItem().toString().equals("440")){
-                        System.out.println("hi");
-                    }
-
 
 
                     // Establishes a connection the database
                     Connection con = DBConnection.getConnection();
+
+
                     // INSERT INTO statement with values from JTextFields
                     PreparedStatement ps = con.prepareStatement("INSERT INTO Customer(FirstName, LastName, Email, " +
                             "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID) VALUES(?,?,?,?,?,?,?,?,?)");
@@ -292,6 +365,8 @@ public class AdvisorMenu extends JFrame {
                         Connection con = DBConnection.getConnection()
                 ) {
 
+                    String s  = (String) customerComboBox.getSelectedItem();
+                    char a = s.charAt(3);
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
                     String payType = paymentType.getSelectedItem().toString();
@@ -306,8 +381,16 @@ public class AdvisorMenu extends JFrame {
                     String latePay = latePayment.getSelectedItem().toString();
                     String exchangeRate = exchangeRateField.getText();
                     String ticketDate = ticketDateField.getText();
-                    String customerID = customerIDField.getText();
+
+                    String customerID = String.valueOf(s.charAt(3));
                     String staffID = staffIDField.getText();
+
+
+
+                    PreparedStatement ps2 = con.prepareStatement("UPDATE Customer SET TotalTickets = ? WHERE ID = ? ;");
+                    ps2.setString(1,ticketQuantity);
+                    ps2.setString(2, String.valueOf(a));
+                    ps2.executeUpdate();
 
 
                     // INSERT INTO statement with values from JTextFields
