@@ -376,6 +376,7 @@ public class AdvisorMenu extends JFrame {
                     String destination = destinationTextField.getText();
                     String comAmount = commissionAmountField.getText();
                     String customer = customerComboBox.getSelectedItem().toString();
+                    customer = customer.substring(11, customer.length());
                     String discount = discountTxt.getText();
                     String ticketQuantity = ticketQuantityTextField.getText();
                     String ticketPrice = ticketPriceField.getText();
