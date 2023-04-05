@@ -10,9 +10,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AdminMenu extends JFrame {
 
@@ -41,6 +39,7 @@ public class AdminMenu extends JFrame {
     private JTextField textField2;
     private JTextField textField3;
     private JButton saveButton;
+    private JButton addBlankStockButton;
 
     private DefaultTableModel dTable;
     private DBConnection db;
@@ -262,6 +261,19 @@ public class AdminMenu extends JFrame {
 
         // Read the login information from the file and add it to the table model
 
+        addBlankStockButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                BlankStock a = new BlankStock();
+                a.setContentPane(a.getPanel());
+                a.setVisible(true);
+                a.setSize(400, 400);
+                a.setLocationRelativeTo(null);
+                a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            }
+
+        });
     }
 
     //manual input
