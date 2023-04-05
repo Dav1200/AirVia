@@ -119,17 +119,11 @@ public class AdvisorMenu extends JFrame {
 
 
 
-
-
                     }catch (SQLException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
 
                 }
                 }
-
-
-
-
             }
         });
 
@@ -139,7 +133,7 @@ public class AdvisorMenu extends JFrame {
                 // Allow only numeric characters and "-" to be entered
                 String filteredString = string.replaceAll("[^\\d-]", "");
 
-                // Only allow "-" to be inserted at positions 3 and 6
+                // Only allow "-" to be inserted at positions  2 and 5
                 if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
                     return;
                 }
@@ -152,7 +146,7 @@ public class AdvisorMenu extends JFrame {
                 // Allow only numeric characters and "-" to be entered
                 String filteredString = string.replaceAll("[^\\d-]", "");
 
-                // Only allow "-" to be inserted at positions 3 and 6
+                // Only allow "-" to be inserted at positions 2 and 5
                 if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
                     return;
                 }
@@ -461,22 +455,19 @@ public class AdvisorMenu extends JFrame {
                         JOptionPane.showMessageDialog(null,"Fill Details");
 
                     }
-                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
+
 
 
                     // INSERT INTO statement with values from JTextFields
                     PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, late_payment, exchange_rate, ticket_date, StaffID)\n" +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ");
 
-
-
-
-
-
-
+                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
                     grandTotal = String.valueOf(Float.parseFloat(grandTotal) - Float.parseFloat(dis));
-                    grandTotal = String.valueOf(Float.parseFloat(grandTotal) + + Float.parseFloat(TaxTotal));
+                    grandTotal = String.valueOf(Float.parseFloat(grandTotal) + Float.parseFloat(TaxTotal));
+
+
 
 
 
