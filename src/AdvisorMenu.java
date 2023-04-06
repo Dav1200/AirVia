@@ -259,11 +259,15 @@ public class AdvisorMenu extends JFrame {
             ps.setString(3,ticketType.getSelectedItem().toString()+"%");
             System.out.println(ticketType.getSelectedItem().toString());
             ResultSet rs = ps.executeQuery();
-if(!rs.next()){
-    showerrorblanks();
-}
-            while(rs.next()){
+            if(!rs.next()){
+                showerrorblanks();
+            }
+
+            else {
                 blankComboBox.addItem(rs.getString("blanks"));
+                while (rs.next()) {
+                    blankComboBox.addItem(rs.getString("blanks"));
+                }
             }
 
 
