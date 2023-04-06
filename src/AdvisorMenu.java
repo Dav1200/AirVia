@@ -46,9 +46,8 @@ public class AdvisorMenu extends JFrame {
 
                 switch (ticketType.getSelectedItem().toString()){
                     case "444":
-blankComboBox.removeAllItems();
+                    blankComboBox.removeAllItems();
                         showBlankComboBox();
-
                         commissionAmountField.setText(getCommissionRate("444"));
                         reportType.setSelectedIndex(0);
                         break;
@@ -260,7 +259,9 @@ blankComboBox.removeAllItems();
             ps.setString(3,ticketType.getSelectedItem().toString()+"%");
             System.out.println(ticketType.getSelectedItem().toString());
             ResultSet rs = ps.executeQuery();
-
+if(!rs.next()){
+    showerrorblanks();
+}
             while(rs.next()){
                 blankComboBox.addItem(rs.getString("blanks"));
             }
@@ -454,7 +455,12 @@ blankComboBox.removeAllItems();
         }
     }
 
+    public void showerrorblanks(){
+        JOptionPane.showMessageDialog(this,"No Assigned Blanks");
+    }
+
     public void registerSalesReport(){
+
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDateTime = now.format(formatter);
@@ -471,6 +477,9 @@ blankComboBox.removeAllItems();
 
                     String s  = (String) customerComboBox.getSelectedItem();
                     char a = s.charAt(3);
+
+
+
 
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
