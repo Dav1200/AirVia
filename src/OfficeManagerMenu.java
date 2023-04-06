@@ -69,6 +69,17 @@ public class OfficeManagerMenu extends JFrame {
                 a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
+        reassignButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ReassignBlank a = new ReassignBlank();
+                a.setContentPane(a.getPane());
+                a.setVisible(true);
+                a.setSize(400, 400);
+                a.setLocationRelativeTo(null);
+                a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            }
+        });
     }
 
     public void showTicketTurnoverReport() {

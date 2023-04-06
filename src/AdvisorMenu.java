@@ -144,10 +144,10 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
-                String filteredString = string.replaceAll("[^\\d-]", "");
+                String filteredString = string.replaceAll("[^\\d/]", "");
 
                 // Only allow "-" to be inserted at positions  2 and 5
-                if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
                     return;
                 }
 
@@ -157,10 +157,10 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
-                String filteredString = string.replaceAll("[^\\d-]", "");
+                String filteredString = string.replaceAll("[^\\d/]", "");
 
                 // Only allow "-" to be inserted at positions 2 and 5
-                if (filteredString.equals("-") && (offset != 2 && offset != 5)) {
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
                     return;
                 }
 
@@ -177,10 +177,10 @@ public class AdvisorMenu extends JFrame {
 
                 if(ticketDateField.getText().toString().length() == 2){
 
-                    ticketDateField.setText(ticketDateField.getText() + "-");
+                    ticketDateField.setText(ticketDateField.getText() + "/");
                 }
                 if(ticketDateField.getText().toString().length() == 5){
-                    ticketDateField.setText(ticketDateField.getText() + "-");
+                    ticketDateField.setText(ticketDateField.getText() + "/");
                 }
             }}
         });
@@ -269,7 +269,6 @@ public class AdvisorMenu extends JFrame {
                     blankComboBox.addItem(rs.getString("blanks"));
                 }
             }
-
 
 
 
@@ -466,7 +465,7 @@ public class AdvisorMenu extends JFrame {
     public void registerSalesReport(){
 
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDateTime = now.format(formatter);
         ticketDateField.setText(formattedDateTime);
         staffIDField.setText(Login.getUserId());
