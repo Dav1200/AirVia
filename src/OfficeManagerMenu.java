@@ -10,7 +10,7 @@ public class OfficeManagerMenu extends JFrame {
     private JTextField tfSearchBlank;
     private JButton searchButton;
     private JTable dbBlanks;
-    private JTextField textField1;
+    private JTextField dsetDiscount;
     private JButton reassignButton;
     private JTextField tfReassignBlank;
     private JButton workButton;
@@ -40,9 +40,14 @@ public class OfficeManagerMenu extends JFrame {
     private JLabel blankJlabel;
     private JTable latePaymentTable;
     private JButton assignBlanksButton;
+    private JComboBox dCustomer;
+    private JComboBox dCustomerType;
+    private JComboBox dDiscountType;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
+        showCombobox();
+        dDiscountType.setEnabled(false);
 
 
         workButton.addActionListener(new ActionListener() {
@@ -80,6 +85,73 @@ public class OfficeManagerMenu extends JFrame {
                 a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
+        setRateButton1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+            }
+        });
+        dCustomer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                System.out.println(dCustomer.getSelectedItem().toString());
+
+
+            }
+        });
+        dCustomerType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(dCustomerType.getSelectedItem().toString().equals("Regular")){
+                    dsetDiscount.setEditable(false);
+                    dsetDiscount.setText("0.00");
+                    dDiscountType.setSelectedIndex(0);
+                    dDiscountType.setEnabled(false);
+
+                }
+                else{
+                     if(dDiscountType.getSelectedItem().toString().equals("Fixed")){
+                        dsetDiscount.setEditable(true);
+                        dsetDiscount.setText("0.");
+
+                    }
+                     else {
+                         dsetDiscount.setEditable(true);
+                         dsetDiscount.setText("0");
+                     }
+
+
+                    dDiscountType.setSelectedIndex(1);
+                    dDiscountType.setEnabled(true);//dDiscountType.setEditable(true);
+
+                }
+            }
+        });
+    }
+
+
+    public void showCombobox(){
+        try (Connection con = DBConnection.getConnection()
+        ){
+            PreparedStatement ps = con.prepareStatement("SELECT ID,Alias FROM Customer");
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                dCustomer.addItem(rs.getString("Alias")+" "+rs.getString("ID"));
+            }
+
+
+
+
+        }  catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void showTicketTurnoverReport() {
@@ -165,8 +237,6 @@ public class OfficeManagerMenu extends JFrame {
 
 
     public void showLatepaymentTable(){
-
-
 
 
 
