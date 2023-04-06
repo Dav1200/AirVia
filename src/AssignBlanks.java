@@ -18,8 +18,12 @@ public class AssignBlanks extends JFrame {
 
     private JPanel pane;
     private JComboBox idcombo;
+    private JTextField textField1;
 
     AssignBlanks(){
+
+        textField1.setText("Unused");
+        textField1.setEditable(false);
 
         addToComboBoxId();
 
@@ -44,19 +48,43 @@ public class AssignBlanks extends JFrame {
                             PreparedStatement ps1 = con.prepareStatement("SELECT * FROM advisor_blanks WHERE blanks = ?");
                             ps1.setString(1, String.valueOf(a));
                             ResultSet rs = ps1.executeQuery();
+
+
+                            PreparedStatement ps2 = con.prepareStatement("SELECT blanks_received FROM blank_stock WHERE blanks_received = ?");
+                            ps2.setString(1, String.valueOf(a));
+                            ResultSet rs1 = ps2.executeQuery();
+
+
+                            PreparedStatement ps4= con.prepareStatement("SELECT status FROM blank_stock WHERE blanks_received = ?");
+                            ps4.setString(1, String.valueOf(a));
+                            ResultSet rs4 = ps4.executeQuery();
+
+
                             if(rs.next()) {
                                 System.out.println("Data exists in the table");
+                               error();
                             } else {
-                                PreparedStatement ps = con.prepareStatement("INSERT INTO advisor_blanks(advisor_id,advisor_name, date, blanks) VALUES(?,?,?,?)");
-                                ps.setString(1, AdvisorId);
-                                ps.setString(2, Name);
-                                ps.setString(3, Date);
-                                ps.setString(4, String.valueOf(a));
-                                ps.executeUpdate();
+
+                                if (rs1.next()) {
+                                    System.out.println("exists");
+
+                                    if(rs4.next()){
+                                    PreparedStatement ps = con.prepareStatement("INSERT INTO advisor_blanks(advisor_id,advisor_name, date, blanks,status) VALUES(?,?,?,?,?)");
+                                    ps.setString(1, AdvisorId);
+                                    ps.setString(2, Name);
+                                    ps.setString(3, Date);
+                                    ps.setString(4, String.valueOf(a));
+                                    ps.setString(5,textField1.getText());
+
+                                    PreparedStatement ps3 = con.prepareStatement("Update blank_stock SET status = ? WHERE blanks_received = ?");
+                                    ps3.setString(1,"assigned");
+                                    ps3.setString(2, String.valueOf(a));
+                                    ps3.executeUpdate();
+                                        ps.executeUpdate();
+
+                                }}
+
                             }
-
-
-
                         }
                     }
                     catch (SQLException | ClassNotFoundException ex) {
@@ -93,6 +121,9 @@ public class AssignBlanks extends JFrame {
 
     }
 
+    public void error(){
+        JOptionPane.showMessageDialog(this, "Error: Blank Already Assigned ");
+    }
 
 
         public JPanel getPane() {

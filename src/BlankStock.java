@@ -16,7 +16,11 @@ public class BlankStock extends JFrame {
     private JTextField startTxt;
     private JTextField endTxt;
     private JButton saveButton;
-public BlankStock()  {
+    private JTextField unassingedTextField;
+
+    public BlankStock()  {
+        unassingedTextField.setText("unassigned");
+        unassingedTextField.setEditable(false);
 
     saveButton.addActionListener(new ActionListener() {
         @Override
@@ -40,9 +44,10 @@ public BlankStock()  {
                     if(rs.next()) {
                         System.out.println("Data exists in the table");
                     } else {
-                        PreparedStatement ps = con.prepareStatement("INSERT INTO blank_stock(date,blanks_received) VALUES(?,?)");
+                        PreparedStatement ps = con.prepareStatement("INSERT INTO blank_stock(date,blanks_received,status) VALUES(?,?,?)");
                         ps.setString(1, Date);
                         ps.setString(2, String.valueOf(a));
+                        ps.setString(3,unassingedTextField.getText());
                         ps.executeUpdate();
                     }
 

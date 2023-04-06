@@ -11,7 +11,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.math.BigInteger;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +22,7 @@ public class AdvisorMenu extends JFrame {
         showCustomer();
         registerCustomer();
         registerSalesReport();
+
         commissionAmountField.setEditable(false);
        // commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
         commissionAmountField.setText("0");
@@ -46,30 +46,43 @@ public class AdvisorMenu extends JFrame {
 
                 switch (ticketType.getSelectedItem().toString()){
                     case "444":
+blankComboBox.removeAllItems();
+                        showBlankComboBox();
+
                         commissionAmountField.setText(getCommissionRate("444"));
                         reportType.setSelectedIndex(0);
                         break;
 
                     case "440":
+                        blankComboBox.removeAllItems();
+                        showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("440"));
                         reportType.setSelectedIndex(0);
                         break;
                     case "420":
+                        blankComboBox.removeAllItems();
+                        showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("420"));
                         reportType.setSelectedIndex(0);
                         break;
                     case "101":
+                        blankComboBox.removeAllItems();
+                        showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("101"));
                         reportType.setSelectedIndex(1);
                         break;
 
                     case "201":
+                        blankComboBox.removeAllItems();
+                        showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("201"));
                         reportType.setSelectedIndex(1);
                         break;
 
 
                     default:
+                        blankComboBox.removeAllItems();
+                        showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("444"));
                         reportType.setSelectedIndex(0);
 
@@ -228,11 +241,37 @@ public class AdvisorMenu extends JFrame {
     private JTextField discountTxt;
     private JLabel discountLabel;
     private JComboBox customerComboBox;
+    private JComboBox blankComboBox;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
 
+
+
+
+    public void showBlankComboBox(){
+
+        try (Connection con = DBConnection.getConnection()
+        ){
+            PreparedStatement ps = con.prepareStatement("SELECT blanks FROM advisor_blanks WHERE advisor_id = ? AND status = ? AND blanks LIKE ?");
+            ps.setString(1, Login.getUserId());
+            ps.setString(2,"Unused");
+            ps.setString(3,ticketType.getSelectedItem().toString()+"%");
+            System.out.println(ticketType.getSelectedItem().toString());
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                blankComboBox.addItem(rs.getString("blanks"));
+            }
+
+
+
+
+        }  catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
@@ -435,7 +474,7 @@ public class AdvisorMenu extends JFrame {
 
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
-                    String blanktype = blankIdtxt.getText();
+                    String blanktype = blankComboBox.getSelectedItem().toString();
                     String payType = paymentType.getSelectedItem().toString();
                     String repType = reportType.getSelectedItem().toString();
                     String departure = departureField.getText();
@@ -453,7 +492,7 @@ public class AdvisorMenu extends JFrame {
                     String ticketDate = ticketDateField.getText();
                     String staffID = staffIDField.getText();
                     if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
-                            || staffID.isEmpty()){
+                            || staffID.isEmpty()|| blanktype.isEmpty()){
                         JOptionPane.showMessageDialog(null,"Fill Details");
 
                     }
@@ -492,6 +531,10 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(17, staffID);
 
 
+                    PreparedStatement ps1 = con.prepareStatement("UPDATE advisor_blanks SET status = ? WHERE blanks =?");
+                    ps1.setString(1, "Used");
+                    ps1.setString(2,blanktype);
+                    ps1.executeUpdate();
                     //showing error message if any of the text fields are empty
 
 
