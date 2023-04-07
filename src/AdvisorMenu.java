@@ -71,6 +71,7 @@ public class AdvisorMenu extends JFrame {
     private JComboBox customerComboBox;
     private JComboBox blankComboBox;
     private JTextField cardtxt;
+    private JTextField payDateTxt;
 
     public AdvisorMenu() {
 
@@ -86,6 +87,11 @@ public class AdvisorMenu extends JFrame {
         incompleteEntry.setVisible(false);
         discountTxt.setEditable(false);
         cardtxt.setEditable(false);
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDateTime = now.format(formatter);
+        payDateTxt.setText(formattedDateTime);
         
 
         logoutButton.addActionListener(new ActionListener() {
@@ -196,6 +202,35 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
+        ((AbstractDocument) cardtxt.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d]", "");
+
+                // Only allow "-" to be inserted at positions  2 and 5
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.insertString(fb, offset, filteredString, attr);
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d]", "");
+
+                // Only allow "-" to be inserted at positions 2 and 5
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.replace(fb, offset, length, filteredString, attr);
+            }
+        });
+
+
         ((AbstractDocument) ticketDateField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -231,7 +266,7 @@ public class AdvisorMenu extends JFrame {
                 super.keyTyped(e);
                 if(!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)){
 
-                if(ticketDateField.getText().toString().length() == 2){
+                if(ticketDateField.getText().toString().length() == 5){
 
                     ticketDateField.setText(ticketDateField.getText() + "/");
                 }
@@ -240,6 +275,10 @@ public class AdvisorMenu extends JFrame {
                 }
             }}
         });
+
+
+
+
         paymentType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -249,6 +288,30 @@ public class AdvisorMenu extends JFrame {
                 else{
                     cardtxt.setEditable(false);
                 }
+
+                if(paymentType.getSelectedItem().toString().equals("LatePayment")){
+                    payDateTxt.setEditable(false);
+                    payDateTxt.setText("");
+                }
+                else{
+                    payDateTxt.setEditable(true);
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String formattedDateTime = now.format(formatter);
+                    payDateTxt.setText(formattedDateTime);
+                }
+            }
+        });
+        cardtxt.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                if(cardtxt.getText().toString().length() > 19){
+                   //dont allow the user to input after length is more than 16
+                    e.consume();
+                }
+
+
             }
         });
     }
@@ -513,6 +576,8 @@ public class AdvisorMenu extends JFrame {
                     String exchangeRate = exchangeRateField.getText();
                     String ticketDate = ticketDateField.getText();
                     String staffID = staffIDField.getText();
+                    String payment_date = payDateTxt.getText();
+
                     if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
                             || staffID.isEmpty()|| blanktype.isEmpty()){
                         JOptionPane.showMessageDialog(null,"Fill Details");
@@ -522,8 +587,8 @@ public class AdvisorMenu extends JFrame {
 
 
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID,card_detail)\n" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?); ");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID,card_detail,payment_date)\n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?); ");
 
                     String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
@@ -552,6 +617,8 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(15, ticketDate);
                     ps.setString(16, staffID);
                     ps.setString(17,card_detail);
+                    ps.setString(18,payment_date);
+
 
 
                     PreparedStatement ps1 = con.prepareStatement("UPDATE advisor_blanks SET status = ? WHERE blanks =?");

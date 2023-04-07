@@ -1,8 +1,17 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class OfficeManagerMenu extends JFrame {
 
@@ -148,6 +157,85 @@ public class OfficeManagerMenu extends JFrame {
                 }
             }
         });
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (Connection con = DBConnection.getConnection()
+                ){
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String formattedDateTime = now.format(formatter);
+                    String a = idcomboBox.getSelectedItem().toString().substring(4);
+                    String b = paymentComboBox.getSelectedItem().toString();
+                    System.out.println(a+" " + b);
+
+                    PreparedStatement ps = con.prepareStatement("UPDATE ticket_sales SET payment_date = ?, card_detail= ?, payment_type = ? WHERE ID = ?;");
+                    ps.setString(1,formattedDateTime);
+                    ps.setString(2,cardtxt.getText());
+                    ps.setString(3,b);
+                    ps.setString(4,a);
+                    ps.executeUpdate();
+                    dialog("Successful");
+                    idcomboBox.removeAllItems();
+                    addToLatePayment();
+
+
+                    //refresh the db //repaint it
+                    JTable table = latePaymentTable;
+                    DefaultTableModel dm = (DefaultTableModel)table.getModel();
+                    dm.setRowCount(0);
+                    showLatepaymentTable();
+
+                    //exception handle
+                }  catch (SQLException | ClassNotFoundException ex) {
+                    dialog("Unsuccessful");
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+
+
+        ((AbstractDocument) cardtxt.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d]", "");
+
+                // Only allow "-" to be inserted at positions  2 and 5
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.insertString(fb, offset, filteredString, attr);
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
+                // Allow only numeric characters and "-" to be entered
+                String filteredString = string.replaceAll("[^\\d]", "");
+
+                // Only allow "-" to be inserted at positions 2 and 5
+                if (filteredString.equals("/") && (offset != 2 && offset != 5)) {
+                    return;
+                }
+
+                super.replace(fb, offset, length, filteredString, attr);
+            }
+        });
+
+
+
+        cardtxt.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                if(cardtxt.getText().toString().length() > 19){
+                    //dont allow the user to input after length is more than 16
+                    e.consume();
+                }
+            }
+        });
     }
 
 
@@ -171,6 +259,9 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    public void dialog(String s){
+        JOptionPane.showMessageDialog(this,s);
+    }
     public void showTicketTurnoverReport() {
 
         try (Connection con = DBConnection.getConnection()) {
@@ -274,7 +365,7 @@ public class OfficeManagerMenu extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid;
+            String ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid,cardd,payd;
             while (resultSet.next()) {
                 ID = resultSet.getString(1);
                 ticket_type = resultSet.getString(2);
@@ -293,11 +384,14 @@ public class OfficeManagerMenu extends JFrame {
                 exchange_rate = resultSet.getString(15);
                 date = resultSet.getString(16);
                 staffid = resultSet.getString(17);
+                cardd = resultSet.getString(18);
+                payd = resultSet.getString(19);
 
 
 
 
-                String[] row = {ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid};
+
+                String[] row = {ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid,cardd,payd};
                 model.addRow(row);
             }
 
