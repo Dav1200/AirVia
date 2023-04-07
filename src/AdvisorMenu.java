@@ -70,6 +70,8 @@ public class AdvisorMenu extends JFrame {
     private JLabel discountLabel;
     private JComboBox customerComboBox;
     private JComboBox blankComboBox;
+    private JTextField cardtxt;
+
     public AdvisorMenu() {
 
         showCustomer();
@@ -83,6 +85,7 @@ public class AdvisorMenu extends JFrame {
         errorLabel.setVisible(false);
         incompleteEntry.setVisible(false);
         discountTxt.setEditable(false);
+        cardtxt.setEditable(false);
         
 
         logoutButton.addActionListener(new ActionListener() {
@@ -236,6 +239,17 @@ public class AdvisorMenu extends JFrame {
                     ticketDateField.setText(ticketDateField.getText() + "/");
                 }
             }}
+        });
+        paymentType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(paymentType.getSelectedItem().toString().equals("Card")){
+                    cardtxt.setEditable(true);
+                }
+                else{
+                    cardtxt.setEditable(false);
+                }
+            }
         });
     }
 
@@ -493,6 +507,7 @@ public class AdvisorMenu extends JFrame {
                     String ticketQuantity = ticketQuantityTextField.getText();
                     String ticketPrice = ticketPriceField.getText();
                     String TaxTotal = taxTotalField.getText();
+                    String card_detail = cardtxt.getText();
 
                     //String latePay = latePayment.getSelectedItem().toString();
                     String exchangeRate = exchangeRateField.getText();
@@ -507,8 +522,8 @@ public class AdvisorMenu extends JFrame {
 
 
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID)\n" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID,card_detail)\n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?); ");
 
                     String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
@@ -536,6 +551,7 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(14, exchangeRate);
                     ps.setString(15, ticketDate);
                     ps.setString(16, staffID);
+                    ps.setString(17,card_detail);
 
 
                     PreparedStatement ps1 = con.prepareStatement("UPDATE advisor_blanks SET status = ? WHERE blanks =?");
