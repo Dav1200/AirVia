@@ -43,12 +43,18 @@ public class OfficeManagerMenu extends JFrame {
     private JComboBox dCustomer;
     private JComboBox dCustomerType;
     private JComboBox dDiscountType;
+    private JComboBox idcomboBox;
+    private JComboBox paymentComboBox;
+    private JButton registerButton;
+    private JTextField cardtxt;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
         showCombobox();
         dDiscountType.setEnabled(false);
-
+        showLatepaymentTable();
+        addToLatePayment();
+        cardtxt.setEditable(false);
 
         workButton.addActionListener(new ActionListener() {
             @Override
@@ -128,6 +134,17 @@ public class OfficeManagerMenu extends JFrame {
                     dDiscountType.setSelectedIndex(1);
                     dDiscountType.setEnabled(true);//dDiscountType.setEditable(true);
 
+                }
+            }
+        });
+        paymentComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(paymentComboBox.getSelectedItem().toString().equals("Card")){
+                    cardtxt.setEditable(true);
+                }
+                else {
+                    cardtxt.setEditable(false);
                 }
             }
         });
@@ -238,8 +255,76 @@ public class OfficeManagerMenu extends JFrame {
 
     public void showLatepaymentTable(){
 
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM ticket_sales WHERE payment_type = ?");
+            ps.setString(1,"LatePayment");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) latePaymentTable.getModel();
+            latePaymentTable.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid;
+            while (resultSet.next()) {
+                ID = resultSet.getString(1);
+                ticket_type = resultSet.getString(2);
+                blank_id = resultSet.getString(3);
+                payment_type = resultSet.getString(4);
+                report_type = resultSet.getString(5);
+                departure = resultSet.getString(6);
+                destination = resultSet.getString(7);
+                commission = resultSet.getString(8);
+                customer = resultSet.getString(9);
+                discount = resultSet.getString(10);
+                quantity = resultSet.getString(11);
+                ticketprice = resultSet.getString(12);
+                tax = resultSet.getString(13);
+                total = resultSet.getString(14);
+                exchange_rate = resultSet.getString(15);
+                date = resultSet.getString(16);
+                staffid = resultSet.getString(17);
 
 
+
+
+                String[] row = {ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public void addToLatePayment() {
+        //adds all id which are in latepayment table to the jcombobox.
+
+        try (Connection con = DBConnection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT ID FROM ticket_sales WHERE payment_type = ?");
+            ps.setString(1,"LatePayment");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                idcomboBox.addItem("ID: "+rs.getString("ID"));
+            }
+
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+
+        }
     }
 
 

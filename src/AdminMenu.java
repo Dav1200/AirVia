@@ -48,9 +48,6 @@ public class AdminMenu extends JFrame {
     public AdminMenu() {
         //manual input
 
-
-
-
         //createTable();
         showStaff();
         registerMember();

@@ -16,8 +16,61 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class AdvisorMenu extends JFrame {
-    public AdvisorMenu() {
 
+    public JPanel getAdPlane() {
+        return adPlane;
+    }
+
+
+    private JPanel adPlane;
+    private JTabbedPane TabMenu;
+    private JButton logoutButton;
+    private JTextField firstNameTextField;
+    private JTextField lastNameTextField;
+    private JTextField emailTextField;
+    private JButton registerButton;
+    private JButton clearButton;
+    private JLabel searchCustomerLabel;
+    private JTextField searchCustomerTextField;
+    private JButton searchCustomerButton;
+    private JTextField recordPaymentTextField;
+    private JTextField commissionAmountField;
+    private JButton registerTicketButton;
+    private JButton createIndividualReportButton;
+    private JLabel registerTicketLabel;
+    private JTable CustomerTable;
+    private JTextField discountAmountTf;
+    private JTextField addressTf;
+    private JTextField staffIDTf;
+    private JButton printButton;
+    private JTextField totalTicketsTf;
+    private JTextField customerTypeTf;
+    private JTextField discountTypeTf;
+    private JTextField departureTextField;
+    private JTextField ticketQuantityTextField;
+    private JLabel errorLabel;
+    private JLabel incompleteEntry;
+    private JComboBox discType;
+    private JComboBox cusType;
+    private JComboBox ticketType;
+    private JComboBox paymentType;
+    private JComboBox reportType;
+    private JTextField departureField;
+    private JTextField destinationTextField;
+    private JTextField ticketPriceField;
+    private JTextField taxTotalField;
+    private JTextField grandTotalField;
+    private JComboBox latePayment;
+    private JTextField exchangeRateField;
+    private JTextField ticketDateField;
+    private JTextField customerIDField;
+    private JTextField staffIDField;
+    private JTextField blankIdtxt;
+    private JTextField discountTxt;
+    private JLabel discountLabel;
+    private JComboBox customerComboBox;
+    private JComboBox blankComboBox;
+    public AdvisorMenu() {
 
         showCustomer();
         registerCustomer();
@@ -188,65 +241,9 @@ public class AdvisorMenu extends JFrame {
 
 
 
-    public JPanel getAdPlane() {
-        return adPlane;
-    }
-
-
-    private JPanel adPlane;
-    private JTabbedPane TabMenu;
-    private JButton logoutButton;
-    private JTextField firstNameTextField;
-    private JTextField lastNameTextField;
-    private JTextField emailTextField;
-    private JButton registerButton;
-    private JButton clearButton;
-    private JLabel searchCustomerLabel;
-    private JTextField searchCustomerTextField;
-    private JButton searchCustomerButton;
-    private JTextField recordPaymentTextField;
-    private JTextField commissionAmountField;
-    private JButton registerTicketButton;
-    private JButton createIndividualReportButton;
-    private JLabel registerTicketLabel;
-    private JTable CustomerTable;
-    private JTextField discountAmountTf;
-    private JTextField addressTf;
-    private JTextField staffIDTf;
-    private JButton printButton;
-    private JTextField totalTicketsTf;
-    private JTextField customerTypeTf;
-    private JTextField discountTypeTf;
-    private JTextField departureTextField;
-    private JTextField ticketQuantityTextField;
-    private JLabel errorLabel;
-    private JLabel incompleteEntry;
-    private JComboBox discType;
-    private JComboBox cusType;
-    private JComboBox ticketType;
-    private JComboBox paymentType;
-    private JComboBox reportType;
-    private JTextField departureField;
-    private JTextField destinationTextField;
-    private JTextField ticketPriceField;
-    private JTextField taxTotalField;
-    private JTextField grandTotalField;
-    private JComboBox latePayment;
-    private JTextField exchangeRateField;
-    private JTextField ticketDateField;
-    private JTextField customerIDField;
-    private JTextField staffIDField;
-    private JTextField blankIdtxt;
-    private JTextField discountTxt;
-    private JLabel discountLabel;
-    private JComboBox customerComboBox;
-    private JComboBox blankComboBox;
-
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
-
-
 
 
     public void showBlankComboBox(){
@@ -482,8 +479,6 @@ public class AdvisorMenu extends JFrame {
                     char a = s.charAt(3);
 
 
-
-
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
                     String blanktype = blankComboBox.getSelectedItem().toString();
@@ -499,7 +494,7 @@ public class AdvisorMenu extends JFrame {
                     String ticketPrice = ticketPriceField.getText();
                     String TaxTotal = taxTotalField.getText();
 
-                    String latePay = latePayment.getSelectedItem().toString();
+                    //String latePay = latePayment.getSelectedItem().toString();
                     String exchangeRate = exchangeRateField.getText();
                     String ticketDate = ticketDateField.getText();
                     String staffID = staffIDField.getText();
@@ -512,8 +507,8 @@ public class AdvisorMenu extends JFrame {
 
 
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, late_payment, exchange_rate, ticket_date, StaffID)\n" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID)\n" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ");
 
                     String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
@@ -537,10 +532,10 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(11, ticketPrice);
                     ps.setString(12, TaxTotal);
                     ps.setString(13, grandTotal);
-                    ps.setString(14, latePay);
-                    ps.setString(15, exchangeRate);
-                    ps.setString(16, ticketDate);
-                    ps.setString(17, staffID);
+                    //ps.setString(14, latePay);
+                    ps.setString(14, exchangeRate);
+                    ps.setString(15, ticketDate);
+                    ps.setString(16, staffID);
 
 
                     PreparedStatement ps1 = con.prepareStatement("UPDATE advisor_blanks SET status = ? WHERE blanks =?");

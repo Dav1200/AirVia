@@ -342,7 +342,8 @@ auth.getCodeSentTxt().setVisible(true);
                     line = reader.readLine();
 
                     if (line != null) {
-                        System.out.println(mysqldumpPath);
+                        showDialog(mysqldumpPath);
+                        //System.out.println(mysqldumpPath);
                     }
                 } else {
                     System.err.println("Could not find mysqldump");
@@ -352,6 +353,10 @@ auth.getCodeSentTxt().setVisible(true);
             }
         }
         });
+    }
+
+    public void showDialog(String s){
+        JOptionPane.showMessageDialog(this,s);
     }
 
     public static String getCodestr() {
