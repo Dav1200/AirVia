@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 public class AdvisorMenu extends JFrame {
 
@@ -72,6 +74,7 @@ public class AdvisorMenu extends JFrame {
     private JComboBox blankComboBox;
     private JTextField cardtxt;
     private JTextField payDateTxt;
+    private JButton globalReportButton;
 
     public AdvisorMenu() {
 
@@ -266,7 +269,7 @@ public class AdvisorMenu extends JFrame {
                 super.keyTyped(e);
                 if(!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)){
 
-                if(ticketDateField.getText().toString().length() == 5){
+                if(ticketDateField.getText().toString().length() == 2){
 
                     ticketDateField.setText(ticketDateField.getText() + "/");
                 }
@@ -312,6 +315,17 @@ public class AdvisorMenu extends JFrame {
                 }
 
 
+            }
+        });
+        createIndividualReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IndividualInterlineReport Iir = new IndividualInterlineReport();
+                Iir.setContentPane(Iir.getPanel1());
+                Iir.setVisible(true);
+                Iir.setSize(1000, 600);
+                Iir.setLocationRelativeTo(null);
+                Iir.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
     }

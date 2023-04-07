@@ -17,7 +17,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="289e5" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="289e5" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Individual Report"/>
@@ -25,14 +25,6 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="d0d03" class="javax.swing.JButton" binding="createIndividualReportButton">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Create"/>
-                </properties>
-              </component>
               <component id="c3366" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
@@ -44,10 +36,26 @@
               </component>
               <component id="fbd6a" class="javax.swing.JButton" binding="printButton" default-binding="true">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Print"/>
+                </properties>
+              </component>
+              <component id="d0d03" class="javax.swing.JButton" binding="createIndividualReportButton">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Interline Report"/>
+                </properties>
+              </component>
+              <component id="710f9" class="javax.swing.JButton" binding="globalReportButton" default-binding="true">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Global Report"/>
                 </properties>
               </component>
             </children>
@@ -55,7 +63,7 @@
           <grid id="e9a57" layout-manager="GridLayoutManager" row-count="32" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <tabbedpane title="Sales Report "/>
+              <tabbedpane title="Register Ticket"/>
             </constraints>
             <properties/>
             <border type="none"/>

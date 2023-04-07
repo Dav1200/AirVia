@@ -17,7 +17,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="40482" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="40482" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Sales Report"/>
@@ -25,27 +25,35 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="9b182" class="javax.swing.JButton" binding="generateReportButton2" default-binding="true">
+              <tabbedpane id="ae811" binding="SalesTab">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Generate Report"/>
-                </properties>
-              </component>
-              <scrollpane id="5386b">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="200" height="200"/>
+                  </grid>
                 </constraints>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="96792" class="javax.swing.JTable" binding="salesReport">
-                    <constraints/>
+                  <grid id="82387" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Interline"/>
+                    </constraints>
                     <properties/>
-                  </component>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="aef41" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Domestic"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
-              </scrollpane>
+              </tabbedpane>
             </children>
           </grid>
           <grid id="376da" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -255,89 +263,6 @@
                   </component>
                 </children>
               </scrollpane>
-            </children>
-          </grid>
-          <grid id="e2152" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
-            <constraints>
-              <tabbedpane title="Global Report"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <grid id="27164" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children>
-                  <tabbedpane id="2dfda" binding="tabbedPane2" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="200" height="200"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <grid id="90619" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <tabbedpane title="Interline"/>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="6f5d7" class="javax.swing.JButton" binding="generateReportButton1" default-binding="true">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text value="Generate Report"/>
-                            </properties>
-                          </component>
-                          <component id="30bc5" class="javax.swing.JTable" binding="table1" default-binding="true">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties/>
-                          </component>
-                        </children>
-                      </grid>
-                      <grid id="2b574" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <tabbedpane title="Domestic"/>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="435bb" class="javax.swing.JButton" binding="generateReportButton3" default-binding="true">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text value="Generate Report"/>
-                            </properties>
-                          </component>
-                          <component id="a897f" class="javax.swing.JTable" binding="table2" default-binding="true">
-                            <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties/>
-                          </component>
-                        </children>
-                      </grid>
-                    </children>
-                  </tabbedpane>
-                </children>
-              </grid>
             </children>
           </grid>
           <grid id="864fb" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

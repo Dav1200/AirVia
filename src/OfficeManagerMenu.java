@@ -36,15 +36,9 @@ public class OfficeManagerMenu extends JFrame {
 
     private JPanel oPlane;
     private JTextField tfComRate;
-    private JButton generateReportButton2;
-    private JTable salesReport;
     private JButton setRateButton;
     private JButton setRateButton1;
-    private JTabbedPane tabbedPane2;
-    private JButton generateReportButton1;
-    private JTable table1;
-    private JButton generateReportButton3;
-    private JTable table2;
+    private JTable IntIndividualTable;
     private JComboBox blankComboBox;
     private JLabel blankJlabel;
     private JTable latePaymentTable;
@@ -56,6 +50,8 @@ public class OfficeManagerMenu extends JFrame {
     private JComboBox paymentComboBox;
     private JButton registerButton;
     private JTextField cardtxt;
+    private JTabbedPane SalesTab;
+    private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
