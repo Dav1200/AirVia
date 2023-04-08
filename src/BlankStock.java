@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BlankStock extends JFrame {
     public JPanel getPanel() {
@@ -17,17 +19,32 @@ public class BlankStock extends JFrame {
     private JTextField endTxt;
     private JButton saveButton;
     private JTextField unassingedTextField;
+    private JComboBox ticketTypeBox;
+    private JLabel ticketType;
 
     public BlankStock()  {
         unassingedTextField.setText("unassigned");
         unassingedTextField.setEditable(false);
 
-    saveButton.addActionListener(new ActionListener() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDateTime = now.format(formatter);
+        datetxt.setText(formattedDateTime);
+
+        saveButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             try(Connection con = DBConnection.getConnection()) {
 
-                String Date = datetxt.getText();
+
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                String formattedDateTime = now.format(formatter);
+
+
+               datetxt.setText(formattedDateTime);
+             String  Date = datetxt.getText();
+
                 long End;
                 long Start = Long.parseLong(startTxt.getText());
                 if(endTxt.getText().isEmpty()){
@@ -37,7 +54,29 @@ public class BlankStock extends JFrame {
                     End = Long.parseLong(endTxt.getText());
                 }
 
-                for(long a = Start; a <= End;a++  ) {
+
+                PreparedStatement ps2 = con.prepareStatement("SELECT MAX(blanks_received) FROM blank_stock WHERE blanks_received LIKE ?");
+                ps2.setString(1, ticketTypeBox.getSelectedItem().toString()+"%");
+                ResultSet rs1 = ps2.executeQuery();
+
+
+                if(rs1.next()){
+                    if (rs1.getString(1) == null) {
+
+                    Start = Long.parseLong(startTxt.getText());
+                    End = Start + Long.parseLong(endTxt.getText());}
+
+                }
+                else{
+                    //start from 000001
+                    String blankstart = ticketTypeBox.getSelectedItem().toString() + "00000001";
+                    Start = Long.parseLong(blankstart);
+                    End = Start + Long.parseLong(endTxt.getText()) ;
+                }
+
+
+
+                for(long a = Start; a < End;a++  ) {
                     PreparedStatement ps1 = con.prepareStatement("SELECT * FROM blank_stock WHERE blanks_received = ?");
                     ps1.setString(1, String.valueOf(a));
                     ResultSet rs = ps1.executeQuery();
@@ -54,7 +93,9 @@ public class BlankStock extends JFrame {
 
 
                 }
+                dialog("Successful");
             }
+
             catch (SQLException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
@@ -62,7 +103,44 @@ public class BlankStock extends JFrame {
 
         }
 
-    });}
+    });
+        ticketTypeBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (Connection con = DBConnection.getConnection()) {
+                    startTxt.setText("");
+
+                    PreparedStatement ps2 = con.prepareStatement("SELECT MAX(blanks_received) FROM blank_stock WHERE blanks_received LIKE ? ");
+                    ps2.setString(1, ticketTypeBox.getSelectedItem().toString() + "%");
+                    ResultSet rs1 = ps2.executeQuery();
+/*
+                    if(!rs1.next()){
+                        startTxt.setText(ticketTypeBox.getSelectedItem().toString() + "00000001");
+                    String s = startTxt.getText();
+                        System.out.println(s);
+
+                    }
+
+                    else {
+
+ */
+                        if(rs1.next()) {
+                            if (rs1.getString(1) == null) {
+                                startTxt.setText(ticketTypeBox.getSelectedItem().toString() + "00000001");
+                                return;
+                            }
+                            startTxt.setText(String.valueOf(Long.parseLong(rs1.getString(1)) + 1));
+
+                        }
+
+
+
+                } catch (SQLException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }});
+    }
 
     public void clear(){
         datetxt.setText(null);
@@ -70,6 +148,9 @@ public class BlankStock extends JFrame {
         endTxt.setText(null);
         }
 
+        public void dialog(String s){
+        JOptionPane.showMessageDialog(this,s);
+        }
 
 
 }

@@ -308,7 +308,7 @@ public class AdminMenu extends JFrame {
 
                 if(!returnStock.getText().isEmpty() && !comboBox1.getSelectedItem().toString().equals("Select Type")){
 
-                    PreparedStatement ps = con.prepareStatement("DELETE FROM blank_stock WHERE blanks_received LIKE ? AND blanks_received <= " +
+                    PreparedStatement ps = con.prepareStatement("DELETE FROM blank_stock WHERE blanks_received LIKE ? AND status = 'unassigned' AND blanks_received <= " +
                             "(SELECT MAX(blanks_received) FROM (SELECT blanks_received FROM blank_stock WHERE blanks_received LIKE ? ORDER BY blanks_received DESC LIMIT ?) AS subquery)ORDER BY blanks_received DESC LIMIT ?");
 
                     ps.setString(1,comboBox1.getSelectedItem().toString()+"%");
@@ -328,8 +328,8 @@ public class AdminMenu extends JFrame {
 
 
                 }
-/*
 
+/*
                 if(!requestStock.getText().isEmpty() && !comboBox1.getSelectedItem().toString().equals("Select Type")){
 
                     PreparedStatement ps = con.prepareStatement("SELECT MAX(blanks_received) FROM blank_stock WHERE blanks_received LIKE ?");
@@ -350,6 +350,8 @@ public class AdminMenu extends JFrame {
 
 
                 }
+
+
 
  */
 
