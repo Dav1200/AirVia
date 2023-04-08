@@ -411,6 +411,19 @@ public class AdvisorMenu extends JFrame {
                 addtoRefundCombo();
             }
         });
+        globalReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                GlobalInterlineReport Gil = new GlobalInterlineReport();
+                Gil.setContentPane(Gil.getPanel1());
+                Gil.setVisible(true);
+                Gil.setSize(1000, 600);
+                Gil.setLocationRelativeTo(null);
+                Gil.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            }
+        });
     }
 
 

@@ -51,6 +51,7 @@ public class OfficeManagerMenu extends JFrame {
     private JButton registerButton;
     private JTextField cardtxt;
     private JTabbedPane SalesTab;
+    private JButton globalReportButton;
     private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
@@ -153,6 +154,21 @@ public class OfficeManagerMenu extends JFrame {
                 }
             }
         });
+
+        globalReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                GlobalInterlineReport Gil = new GlobalInterlineReport();
+                Gil.setContentPane(Gil.getPanel1());
+                Gil.setVisible(true);
+                Gil.setSize(1000, 600);
+                Gil.setLocationRelativeTo(null);
+                Gil.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            }
+        });
+
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
