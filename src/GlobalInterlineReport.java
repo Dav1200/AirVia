@@ -204,7 +204,7 @@ public class GlobalInterlineReport extends JFrame {
                     model.setColumnIdentifiers(colName);
 
                     //getting data
-                    String StaffID, FirstName, total_tax, Total_New, total_commission, totalPrice;
+                    String StaffID, FirstName, total_tax, Total_New,  totalPrice,total_commission;
                     while (resultSet.next()) {
                         StaffID = resultSet.getString(1);
                         FirstName = resultSet.getString(2);
@@ -212,6 +212,7 @@ public class GlobalInterlineReport extends JFrame {
                         Total_New = resultSet.getString(4);
                         totalPrice = resultSet.getString(5);
                         total_commission = resultSet.getString(6);
+                        System.out.println(total_commission);
 
 
                         String[] row = {StaffID, FirstName, total_tax, Total_New, totalPrice, total_commission};
@@ -222,10 +223,15 @@ public class GlobalInterlineReport extends JFrame {
                     double totalCommAmount = 0.0;
                     double total_grand_total = 0.0;
                     double price_min_tax = 0.0;
-                    int columnIndex = 6; // Index of the seventh column (column indices start at 0)
-                    int columnIndex2 = 5;
-                    int columnIndex3 = 4;
-                    int columnIndex4 = 3;
+
+
+
+                    double commission = 0.0;
+                    double tax = 0.0;
+                    int columnIndex = 6-1; //total comm
+                    int columnIndex2 = 5-1;// totalprice
+                    int columnIndex3 = 4-1; // total_ new
+                    int columnIndex4 = 3-1; // total tax
                     int rowCount = model.getRowCount(); // Get the number of rows in the table
 
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
@@ -234,22 +240,19 @@ public class GlobalInterlineReport extends JFrame {
                         Object value3 = model.getValueAt(rowIndex, columnIndex3);
                         Object value4 = model.getValueAt(rowIndex, columnIndex4);
 
-                        total_price += Double.parseDouble(value2.toString());
-                        price_min_tax += Double.parseDouble(value3.toString()) - Double.parseDouble(value4.toString()) - Double.parseDouble(value.toString());
-                        totalCommAmount += Double.parseDouble(value2.toString());
-                        total_grand_total += Double.parseDouble(value3.toString());
+                        totalCommAmount += Double.parseDouble(value.toString());
+                        total_grand_total += Double.parseDouble(value2.toString());
+                        tax += Double.parseDouble(value4.toString());
 
-
-
-                        // Do something with the value (e.g. print it to the console)
-                        System.out.println(total_price);
                     }
+
+
                     double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
 
                     netAmount.setText(String.valueOf(total_grand_total - roundedNum));
                     totalPaid.setText(String.valueOf(total_grand_total));
-                    subTotal.setText(String.valueOf(price_min_tax));
-                    totalComAmount.setText(String.valueOf(total_price));
+                    subTotal.setText(String.valueOf(total_grand_total-tax));
+                    totalComAmount.setText(String.valueOf(totalCommAmount));
 
                 } catch (SQLException | ClassNotFoundException throwables) {
                     dialog(throwables.toString());
