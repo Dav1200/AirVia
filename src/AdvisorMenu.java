@@ -49,7 +49,6 @@ public class AdvisorMenu extends JFrame {
     private JTextField customerTypeTf;
     private JTextField discountTypeTf;
     private JTextField departureTextField;
-    private JTextField ticketQuantityTextField;
     private JLabel errorLabel;
     private JLabel incompleteEntry;
     private JComboBox discType;
@@ -75,15 +74,20 @@ public class AdvisorMenu extends JFrame {
     private JTextField cardtxt;
     private JTextField payDateTxt;
     private JButton globalReportButton;
+    private JComboBox ticketListCombo;
+    private JTextField rName;
+    private JTextField rtotal;
+    private JButton refundButton;
+    private JButton updateButton;
 
     public AdvisorMenu() {
 
         showCustomer();
         registerCustomer();
         registerSalesReport();
-
+        addtoRefundCombo();
         commissionAmountField.setEditable(false);
-       // commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
+        // commissionAmountField.setText(getCommissionRate(ticketType.getSelectedItem().toString()));
         commissionAmountField.setText("0");
         showCombobox();
         errorLabel.setVisible(false);
@@ -95,7 +99,7 @@ public class AdvisorMenu extends JFrame {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDateTime = now.format(formatter);
         payDateTxt.setText(formattedDateTime);
-        
+
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -109,9 +113,9 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                switch (ticketType.getSelectedItem().toString()){
+                switch (ticketType.getSelectedItem().toString()) {
                     case "444":
-                    blankComboBox.removeAllItems();
+                        blankComboBox.removeAllItems();
                         showBlankComboBox();
                         commissionAmountField.setText(getCommissionRate("444"));
                         reportType.setSelectedIndex(0);
@@ -151,15 +155,14 @@ public class AdvisorMenu extends JFrame {
                         reportType.setSelectedIndex(0);
 
 
-
                 }
 
 
-                if(ticketType.getSelectedItem().toString().equals("444")){
+                if (ticketType.getSelectedItem().toString().equals("444")) {
                     System.out.println("hi");
                 }
 
-                if(ticketType.getSelectedItem().toString().equals("440")){
+                if (ticketType.getSelectedItem().toString().equals("440")) {
                     System.out.println("hi2");
                 }
             }
@@ -174,18 +177,19 @@ public class AdvisorMenu extends JFrame {
         customerComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(customerComboBox.getSelectedItem().equals("Casual")|| customerComboBox.getSelectedItem().equals("Select Type")){
+                if (customerComboBox.getSelectedItem().equals("Casual") || customerComboBox.getSelectedItem().equals("Select Type")) {
                     discountTxt.setText("0");
 
                 }
-                if(!customerComboBox.getSelectedItem().equals("Select Type") && !customerComboBox.getSelectedItem().equals("Casual")){
+                if (!customerComboBox.getSelectedItem().equals("Select Type") && !customerComboBox.getSelectedItem().equals("Casual")) {
                     try (Connection con = DBConnection.getConnection()
-                    ){ PreparedStatement ps1 = con.prepareStatement("SELECT ID,Alias FROM Customer");
+                    ) {
+                        PreparedStatement ps1 = con.prepareStatement("SELECT ID,Alias FROM Customer");
 
                         ResultSet rs1 = ps1.executeQuery();
 
-                        String s  = (String) customerComboBox.getSelectedItem();
-                        char a = s.charAt(s.length()-1);
+                        String s = (String) customerComboBox.getSelectedItem();
+                        char a = s.charAt(s.length() - 1);
 
                         PreparedStatement ps = con.prepareStatement("SELECT DiscountAmount FROM Customer WHERE ID =?");
                         ps.setString(1, String.valueOf(a));
@@ -196,11 +200,10 @@ public class AdvisorMenu extends JFrame {
                         discountTxt.setText(rs.getString("DiscountAmount"));
 
 
-
-                    }catch (SQLException | ClassNotFoundException ex) {
+                    } catch (SQLException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
 
-                }
+                    }
                 }
             }
         });
@@ -267,36 +270,33 @@ public class AdvisorMenu extends JFrame {
             public void keyPressed(KeyEvent e) {
 
                 super.keyTyped(e);
-                if(!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)){
+                if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
-                if(ticketDateField.getText().toString().length() == 2){
+                    if (ticketDateField.getText().toString().length() == 2) {
 
-                    ticketDateField.setText(ticketDateField.getText() + "/");
+                        ticketDateField.setText(ticketDateField.getText() + "/");
+                    }
+                    if (ticketDateField.getText().toString().length() == 5) {
+                        ticketDateField.setText(ticketDateField.getText() + "/");
+                    }
                 }
-                if(ticketDateField.getText().toString().length() == 5){
-                    ticketDateField.setText(ticketDateField.getText() + "/");
-                }
-            }}
+            }
         });
-
-
 
 
         paymentType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(paymentType.getSelectedItem().toString().equals("Card")){
+                if (paymentType.getSelectedItem().toString().equals("Card")) {
                     cardtxt.setEditable(true);
-                }
-                else{
+                } else {
                     cardtxt.setEditable(false);
                 }
 
-                if(paymentType.getSelectedItem().toString().equals("LatePayment")){
+                if (paymentType.getSelectedItem().toString().equals("LatePayment")) {
                     payDateTxt.setEditable(false);
                     payDateTxt.setText("");
-                }
-                else{
+                } else {
                     payDateTxt.setEditable(true);
                     LocalDateTime now = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -309,8 +309,10 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
-                if(cardtxt.getText().toString().length() > 19){
-                   //dont allow the user to input after length is more than 16
+
+
+                if (cardtxt.getText().toString().length() > 19) {
+                    //dont allow the user to input after length is more than 16
                     e.consume();
                 }
 
@@ -328,8 +330,88 @@ public class AdvisorMenu extends JFrame {
                 Iir.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
-    }
+        ticketListCombo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (Connection con = DBConnection.getConnection()
+                ) {
 
+    if(ticketListCombo.getItemCount() != 0){
+                    PreparedStatement ps = con.prepareStatement("SELECT customer,grand_total FROM ticket_sales WHERE blank_id = ? AND refund = 'No' ");
+                    ps.setString(1, ticketListCombo.getSelectedItem().toString());
+
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        rName.setText(rs.getString(1));
+                        rtotal.setText(rs.getString(2));
+                    }}
+                } catch (SQLException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        refundButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (Connection con = DBConnection.getConnection()
+                ) {
+
+                    PreparedStatement ps = con.prepareStatement("UPDATE advisor_blanks SET status = 'Unused' WHERE blanks = ?");
+                    ps.setString(1, ticketListCombo.getSelectedItem().toString());
+                    ps.executeUpdate();
+
+                    PreparedStatement ps1 = con.prepareStatement("UPDATE ticket_sales SET refund = 'Yes' WHERE blank_id = ?");
+                    ps1.setString(1, ticketListCombo.getSelectedItem().toString());
+                    ps1.executeUpdate();
+
+                    PreparedStatement ps2 = con.prepareStatement("SELECT grand_total, customer FROM ticket_sales WHERE blank_id = ?");
+                    ps2.setString(1, ticketListCombo.getSelectedItem().toString());
+                    ResultSet rs = ps2.executeQuery();
+                    rs.next();
+                    String customer_id = rs.getString(2);
+                    customer_id = customer_id.substring(customer_id.length() - 1);
+                    double grandtotal = Double.parseDouble(rs.getString(1));
+
+                    PreparedStatement ps3 = con.prepareStatement("SELECT TotalTickets, TotalPayment FROM Customer WHERE ID = ?");
+                    ps3.setString(1, customer_id);
+                    ResultSet rs1 = ps3.executeQuery();
+                    rs1.next();
+
+                    double customerTotal = Double.parseDouble(rs1.getString(2));
+                    int customerTotalTickets = Integer.parseInt(rs1.getString(1));
+
+                    Double finalTotal = customerTotal - grandtotal;
+                    customerTotalTickets--;
+
+                    PreparedStatement ps4 = con.prepareStatement("UPDATE Customer SET TotalTickets = ?, TotalPayment = ? WHERE ID = ?");
+                    ps4.setString(1, String.valueOf(customerTotalTickets));
+                    ps4.setString(2, String.valueOf(finalTotal));
+                    ps4.setString(3, customer_id);
+                    ps4.executeUpdate();
+
+                    rName.setText("");
+                    rtotal.setText("");
+                    ticketListCombo.removeAllItems();
+
+                    addtoRefundCombo();
+
+                    dialog("Successfully Refunded");
+
+
+                } catch (SQLException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ticketListCombo.removeAllItems();
+
+                addtoRefundCombo();
+            }
+        });
+    }
 
 
     private void createUIComponents() {
@@ -337,21 +419,19 @@ public class AdvisorMenu extends JFrame {
     }
 
 
-    public void showBlankComboBox(){
+    public void showBlankComboBox() {
 
         try (Connection con = DBConnection.getConnection()
-        ){
+        ) {
             PreparedStatement ps = con.prepareStatement("SELECT blanks FROM advisor_blanks WHERE advisor_id = ? AND status = ? AND blanks LIKE ?");
             ps.setString(1, Login.getUserId());
-            ps.setString(2,"Unused");
-            ps.setString(3,ticketType.getSelectedItem().toString()+"%");
+            ps.setString(2, "Unused");
+            ps.setString(3, ticketType.getSelectedItem().toString() + "%");
             System.out.println(ticketType.getSelectedItem().toString());
             ResultSet rs = ps.executeQuery();
-            if(!rs.next()){
+            if (!rs.next()) {
                 showerrorblanks();
-            }
-
-            else {
+            } else {
                 blankComboBox.addItem(rs.getString("blanks"));
                 while (rs.next()) {
                     blankComboBox.addItem(rs.getString("blanks"));
@@ -359,31 +439,27 @@ public class AdvisorMenu extends JFrame {
             }
 
 
-
-        }  catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-
-    public void showCombobox(){
+    public void showCombobox() {
         try (Connection con = DBConnection.getConnection()
-        ){
+        ) {
             PreparedStatement ps = con.prepareStatement("SELECT ID,Alias FROM Customer");
 
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
-                customerComboBox.addItem(rs.getString("Alias")+" "+rs.getString("ID"));
+            while (rs.next()) {
+                customerComboBox.addItem(rs.getString("Alias") + " " + rs.getString("ID"));
             }
 
 
-
-
-        }  catch (SQLException | ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -408,7 +484,7 @@ public class AdvisorMenu extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID,Alias;
+            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias;
             while (resultSet.next()) {
                 ID = resultSet.getString(1);
                 Firstname = resultSet.getString(2);
@@ -422,7 +498,7 @@ public class AdvisorMenu extends JFrame {
                 StaffID = resultSet.getString(10);
                 Alias = resultSet.getString(11);
 
-                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID,Alias};
+                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias};
                 model.addRow(row);
 
 
@@ -446,7 +522,7 @@ public class AdvisorMenu extends JFrame {
         }
     }
 
-    private void clearRegisterCustomer(){
+    private void clearRegisterCustomer() {
         firstNameTextField.setText(null);
         lastNameTextField.setText(null);
         emailTextField.setText(null);
@@ -456,7 +532,7 @@ public class AdvisorMenu extends JFrame {
         staffIDTf.setText(null);
     }
 
-    public void registerCustomer(){
+    public void registerCustomer() {
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -474,18 +550,15 @@ public class AdvisorMenu extends JFrame {
                     //set discount amount to 0
 
                     // Takes in what the advisor has entered
-                    String firstName =  firstNameTextField.getText();
+                    String firstName = firstNameTextField.getText();
                     String lastName = lastNameTextField.getText();
-                    String email =  emailTextField.getText();
+                    String email = emailTextField.getText();
                     String customerType = cusType.getSelectedItem().toString();
                     String discountType = discType.getSelectedItem().toString();
                     String discountAmount = discountAmountTf.getText();
                     String address = addressTf.getText();
                     String totalTickets = totalTicketsTf.getText();
                     String staffID = staffIDTf.getText();
-
-
-
 
 
                     // Establishes a connection the database
@@ -495,20 +568,20 @@ public class AdvisorMenu extends JFrame {
                     // INSERT INTO statement with values from JTextFields
                     PreparedStatement ps = con.prepareStatement("INSERT INTO Customer(FirstName, LastName, Email, " +
                             "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID) VALUES(?,?,?,?,?,?,?,?,?)");
-                    ps.setString(1,firstName);
-                    ps.setString(2,lastName);
-                    ps.setString(3,email);
-                    ps.setString(4,customerType);
-                    ps.setString(5,discountType);
-                    ps.setString(6,discountAmount);
-                    ps.setString(7,address);
-                    ps.setString(8,totalTickets);
-                    ps.setString(9,staffID);
+                    ps.setString(1, firstName);
+                    ps.setString(2, lastName);
+                    ps.setString(3, email);
+                    ps.setString(4, customerType);
+                    ps.setString(5, discountType);
+                    ps.setString(6, discountAmount);
+                    ps.setString(7, address);
+                    ps.setString(8, totalTickets);
+                    ps.setString(9, staffID);
 
                     System.out.println(ticketType);
 
                     //showing error message if any of the text fields are empty
-                    if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || customerType.isEmpty() || totalTickets.isEmpty() || staffID.isEmpty()){
+                    if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || customerType.isEmpty() || totalTickets.isEmpty() || staffID.isEmpty()) {
 
                         errorLabel.setVisible(true);
                     }
@@ -516,7 +589,7 @@ public class AdvisorMenu extends JFrame {
 
                     // When Button is pressed PHP MY ADMIN should update
                     ps.executeUpdate();
-                    JOptionPane.showMessageDialog(null,"Customer Successfully Registered");
+                    JOptionPane.showMessageDialog(null, "Customer Successfully Registered");
 
 
                     //Clears form once submitted
@@ -531,7 +604,12 @@ public class AdvisorMenu extends JFrame {
 
     }
 
-    public String getCommissionRate(String blankType){
+    public void dialog(String s) {
+        JOptionPane.showMessageDialog(this, s
+        );
+    }
+
+    public String getCommissionRate(String blankType) {
         try (Connection con = DBConnection.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT CommissionRate FROM CommissionRate WHERE BlankType = ?");
             ps.setString(1, blankType);
@@ -540,17 +618,17 @@ public class AdvisorMenu extends JFrame {
             resultSet.next();
             return resultSet.getString(1);
 
-             } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
 
         }
     }
 
-    public void showerrorblanks(){
-        JOptionPane.showMessageDialog(this,"No Assigned Blanks");
+    public void showerrorblanks() {
+        JOptionPane.showMessageDialog(this, "No Assigned Blanks");
     }
 
-    public void registerSalesReport(){
+    public void registerSalesReport() {
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -566,10 +644,17 @@ public class AdvisorMenu extends JFrame {
                         Connection con = DBConnection.getConnection()
                 ) {
 
-                    String s  = (String) customerComboBox.getSelectedItem();
+                    String s = (String) customerComboBox.getSelectedItem();
                     char a = s.charAt(3);
 
+                    if (customerComboBox.getSelectedItem().toString().equals("Casual") && paymentType.getSelectedItem().toString().equals("LatePayment")) {
+                        dialog("Casual Customer cannot have Late Payment");
+                        return;
+                    }
 
+                    if (paymentType.getSelectedItem().toString().equals("Card") && cardtxt.getText().isEmpty()) {
+                        dialog("Enter Card Details");
+                    }
                     //column names
                     String ticType = ticketType.getSelectedItem().toString();
                     String blanktype = blankComboBox.getSelectedItem().toString();
@@ -581,7 +666,7 @@ public class AdvisorMenu extends JFrame {
                     String customer = customerComboBox.getSelectedItem().toString();
 
                     String discount = discountTxt.getText();
-                    String ticketQuantity = ticketQuantityTextField.getText();
+                    String ticketQuantity = "No";
                     String ticketPrice = ticketPriceField.getText();
                     String TaxTotal = taxTotalField.getText();
                     String card_detail = cardtxt.getText();
@@ -592,25 +677,21 @@ public class AdvisorMenu extends JFrame {
                     String staffID = staffIDField.getText();
                     String payment_date = payDateTxt.getText();
 
-                    if(departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty()|| exchangeRate.isEmpty()|| ticketDate.isEmpty()
-                            || staffID.isEmpty()|| blanktype.isEmpty()){
-                        JOptionPane.showMessageDialog(null,"Fill Details");
+                    if (departure.isEmpty() || destination.isEmpty() || comAmount.isEmpty() || ticketQuantity.isEmpty() || ticketPrice.isEmpty() || TaxTotal.isEmpty() || exchangeRate.isEmpty() || ticketDate.isEmpty()
+                            || staffID.isEmpty() || blanktype.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Fill Details");
 
                     }
 
 
-
                     // INSERT INTO statement with values from JTextFields
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, ticket_quantity, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID,card_detail,payment_date)\n" +
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO ticket_sales ( ticket_type, blank_id, payment_type, report_type, departure, destination, commission_amount, customer, discount, refund, ticket_price, tax_total, grand_total, exchange_rate, ticket_date, StaffID,card_detail,payment_date)\n" +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?); ");
 
-                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice) * Integer.parseInt(ticketQuantity) ));
+                    String grandTotal = String.valueOf((Integer.parseInt(ticketPrice)));
                     String dis = String.valueOf(Integer.parseInt(grandTotal) * Float.parseFloat(discount));
                     grandTotal = String.valueOf(Float.parseFloat(grandTotal) - Float.parseFloat(dis));
                     grandTotal = String.valueOf(Float.parseFloat(grandTotal) + Float.parseFloat(TaxTotal));
-
-
-
 
 
                     ps.setString(1, ticType);
@@ -630,21 +711,46 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(14, exchangeRate);
                     ps.setString(15, ticketDate);
                     ps.setString(16, staffID);
-                    ps.setString(17,card_detail);
-                    ps.setString(18,payment_date);
-
+                    ps.setString(17, card_detail);
+                    ps.setString(18, payment_date);
 
 
                     PreparedStatement ps1 = con.prepareStatement("UPDATE advisor_blanks SET status = ? WHERE blanks =?");
                     ps1.setString(1, "Used");
-                    ps1.setString(2,blanktype);
+                    ps1.setString(2, blanktype);
                     ps1.executeUpdate();
                     //showing error message if any of the text fields are empty
 
-
                     ps.executeUpdate();
-                    JOptionPane.showMessageDialog(null,"Ticket added to sales report");
+                    int total_ticket = 0;
+                    ResultSet rs;
+                    if (!customerComboBox.getSelectedItem().toString().equals("Casual")) {
 
+                        PreparedStatement ps3 = con.prepareStatement("SELECT TotalTickets, TotalPayment FROM Customer WHERE ID = ?");
+                        ps3.setString(1, customerComboBox.getSelectedItem().toString().substring(((String) customerComboBox.getSelectedItem()).length() - 1));
+                        rs = ps3.executeQuery();
+                        if (rs.next()) {
+
+                            total_ticket = rs.getInt(1);
+                            double tcprice = rs.getDouble(2);
+                            //total_ticket += Integer.parseInt(ticketQuantity);
+                            tcprice += Double.parseDouble(grandTotal);
+
+                            PreparedStatement ps4 = con.prepareStatement("UPDATE Customer SET TotalTickets = TotalTickets + 1  , TotalPayment = ? WHERE ID = ?");
+
+                            ps4.setDouble(1, tcprice);
+                            ps4.setString(2, customerComboBox.getSelectedItem().toString().substring(((String) customerComboBox.getSelectedItem()).length() - 1));
+                            ps4.executeUpdate();
+
+
+                        }
+
+                    }
+
+                    ticketListCombo.removeAllItems();
+
+                    addtoRefundCombo();
+                    JOptionPane.showMessageDialog(null, "Ticket added to sales report");
 
 
                 } catch (ClassNotFoundException | SQLException exc) {
@@ -655,8 +761,26 @@ public class AdvisorMenu extends JFrame {
             }
 
         });
+
         clearRegisterCustomer();
     }
+
+    public void addtoRefundCombo() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT blank_id FROM ticket_sales WHERE refund = ?");
+            ps.setString(1, "No");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ticketListCombo.addItem(rs.getString(1));
+
+            }
+
+
+        } catch (ClassNotFoundException | SQLException exc) {
+            exc.printStackTrace();
+        }
 
 
     /*
@@ -676,7 +800,8 @@ public class AdvisorMenu extends JFrame {
         }
 
      */
-    //}
+//}
+    }
 }
 
 
