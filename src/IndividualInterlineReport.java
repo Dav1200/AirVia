@@ -149,11 +149,17 @@ public class IndividualInterlineReport extends JFrame {
 
                     PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                             "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
-                            "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.StaffID = 250 " +
+                            "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.StaffID = ? " +
                             "AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?");
 
-
-
+ps.setString(1,Login.getUserId());
+if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
+    JTable table = InterlineIndividual;
+    DefaultTableModel dm = (DefaultTableModel)table.getModel();
+    dm.setRowCount(0);
+    showReport();
+    return;
+}
 
 
                     String inputDateString = startDate.getText();
@@ -163,7 +169,7 @@ public class IndividualInterlineReport extends JFrame {
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString = outputFormatter.format(inputDate);
                     System.out.println(outputDateString);
-                    ps.setString(1,outputDateString);
+                    ps.setString(2,outputDateString);
 
 
 
@@ -174,7 +180,7 @@ public class IndividualInterlineReport extends JFrame {
                     DateTimeFormatter outputFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString2 = outputFormatter2.format(inputDate2);
                     System.out.println(outputDateString2);
-                    ps.setString(2, outputDateString2);
+                    ps.setString(3, outputDateString2);
 
                     //refresh the db //repaint it
                     JTable table = InterlineIndividual;
@@ -240,6 +246,7 @@ public class IndividualInterlineReport extends JFrame {
                     totalComAmount.setText(String.valueOf(roundedNum));
 
                 } catch (SQLException | ClassNotFoundException throwables) {
+                    dialog(throwables.toString());
                     throwables.printStackTrace();
                 }
 
@@ -247,6 +254,9 @@ public class IndividualInterlineReport extends JFrame {
         });
     }
 
+    public void dialog(String s){
+        JOptionPane.showMessageDialog(this,s);
+    }
     public void showReport() {
         try (
                 Connection con = DBConnection.getConnection()
@@ -254,7 +264,8 @@ public class IndividualInterlineReport extends JFrame {
 
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                     "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
-                    "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.StaffID = 250 ");
+                    "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.StaffID = ? ");
+                    ps.setString(1,Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) InterlineIndividual.getModel();

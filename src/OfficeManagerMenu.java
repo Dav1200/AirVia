@@ -165,6 +165,15 @@ public class OfficeManagerMenu extends JFrame {
                     String b = paymentComboBox.getSelectedItem().toString();
                     System.out.println(a+" " + b);
 
+                    if(paymentComboBox.getSelectedItem().toString().equals("Card") && cardtxt.getText().isEmpty() ){
+                        dialog("Enter card Details");
+                        return;
+                    }
+                    if(paymentComboBox.getSelectedItem().toString().equals("Card") && cardtxt.getText().length() < 16){
+                        dialog("Enter card Details");
+                    return;
+                }
+
                     PreparedStatement ps = con.prepareStatement("UPDATE ticket_sales SET payment_date = ?, card_detail= ?, payment_type = ? WHERE ID = ?;");
                     ps.setString(1,formattedDateTime);
                     ps.setString(2,cardtxt.getText());
@@ -173,6 +182,7 @@ public class OfficeManagerMenu extends JFrame {
                     ps.executeUpdate();
                     dialog("Successful");
                     idcomboBox.removeAllItems();
+                    cardtxt.setText("");
                     addToLatePayment();
 
 

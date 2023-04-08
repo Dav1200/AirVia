@@ -35,9 +35,9 @@ public class AdminMenu extends JFrame {
     private JLabel errorLabel;
     private JTable logsTable;
     private JComboBox comboBox1;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
+    private JTextField stockAmount;
+    private JTextField requestStock;
+    private JTextField returnStock;
     private JButton saveButton;
     private JButton addBlankStockButton;
 
@@ -271,6 +271,101 @@ public class AdminMenu extends JFrame {
             }
 
         });
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stockAmount.setText("");
+                try (Connection con = DBConnection.getConnection()) {
+
+                    PreparedStatement ps = con.prepareStatement("SELECT COUNT(blanks_received) FROM blank_stock WHERE status = ? AND blanks_received LIKE ?");
+                    ps.setString(1,"unassigned");
+
+                    System.out.println(comboBox1.getSelectedItem().toString());
+                    ps.setString(2, comboBox1.getSelectedItem().toString()+"%");
+                    ResultSet rs = ps.executeQuery();
+
+                    if(rs.next()){
+                        stockAmount.setText(rs.getString(1));
+
+                    }
+                    else{
+                    stockAmount.setText("0");
+                    }
+
+
+                } catch (SQLException | ClassNotFoundException xe) {
+                    throw new RuntimeException(xe);
+                }
+            }
+        });
+
+        //save stocks returned and requested stock.
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try (Connection con = DBConnection.getConnection()) {
+
+                if(!returnStock.getText().isEmpty() && !comboBox1.getSelectedItem().toString().equals("Select Type")){
+
+                    PreparedStatement ps = con.prepareStatement("DELETE FROM blank_stock WHERE blanks_received LIKE ? AND blanks_received <= " +
+                            "(SELECT MAX(blanks_received) FROM (SELECT blanks_received FROM blank_stock WHERE blanks_received LIKE ? ORDER BY blanks_received DESC LIMIT ?) AS subquery)ORDER BY blanks_received DESC LIMIT ?");
+
+                    ps.setString(1,comboBox1.getSelectedItem().toString()+"%");
+                    ps.setString(2,comboBox1.getSelectedItem().toString()+"%");
+
+                    if(Integer.parseInt(returnStock.getText()) > Integer.parseInt(stockAmount.getText())){
+                        dialog("Enter Valid Amount");
+                        returnStock.setText("");
+                        return;
+                    }
+                    ps.setInt(3,Integer.parseInt(returnStock.getText()));
+                    ps.setInt(4,Integer.parseInt(returnStock.getText()));
+                    ps.executeUpdate();
+                    dialog("Success");
+
+                    returnStock.setText("");
+
+
+                }
+/*
+
+                if(!requestStock.getText().isEmpty() && !comboBox1.getSelectedItem().toString().equals("Select Type")){
+
+                    PreparedStatement ps = con.prepareStatement("SELECT MAX(blanks_received) FROM blank_stock WHERE blanks_received LIKE ?");
+                    ps.setString(1,comboBox1.getSelectedItem().toString()+"%");
+                    ResultSet rs = ps.executeQuery();
+                    if(rs.next()){
+                        long start = Long.parseLong(rs.getString(1));
+                        start++;
+                        long end = start + Long.parseLong(requestStock.getText());
+                        for(long i = start ; i<= end;i++){
+                            PreparedStatement ps1 = con.prepareStatement("INSERT INTO blank_stock(date,blanks_received,status) VALUES(?,?,?)");
+                            ps1.setString(1, String.valueOf(i));
+                            ps1.setString();
+
+                        }
+
+                    }
+
+
+                }
+
+ */
+
+                else {
+                    dialog("Enter/Pick Valid Options please ");
+                }
+
+
+                    DBConnection.getConnection().close();
+                } catch (SQLException | ClassNotFoundException xe) {
+                    throw new RuntimeException(xe);
+                }
+
+
+            }
+        });
     }
 
     //manual input
@@ -319,6 +414,7 @@ public class AdminMenu extends JFrame {
             DefaultTableModel model = (DefaultTableModel) DB.getModel();
             DB.setRowHeight(25);
 
+
             //getting column names
             int col = resultSetMetaData.getColumnCount();
             String[] colName = new String[col];
@@ -341,13 +437,18 @@ public class AdminMenu extends JFrame {
 
                 String[] row = {StaffID, Firstname, Lastname, Email, Address, Role, Password};
                 model.addRow(row);
-            }
 
+            }con.close();
+            con.close();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
 
+    }
+
+    public void dialog(String s){
+        JOptionPane.showMessageDialog(this,s);
     }
 //Clear table fields
     private void clearRegisterStaffField() {
@@ -429,10 +530,12 @@ public class AdminMenu extends JFrame {
                         //Clears once form is submitted
                         clearRegisterStaffField();
                     }
+                    con.close();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
                 showStaff();
+
             }
         });
     }
