@@ -415,13 +415,12 @@ public class AdvisorMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                GlobalInterlineReport Gil = new GlobalInterlineReport();
-                Gil.setContentPane(Gil.getPanel1());
-                Gil.setVisible(true);
-                Gil.setSize(1000, 600);
-                Gil.setLocationRelativeTo(null);
-                Gil.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+                IndividualDomesticReport Idr = new IndividualDomesticReport();
+                Idr.setContentPane(Idr.getPanel1());
+                Idr.setVisible(true);
+                Idr.setSize(1000, 600);
+                Idr.setLocationRelativeTo(null);
+                Idr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
     }

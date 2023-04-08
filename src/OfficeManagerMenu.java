@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -52,6 +51,9 @@ public class OfficeManagerMenu extends JFrame {
     private JTextField cardtxt;
     private JTabbedPane SalesTab;
     private JButton globalReportButton;
+    private JButton individualReport;
+    private JButton globalButton;
+    private JButton individualButton;
     private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
@@ -165,6 +167,43 @@ public class OfficeManagerMenu extends JFrame {
                 Gil.setSize(1000, 600);
                 Gil.setLocationRelativeTo(null);
                 Gil.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            }
+        });
+        individualReport.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IndividualInterlineReport Iil = new IndividualInterlineReport();
+                Iil.setContentPane(Iil.getPanel1());
+                Iil.setVisible(true);
+                Iil.setSize(1000, 600);
+                Iil.setLocationRelativeTo(null);
+                Iil.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            }
+        });
+
+        globalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GlobalDomesticReport Gdr = new GlobalDomesticReport();
+                Gdr.setContentPane(Gdr.getPanel1());
+                Gdr.setVisible(true);
+                Gdr.setSize(1000, 600);
+                Gdr.setLocationRelativeTo(null);
+                Gdr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            }
+        });
+        individualButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IndividualDomesticReport Idr = new IndividualDomesticReport();
+                Idr.setContentPane(Idr.getPanel1());
+                Idr.setVisible(true);
+                Idr.setSize(1000, 600);
+                Idr.setLocationRelativeTo(null);
+                Idr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
             }
         });
