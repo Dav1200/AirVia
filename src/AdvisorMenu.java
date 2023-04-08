@@ -73,7 +73,7 @@ public class AdvisorMenu extends JFrame {
     private JComboBox blankComboBox;
     private JTextField cardtxt;
     private JTextField payDateTxt;
-    private JButton globalReportButton;
+    private JButton DomesticReportButton;
     private JComboBox ticketListCombo;
     private JTextField rName;
     private JTextField rtotal;
@@ -411,7 +411,7 @@ public class AdvisorMenu extends JFrame {
                 addtoRefundCombo();
             }
         });
-        globalReportButton.addActionListener(new ActionListener() {
+        DomesticReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 

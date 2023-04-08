@@ -50,12 +50,12 @@
                   <text value="Interline Report"/>
                 </properties>
               </component>
-              <component id="710f9" class="javax.swing.JButton" binding="globalReportButton" default-binding="true">
+              <component id="710f9" class="javax.swing.JButton" binding="DomesticReportButton">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Global Report"/>
+                  <text value="Domestic Report"/>
                 </properties>
               </component>
             </children>
