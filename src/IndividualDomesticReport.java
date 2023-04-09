@@ -10,9 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -20,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class IndividualDomesticReport extends JFrame {
     private JPanel panel1;
     private JButton printReportButton;
-    private JTable InterlineIndividual;
+    private JTable domesticIndividual;
     private JTextField netAmount;
     private JTextField totalComAmount;
     private JTextField totalPaid;
@@ -29,7 +26,6 @@ public class IndividualDomesticReport extends JFrame {
     private JTextField endDate;
     private JButton search;
     private JButton generateReportButton;
-    private JTable domesticIndividual;
 
 
     public IndividualDomesticReport() {
@@ -183,13 +179,13 @@ public class IndividualDomesticReport extends JFrame {
                     ps.setString(3, outputDateString2);
 
                     //refresh the db //repaint it
-                    JTable table = InterlineIndividual;
+                    JTable table = domesticIndividual;
                     DefaultTableModel dm = (DefaultTableModel)table.getModel();
                     dm.setRowCount(0);
                     ResultSet resultSet = ps.executeQuery();
                     ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                    DefaultTableModel model = (DefaultTableModel) InterlineIndividual.getModel();
-                    InterlineIndividual.setRowHeight(25);
+                    DefaultTableModel model = (DefaultTableModel) domesticIndividual.getModel();
+                    domesticIndividual.setRowHeight(25);
 
                     //getting column names
                     int col = resultSetMetaData.getColumnCount();

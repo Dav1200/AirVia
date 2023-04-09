@@ -28,7 +28,7 @@ public class GlobalDomesticReport extends JFrame {
     private JButton generateReportButton;
 
 
-    public GlobalDomesticReport() {
+    public GlobalDomesticReport () {
 
         //showReport();
         printReportButton.addActionListener(new ActionListener() {
@@ -357,6 +357,5 @@ public class GlobalDomesticReport extends JFrame {
         return panel1;
     }
 }
-
 
 
