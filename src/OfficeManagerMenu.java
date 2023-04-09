@@ -54,6 +54,7 @@ public class OfficeManagerMenu extends JFrame {
     private JButton individualReport;
     private JButton globalButton;
     private JButton individualButton;
+    private JTable table1;
     private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
@@ -62,6 +63,7 @@ public class OfficeManagerMenu extends JFrame {
         dDiscountType.setEnabled(false);
         showLatepaymentTable();
         addToLatePayment();
+        showTicketTurnoverReport2();
         cardtxt.setEditable(false);
 
         workButton.addActionListener(new ActionListener() {
@@ -364,6 +366,57 @@ public class OfficeManagerMenu extends JFrame {
 
 
     }
+
+
+    public void showTicketTurnoverReport2() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT \n" +
+                    "  CASE WHEN blanks_received LIKE '444%' THEN '444' \n" +
+                    "       WHEN blanks_received LIKE '420%' THEN '420' \n" +
+                    "       WHEN blanks_received LIKE '440%' THEN '440' \n" +
+                    "       WHEN blanks_received LIKE '201%' THEN '201' \n" +
+                    "       WHEN blanks_received LIKE '101%' THEN '101' \n" +
+                    "  END AS blank_type,\n" +
+                    "  CONCAT(MIN(blanks_received), '-', MAX(blanks_received)) AS blank_range\n" +
+                    "FROM blank_stock\n" +
+                    "WHERE blanks_received LIKE '444%' OR blanks_received LIKE '420%' OR blanks_received LIKE '440%' OR blanks_received LIKE '201%' OR blanks_received LIKE '101%'\n" +
+                    "GROUP BY blank_type  \n" +
+                    "ORDER BY blank_type DESC;\n");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) table1.getModel();
+            table1.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String BlankType, RecievedBlanks;
+            while (resultSet.next()) {
+
+                BlankType = resultSet.getString(1);
+                RecievedBlanks = resultSet.getString(2);
+
+
+                String[] row = {BlankType, RecievedBlanks};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 
 
     public void updateCommissionRate() {
