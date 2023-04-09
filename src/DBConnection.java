@@ -12,9 +12,12 @@ public class DBConnection {
                 // ...
             }  catch (SQLException e) {
 
+                //if connection fails handle the exception
                 e.printStackTrace();
             }
 
+
+            //return the connection to the database.
         return conn;
     }
 }
