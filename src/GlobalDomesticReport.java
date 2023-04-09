@@ -17,9 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class GlobalDomesticReport extends JFrame {
     private JPanel panel1;
     private JButton printReportButton;
-    private JTable DomesticGlobal;
-    private JScrollPane Pane1;
-    private JButton generateReportButton;
+    private JTable domesticGlobal;
     private JTextField netAmount;
     private JTextField totalComAmount;
     private JTextField totalPaid;
@@ -27,6 +25,7 @@ public class GlobalDomesticReport extends JFrame {
     private JTextField startDate;
     private JTextField endDate;
     private JButton search;
+    private JButton generateReportButton;
 
 
     public GlobalDomesticReport() {
@@ -157,7 +156,7 @@ public class GlobalDomesticReport extends JFrame {
 
 
                     if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
-                        JTable table = DomesticGlobal;
+                        JTable table = domesticGlobal;
                         DefaultTableModel dm = (DefaultTableModel)table.getModel();
                         dm.setRowCount(0);
                         showReport();
@@ -186,13 +185,13 @@ public class GlobalDomesticReport extends JFrame {
                     ps.setString(2, outputDateString2);
 
                     //refresh the db //repaint it
-                    JTable table = DomesticGlobal;
+                    JTable table = domesticGlobal;
                     DefaultTableModel dm = (DefaultTableModel)table.getModel();
                     dm.setRowCount(0);
                     ResultSet resultSet = ps.executeQuery();
                     ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                    DefaultTableModel model = (DefaultTableModel) DomesticGlobal.getModel();
-                    DomesticGlobal.setRowHeight(25);
+                    DefaultTableModel model = (DefaultTableModel) domesticGlobal.getModel();
+                    domesticGlobal.setRowHeight(25);
 
                     //getting column names
                     int col = resultSetMetaData.getColumnCount();
@@ -284,8 +283,8 @@ public class GlobalDomesticReport extends JFrame {
 
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            DefaultTableModel model = (DefaultTableModel) DomesticGlobal.getModel();
-            DomesticGlobal.setRowHeight(25);
+            DefaultTableModel model = (DefaultTableModel) domesticGlobal.getModel();
+            domesticGlobal.setRowHeight(25);
 
             //getting column names
             int col = resultSetMetaData.getColumnCount();

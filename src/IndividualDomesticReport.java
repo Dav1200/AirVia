@@ -21,7 +21,6 @@ public class IndividualDomesticReport extends JFrame {
     private JPanel panel1;
     private JButton printReportButton;
     private JTable InterlineIndividual;
-    private JButton generateReportButton;
     private JTextField netAmount;
     private JTextField totalComAmount;
     private JTextField totalPaid;
@@ -29,7 +28,8 @@ public class IndividualDomesticReport extends JFrame {
     private JTextField startDate;
     private JTextField endDate;
     private JButton search;
-    private JScrollPane Pane1;
+    private JButton generateReportButton;
+    private JTable domesticIndividual;
 
 
     public IndividualDomesticReport() {
@@ -154,7 +154,7 @@ public class IndividualDomesticReport extends JFrame {
 
                     ps.setString(1,Login.getUserId());
                     if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
-                        JTable table = InterlineIndividual;
+                        JTable table = domesticIndividual;
                         DefaultTableModel dm = (DefaultTableModel)table.getModel();
                         dm.setRowCount(0);
                         showReport();
@@ -268,8 +268,8 @@ public class IndividualDomesticReport extends JFrame {
             ps.setString(1,Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            DefaultTableModel model = (DefaultTableModel) InterlineIndividual.getModel();
-            InterlineIndividual.setRowHeight(25);
+            DefaultTableModel model = (DefaultTableModel) domesticIndividual.getModel();
+            domesticIndividual.setRowHeight(25);
 
             //getting column names
             int col = resultSetMetaData.getColumnCount();

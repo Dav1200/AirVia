@@ -10,9 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -20,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class IndividualInterlineReport extends JFrame {
     private JPanel panel1;
     private JButton printReportButton;
-    private JTable InterlineIndividual;
+    private JTable interlineIndividual;
     private JScrollPane Pane1;
     private JButton generateReportButton;
     private JTextField netAmount;
@@ -154,7 +151,7 @@ public class IndividualInterlineReport extends JFrame {
 
 ps.setString(1,Login.getUserId());
 if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
-    JTable table = InterlineIndividual;
+    JTable table = interlineIndividual;
     DefaultTableModel dm = (DefaultTableModel)table.getModel();
     dm.setRowCount(0);
     showReport();
@@ -183,13 +180,13 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                     ps.setString(3, outputDateString2);
 
                     //refresh the db //repaint it
-                    JTable table = InterlineIndividual;
+                    JTable table = interlineIndividual;
                     DefaultTableModel dm = (DefaultTableModel)table.getModel();
                     dm.setRowCount(0);
                     ResultSet resultSet = ps.executeQuery();
                     ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                    DefaultTableModel model = (DefaultTableModel) InterlineIndividual.getModel();
-                    InterlineIndividual.setRowHeight(25);
+                    DefaultTableModel model = (DefaultTableModel) interlineIndividual.getModel();
+                    interlineIndividual.setRowHeight(25);
 
                     //getting column names
                     int col = resultSetMetaData.getColumnCount();
@@ -268,8 +265,8 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                     ps.setString(1,Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            DefaultTableModel model = (DefaultTableModel) InterlineIndividual.getModel();
-            InterlineIndividual.setRowHeight(25);
+            DefaultTableModel model = (DefaultTableModel) interlineIndividual.getModel();
+            interlineIndividual.setRowHeight(25);
 
             //getting column names
             int col = resultSetMetaData.getColumnCount();
