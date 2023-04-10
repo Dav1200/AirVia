@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -20,7 +21,6 @@ public class OfficeManagerMenu extends JFrame {
     private JTable dbBlanks;
     private JTextField dsetDiscount;
     private JButton reassignButton;
-    private JTextField tfReassignBlank;
     private JButton workButton;
     private JButton generateReportButton;
     private JTable turnoverReport;
@@ -55,11 +55,13 @@ public class OfficeManagerMenu extends JFrame {
     private JButton globalButton;
     private JButton individualButton;
     private JTable table1;
+    private JScrollPane allocatedTable;
     private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
         showTicketTurnoverReport();
         showCombobox();
+        showAllocatedBlanks();
         dDiscountType.setEnabled(false);
         showLatepaymentTable();
         addToLatePayment();
@@ -321,6 +323,73 @@ public class OfficeManagerMenu extends JFrame {
         }
 
     }
+
+
+    public void showAllocatedBlanks() {
+        try (//connect to to db
+             Connection con = DBConnection.getConnection()
+        ) {
+            //select all customers from db
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM advisor_blanks");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) dbBlanks.getModel();
+            dbBlanks.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String ad_blank_id, advisor_id, advisor_name, date, blanks, status;
+            while (resultSet.next()) {
+                //get the info and add it as a row in the jtable
+                ad_blank_id = resultSet.getString(1);
+                advisor_id = resultSet.getString(2);
+                advisor_name = resultSet.getString(3);
+                date = resultSet.getString(4);
+                blanks = resultSet.getString(5);
+                status = resultSet.getString(6);
+
+
+                String[] row = {ad_blank_id, advisor_id, advisor_name, date, blanks, status};
+                model.addRow(row);
+
+
+                // row filter
+                TableRowSorter tableRowSorter = new TableRowSorter(model);
+                dbBlanks.setRowSorter(tableRowSorter);
+
+                //search customer
+                //if search button is pressed, search the customer via ID
+
+
+
+                searchButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String searchText = tfSearchBlank.getText();
+                        tableRowSorter.setRowFilter(new myRowFilter(searchText));
+                    }
+                });
+
+            }
+
+
+
+                //handle exceptions
+
+        } catch(SQLException | ClassNotFoundException e){
+                throw new RuntimeException(e);
+            }
+        }
+
+
 
     public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);

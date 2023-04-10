@@ -126,7 +126,7 @@
                   <text value="Search"/>
                 </properties>
               </component>
-              <scrollpane id="b3c86">
+              <scrollpane id="b3c86" binding="allocatedTable">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -139,14 +139,6 @@
                   </component>
                 </children>
               </scrollpane>
-              <component id="6837d" class="javax.swing.JButton" binding="reassignButton">
-                <constraints>
-                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Reassign"/>
-                </properties>
-              </component>
               <component id="ee4ed" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
@@ -155,25 +147,17 @@
                   <text value="Search Blank:"/>
                 </properties>
               </component>
-              <component id="c2ee5" class="javax.swing.JLabel">
+              <component id="6837d" class="javax.swing.JButton" binding="reassignButton">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Reassign Blank:"/>
+                  <text value="Reassign"/>
                 </properties>
-              </component>
-              <component id="6f8de" class="javax.swing.JTextField" binding="tfReassignBlank">
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties/>
               </component>
               <component id="c012c" class="javax.swing.JButton" binding="assignBlanksButton" default-binding="true">
                 <constraints>
-                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Assign Blanks"/>
