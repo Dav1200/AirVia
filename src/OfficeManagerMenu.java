@@ -309,10 +309,25 @@ public class OfficeManagerMenu extends JFrame {
         generateReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                DefaultTableModel dm1 = (DefaultTableModel)table1.getModel();
+                dm1.setRowCount(0);
+
+                DefaultTableModel dm2 = (DefaultTableModel)table2.getModel();
+                dm2.setRowCount(0);
+
+                DefaultTableModel dm3 = (DefaultTableModel)table3.getModel();
+                dm3.setRowCount(0);
+
+
+                DefaultTableModel dm4 = (DefaultTableModel)table4.getModel();
+                dm4.setRowCount(0);
                 showTicketTurnoverReport2();
                 showTicketTurnoverReport3();
                 showTicketTurnoverReport4();
                 showTicketTurnoverReport5();
+
+
             }
         });
     }
@@ -593,7 +608,7 @@ public class OfficeManagerMenu extends JFrame {
         try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT advisor_id, CONCAT(MIN(blanks), '-', MAX(blanks)) AS blanks_range\n" +
-                    "FROM advisor_blanks\n" +
+                    "FROM advisor_blanks \n" +
                     "WHERE STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ? \n" +
                     "GROUP BY advisor_id;");
 
