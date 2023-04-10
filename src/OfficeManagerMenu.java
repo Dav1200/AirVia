@@ -56,16 +56,24 @@ public class OfficeManagerMenu extends JFrame {
     private JButton individualButton;
     private JTable table1;
     private JScrollPane allocatedTable;
+    private JTable table2;
+    private JTable table3;
+    private JTextField startDateTf;
+    private JTextField endDateTf;
+    private JTable table4;
     private JButton GenerateIntInd;
 
     public OfficeManagerMenu() {
-        showTicketTurnoverReport();
+       // showTicketTurnoverReport();
         showCombobox();
         showAllocatedBlanks();
         dDiscountType.setEnabled(false);
         showLatepaymentTable();
         addToLatePayment();
         showTicketTurnoverReport2();
+        showTicketTurnoverReport3();
+        showTicketTurnoverReport4();
+        showTicketTurnoverReport5();
         cardtxt.setEditable(false);
 
         workButton.addActionListener(new ActionListener() {
@@ -486,7 +494,128 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    public void showTicketTurnoverReport3() {
 
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT date, blanks_received, status\n" +
+                    "FROM blank_stock\n" +
+                    "WHERE status = 'unassigned'\n" +
+                    "ORDER BY date ASC");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) table3.getModel();
+            table3.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String date, blank_received, status;
+            while (resultSet.next()) {
+
+                date = resultSet.getString(1);
+                blank_received = resultSet.getString(2);
+                status = resultSet.getString(3);
+
+
+                String[] row = {date, blank_received, status};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public void showTicketTurnoverReport4() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT advisor_id, CONCAT(MIN(blanks), '-', MAX(blanks)) AS blanks_range \n" +
+                    "FROM advisor_blanks \n" +
+                    "GROUP BY advisor_id;");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) table2.getModel();
+            table2.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String advisor_id, blanks;
+            while (resultSet.next()) {
+
+                advisor_id = resultSet.getString(1);
+                blanks = resultSet.getString(2);
+
+
+                String[] row = {advisor_id, blanks};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public void showTicketTurnoverReport5() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            PreparedStatement ps = con.prepareStatement("SELECT advisor_id, COUNT(blanks) AS Final_Amount \n" +
+                    "FROM advisor_blanks \n" +
+                    "WHERE status = 'Unused'\n" +
+                    "GROUP BY advisor_id;");
+            ResultSet resultSet = ps.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            DefaultTableModel model = (DefaultTableModel) table4.getModel();
+            table4.setRowHeight(25);
+
+            //getting column names
+            int col = resultSetMetaData.getColumnCount();
+            String[] colName = new String[col];
+            for (int i = 1; i <= col; i++) {
+                colName[i - 1] = resultSetMetaData.getColumnName(i);
+            }
+
+            model.setColumnIdentifiers(colName);
+
+            //getting data
+            String advisor_id, blanks;
+            while (resultSet.next()) {
+
+                advisor_id = resultSet.getString(1);
+                blanks = resultSet.getString(2);
+
+
+                String[] row = {advisor_id, blanks};
+                model.addRow(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
     public void updateCommissionRate() {
 
