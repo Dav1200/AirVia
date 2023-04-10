@@ -53,6 +53,7 @@ public class Authentication extends JFrame {
         return emailButton;
     }
     public Authentication() {
+        // Doesn't show the code
         codeSentTxt.setVisible(false);
         
         //remove this AT THE END
@@ -65,6 +66,7 @@ public class Authentication extends JFrame {
                 super.keyPressed(e);
 
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // Allows the user to submit the code
                     submitButton.doClick();
                 }}
 

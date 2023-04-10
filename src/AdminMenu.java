@@ -136,7 +136,7 @@ public class AdminMenu extends JFrame {
 
 
                         }
-                        // show prommpt to user if tthe database restore was unsuccessful
+                        // show a prompt to user if the database restore was unsuccessful
                         else {
                             //Creating window to show Error as GUI prompt
                             System.out.println("Failed to restore database.");
