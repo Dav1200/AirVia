@@ -374,7 +374,7 @@ public class OfficeManagerMenu extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String searchText = tfSearchBlank.getText();
-                        tableRowSorter.setRowFilter(new myRowFilter(searchText));
+                        tableRowSorter.setRowFilter(new RowFilterBlanks(searchText));
                     }
                 });
 
