@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class OfficeManagerMenu extends JFrame {
-
+    //fields
     private JTabbedPane tabbedPane1;
     private JTextField tfSearchBlank;
     private JButton searchButton;
@@ -64,6 +64,9 @@ public class OfficeManagerMenu extends JFrame {
     private JTable table4;
     private JButton GenerateIntInd;
 
+
+
+    //constructor
     public OfficeManagerMenu() {
        // showTicketTurnoverReport();
         showCombobox();
@@ -73,6 +76,8 @@ public class OfficeManagerMenu extends JFrame {
         addToLatePayment();
         cardtxt.setEditable(false);
 
+
+        //if logout button is pressed close the form
         workButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,12 +85,16 @@ public class OfficeManagerMenu extends JFrame {
                 dispose();
             }
         });
+
+        //set the updated commission rate
         setRateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateCommissionRate();
             }
         });
+
+        //make a panel/form to assign blanks if assign button pressed
         assignBlanksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,6 +106,8 @@ public class OfficeManagerMenu extends JFrame {
                 a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
+
+        //if reassign button pressed open a new form
         reassignButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,14 +119,10 @@ public class OfficeManagerMenu extends JFrame {
                 a.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
-        setRateButton1.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
 
-            }
-        });
+
+
         dCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,6 +132,8 @@ public class OfficeManagerMenu extends JFrame {
 
             }
         });
+
+        //default values for setting discount
         dCustomerType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,6 +163,8 @@ public class OfficeManagerMenu extends JFrame {
                 }
             }
         });
+
+        //make text field editable if card is selected otherwise false
         paymentComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,15 +172,21 @@ public class OfficeManagerMenu extends JFrame {
                     cardtxt.setEditable(true);
                 }
                 else {
+                    //setting editable false as card wasnt selected
                     cardtxt.setEditable(false);
                 }
             }
         });
 
+
+
+        //when global report button is pressed
+        //make a new panel and form
         globalReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //set window sizes and preferences
                 GlobalInterlineReport Gil = new GlobalInterlineReport();
                 Gil.setContentPane(Gil.getPanel1());
                 Gil.setVisible(true);
@@ -179,9 +196,13 @@ public class OfficeManagerMenu extends JFrame {
 
             }
         });
+
+        //if individual report button is pressed open a panel
         individualReport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //set frame preferences
                 IndividualInterlineReport Iil = new IndividualInterlineReport();
                 Iil.setContentPane(Iil.getPanel1());
                 Iil.setVisible(true);
@@ -192,9 +213,13 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
+
+        //if global report button is clicked
+        //open a new panel and form for global reports
         globalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //set frame preferences
                 GlobalDomesticReport Gdr = new GlobalDomesticReport();
                 Gdr.setContentPane(Gdr.getPanel1());
                 Gdr.setVisible(true);
@@ -204,9 +229,13 @@ public class OfficeManagerMenu extends JFrame {
 
             }
         });
+
+        //if individual domestic report button clicked
+        //shows panel and forms corresponding
         individualButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //set frame preferences
                 IndividualDomesticReport Idr = new IndividualDomesticReport();
                 Idr.setContentPane(Idr.getPanel1());
                 Idr.setVisible(true);
@@ -217,11 +246,17 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
+
+        //register payments for customers
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //get connection to database
                 try (Connection con = DBConnection.getConnection()
                 ){
+
+                    //set date
                     LocalDateTime now = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     String formattedDateTime = now.format(formatter);
@@ -229,20 +264,28 @@ public class OfficeManagerMenu extends JFrame {
                     String b = paymentComboBox.getSelectedItem().toString();
                     System.out.println(a+" " + b);
 
+
+                    //if register button is pressed and card payment is selected and text field is empty show prompt
                     if(paymentComboBox.getSelectedItem().toString().equals("Card") && cardtxt.getText().isEmpty() ){
                         dialog("Enter card Details");
                         return;
                     }
+
+                    //if length of card number is less than 16 show error prompt
                     if(paymentComboBox.getSelectedItem().toString().equals("Card") && cardtxt.getText().length() < 16){
                         dialog("Enter card Details");
+                        //stop the function
                     return;
                 }
 
+
+                    //sql statement to update sales to notify the agent that customer has paid their late payment
                     PreparedStatement ps = con.prepareStatement("UPDATE ticket_sales SET payment_date = ?, card_detail= ?, payment_type = ? WHERE ID = ?;");
                     ps.setString(1,formattedDateTime);
                     ps.setString(2,cardtxt.getText());
                     ps.setString(3,b);
                     ps.setString(4,a);
+                    //execute the query
                     ps.executeUpdate();
                     dialog("Successful");
                     idcomboBox.removeAllItems();
@@ -266,6 +309,8 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
+
+        //format card text field
         ((AbstractDocument) cardtxt.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -296,6 +341,8 @@ public class OfficeManagerMenu extends JFrame {
 
 
 
+
+        //check if the length is less than 19
         cardtxt.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -306,10 +353,14 @@ public class OfficeManagerMenu extends JFrame {
                 }
             }
         });
+
+        //if ticket turnover button is pressed, refresh the tables and show updated jtables
         generateReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+
+                //empty the tables for ticket turnover report
                 DefaultTableModel dm1 = (DefaultTableModel)table1.getModel();
                 dm1.setRowCount(0);
 
@@ -322,6 +373,7 @@ public class OfficeManagerMenu extends JFrame {
 
                 DefaultTableModel dm4 = (DefaultTableModel)table4.getModel();
                 dm4.setRowCount(0);
+                //populate the tables with data
                 showTicketTurnoverReport2();
                 showTicketTurnoverReport3();
                 showTicketTurnoverReport4();
@@ -333,6 +385,7 @@ public class OfficeManagerMenu extends JFrame {
     }
 
 
+    //add to customer combobox
     public void showCombobox(){
         try (Connection con = DBConnection.getConnection()
         ){
@@ -340,13 +393,12 @@ public class OfficeManagerMenu extends JFrame {
 
             ResultSet rs = ps.executeQuery();
 
+            //if date exists in db put it in the combo box
             while(rs.next()){
                 dCustomer.addItem(rs.getString("Alias")+" "+rs.getString("ID"));
             }
 
-
-
-
+            //handle exceptions
         }  catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -354,11 +406,12 @@ public class OfficeManagerMenu extends JFrame {
     }
 
 
+    //show all blanks assigned to advisors in a jtable
     public void showAllocatedBlanks() {
         try (//connect to to db
              Connection con = DBConnection.getConnection()
         ) {
-            //select all customers from db
+            //select all advisor_blank table from db
             PreparedStatement ps = con.prepareStatement("SELECT * FROM advisor_blanks");
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -396,9 +449,6 @@ public class OfficeManagerMenu extends JFrame {
 
                 //search customer
                 //if search button is pressed, search the customer via ID
-
-
-
                 searchButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -410,9 +460,7 @@ public class OfficeManagerMenu extends JFrame {
             }
 
 
-
                 //handle exceptions
-
         } catch(SQLException | ClassNotFoundException e){
                 throw new RuntimeException(e);
             }
@@ -420,54 +468,17 @@ public class OfficeManagerMenu extends JFrame {
 
 
 
+        //prompt for custom msg error or success
     public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);
     }
-    public void showTicketTurnoverReport() {
-
-        try (Connection con = DBConnection.getConnection()) {
-
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM TicketTurnoverReport");
-            ResultSet resultSet = ps.executeQuery();
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            DefaultTableModel model = (DefaultTableModel) turnoverReport.getModel();
-            turnoverReport.setRowHeight(25);
-
-            //getting column names
-            int col = resultSetMetaData.getColumnCount();
-            String[] colName = new String[col];
-            for (int i = 1; i <= col; i++) {
-                colName[i - 1] = resultSetMetaData.getColumnName(i);
-            }
-
-            model.setColumnIdentifiers(colName);
-
-            //getting data
-            String BlankID, BlankType, RecievedBlanks, BlanksAssigned, TotalBlanks, StartDate, AdvisorID, StaffID;
-            while (resultSet.next()) {
-                BlankID = resultSet.getString(1);
-                BlankType = resultSet.getString(2);
-                RecievedBlanks = resultSet.getString(3);
-                BlanksAssigned = resultSet.getString(4);
-                TotalBlanks = resultSet.getString(5);
-                StartDate = resultSet.getString(6);
-                AdvisorID = resultSet.getString(7);
-                StaffID = resultSet.getString(8);
-
-                String[] row = {BlankID, BlankType, RecievedBlanks, BlanksAssigned, TotalBlanks, StartDate, AdvisorID, StaffID};
-                model.addRow(row);
-            }
-
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
 
-    }
-
-
+    //generate sub table for ticket turnvoer report to show how many blanks were received from airvia
+    //sorted by blank types and largest to smallest
     public void showTicketTurnoverReport2() {
 
+        //connect to db
         try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT \n" +
@@ -490,6 +501,7 @@ public class OfficeManagerMenu extends JFrame {
                     "ORDER BY blank_type DESC;");
 
 
+            //format date for sql query as they accept yyyy-mm-dd
             String inputDateString = startDateTf.getText();
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
@@ -525,7 +537,7 @@ public class OfficeManagerMenu extends JFrame {
             //getting data
             String BlankType, RecievedBlanks;
             while (resultSet.next()) {
-
+                    //populate the jtable with data received from db
                 BlankType = resultSet.getString(1);
                 RecievedBlanks = resultSet.getString(2);
 
@@ -534,6 +546,7 @@ public class OfficeManagerMenu extends JFrame {
                 model.addRow(row);
             }
 
+            //handle exceptions
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -723,6 +736,8 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+
+    //update commission rates for each type of blank
     public void updateCommissionRate() {
 
         int blankType = 0;
@@ -755,19 +770,24 @@ public class OfficeManagerMenu extends JFrame {
             }
 
 
+
+            //handle exceptions
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-
+        //this function populates the latepayment table withh customers details who are yet to make payment for their
+    //ticket
     public void showLatepaymentTable(){
-
+        //connect to db
         try (Connection con = DBConnection.getConnection()) {
-
+            //sql statementt to get all customers that opted for late payment
             PreparedStatement ps = con.prepareStatement("SELECT * FROM ticket_sales WHERE payment_type = ?");
             ps.setString(1,"LatePayment");
+
+            //store the result from sql query
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) latePaymentTable.getModel();
@@ -785,6 +805,7 @@ public class OfficeManagerMenu extends JFrame {
             //getting data
             String ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid,cardd,payd;
             while (resultSet.next()) {
+                //populate the tables with correct information received from result set
                 ID = resultSet.getString(1);
                 ticket_type = resultSet.getString(2);
                 blank_id = resultSet.getString(3);
@@ -810,9 +831,11 @@ public class OfficeManagerMenu extends JFrame {
 
 
                 String[] row = {ID, ticket_type, blank_id, payment_type, report_type, departure, destination, commission,customer, discount,quantity,ticketprice,tax,total,exchange_rate,date,staffid,cardd,payd};
+                //add data to jtable
                 model.addRow(row);
             }
 
+            //handle exceptions
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

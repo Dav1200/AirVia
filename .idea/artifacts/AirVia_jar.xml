@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AirVia:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AirVia_jar</output-path>
+    <root id="archive" name="AirVia.jar">
+      <element id="module-output" name="AirVia" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jakarta.activation-api-2.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/angus-activation-2.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jakarta.mail-2.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/mysql-connector-j-8.0.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/twilio-9.2.5-jar-with-dependencies.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

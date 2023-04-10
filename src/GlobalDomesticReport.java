@@ -95,23 +95,28 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
 
-
+        //check each key inputted by the user, add / where appropriate for date format
         endDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
 
+                //do not allow then length of the date to be more than 10
                 if (endDate.getText().toString().length() > 10){
                     e.consume();
                 }
+                //dont allow backspace to be registered as a key
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
                     if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
+                        //put slash at appropriate positions
                         if (endDate.getText().toString().length() == 2) {
 
                             endDate.setText(endDate.getText() + "/");
                         }
+
+                        //put slash at appropriate positions
                         if (endDate.getText().toString().length() == 5) {
                             endDate.setText(endDate.getText() + "/");
                         }
@@ -120,29 +125,37 @@ public class GlobalDomesticReport extends JFrame {
             }
 
         });
+        //check each key inputted by the user, add / where appropriate for date format
         startDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
+                    //put slash at appropriate positions
                     if (startDate.getText().toString().length() == 2) {
 
                         startDate.setText(startDate.getText() + "/");
-                    }
+                    }  //put slash at appropriate positions
                     if (startDate.getText().toString().length() == 5) {
                         startDate.setText(startDate.getText() + "/");
                     }
                 }
             }
         });
+
+        //search data for the global domestic report
+        //when search button is pressed with valid date format
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
+                        //connect to database
                         Connection con = DBConnection.getConnection()
                 ) {
 
+                    //sql query which gets data from appropriate tables
+                    //gets data which will be used to generate and dispaly globaldomestic report
                     PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
                             "       SUM(ticket_sales.tax_total) as total_tax, \n" +
                             "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
@@ -155,7 +168,9 @@ public class GlobalDomesticReport extends JFrame {
                             "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
 
 
+                    //do not allow date field to be empty
                     if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
+                        //if date text fields are empty do not display anything, clear the jtable
                         JTable table = domesticGlobal;
                         DefaultTableModel dm = (DefaultTableModel)table.getModel();
                         dm.setRowCount(0);
@@ -163,22 +178,23 @@ public class GlobalDomesticReport extends JFrame {
                         return;
                     }
 
+                    //format date for sql for start txt field
 
                     String inputDateString = startDate.getText();
                     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
-
+                    //format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString = outputFormatter.format(inputDate);
                     System.out.println(outputDateString);
                     ps.setString(1,outputDateString);
 
 
-
+                    //format date for sql for end date text field
                     String inputDateString2 = endDate.getText();
                     DateTimeFormatter inputFormatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate2 = LocalDate.parse(inputDateString2, inputFormatter2);
-
+                    //format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString2 = outputFormatter2.format(inputDate2);
                     System.out.println(outputDateString2);
@@ -203,6 +219,7 @@ public class GlobalDomesticReport extends JFrame {
                     model.setColumnIdentifiers(colName);
 
                     //getting data
+                    //display the data in jtable to be visualised
                     String StaffID, FirstName, total_tax, Total_New,  totalPrice,total_commission;
                     while (resultSet.next()) {
                         StaffID = resultSet.getString(1);
@@ -217,7 +234,7 @@ public class GlobalDomesticReport extends JFrame {
                         String[] row = {StaffID, FirstName, total_tax, Total_New, totalPrice, total_commission};
                         model.addRow(row);
                     }
-
+                    //initial values to be used in report
                     double total_price = 0.0;
                     double totalCommAmount = 0.0;
                     double total_grand_total = 0.0;
@@ -233,6 +250,8 @@ public class GlobalDomesticReport extends JFrame {
                     int columnIndex4 = 3-1; // total tax
                     int rowCount = model.getRowCount(); // Get the number of rows in the table
 
+
+                    //index through the table storing required data for report.
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
                         Object value = model.getValueAt(rowIndex, columnIndex);// Get the value at the current row and column
                         Object value2 = model.getValueAt(rowIndex, columnIndex2);
@@ -247,12 +266,14 @@ public class GlobalDomesticReport extends JFrame {
 
 
                     double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
-
+                    //set text field with correct data for summary report
+                    //shows total commission, total spent by customers, total amount sent to airvia
                     netAmount.setText(String.valueOf(total_grand_total - roundedNum));
                     totalPaid.setText(String.valueOf(total_grand_total));
                     subTotal.setText(String.valueOf(total_grand_total-tax));
                     totalComAmount.setText(String.valueOf(totalCommAmount));
 
+                    //handle exceptions
                 } catch (SQLException | ClassNotFoundException throwables) {
                     dialog(throwables.toString());
                     throwables.printStackTrace();
@@ -261,15 +282,21 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
     }
-
+        //show prompt with custom text
     public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);
     }
+
+
+    //process to show the reports in jtable same as previous.
     public void showReport() {
         try (
+                //connect to db
                 Connection con = DBConnection.getConnection()
         ) {
 
+            //sql query which gets data from appropriate tables
+            //gets data which will be used to generate and dispaly globaldomestic report
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
                     "       SUM(ticket_sales.tax_total) as total_tax, \n" +
                     "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
@@ -332,7 +359,8 @@ public class GlobalDomesticReport extends JFrame {
                 System.out.println(totalPrice);
             }
             double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
-
+            //set the summary text fields for total commission, total earned and etc
+            //final values for report
             netAmount.setText(String.valueOf(total_grand_total - roundedNum));
             totalPaid.setText(String.valueOf(total_grand_total));
             subTotal.setText(String.valueOf(totalPrice));
@@ -340,6 +368,7 @@ public class GlobalDomesticReport extends JFrame {
 
 
 
+            //handle exceptions
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

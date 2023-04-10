@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 
 public class IndividualInterlineReport extends JFrame {
+    //fields
     private JPanel panel1;
     private JButton printReportButton;
     private JTable interlineIndividual;
@@ -29,9 +30,13 @@ public class IndividualInterlineReport extends JFrame {
     private JButton search;
 
 
+    //constructor
     public IndividualInterlineReport() {
 
+        //display report on table
         showReport();
+
+        //functionality for printing report
         printReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -39,7 +44,7 @@ public class IndividualInterlineReport extends JFrame {
             }
         });
 
-
+//format date
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -67,7 +72,7 @@ public class IndividualInterlineReport extends JFrame {
                 super.replace(fb, offset, length, filteredString, attr);
             }
         });
-
+//format date
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -96,23 +101,24 @@ public class IndividualInterlineReport extends JFrame {
             }
         });
 
-
+        //check each key inputted by the user, add / where appropriate for date format
         endDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
-
-                if (endDate.getText().toString().length() > 10){
+//do not allow then length of the date to be more than 10
+                if (endDate.getText().toString().length() > 10) {
                     e.consume();
-                }
+                }//dont allow backspace to be registered as a key
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
                     if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-
+//put slash at appropriate positions
                         if (endDate.getText().toString().length() == 2) {
 
                             endDate.setText(endDate.getText() + "/");
                         }
+                        //put slash at appropriate positions
                         if (endDate.getText().toString().length() == 5) {
                             endDate.setText(endDate.getText() + "/");
                         }
@@ -121,59 +127,65 @@ public class IndividualInterlineReport extends JFrame {
             }
 
         });
+
+        //check each key inputted by the user, add / where appropriate for date format
         startDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-
+//put slash at appropriate positions
                     if (startDate.getText().toString().length() == 2) {
 
                         startDate.setText(startDate.getText() + "/");
-                    }
+                    }//put slash at appropriate positions
                     if (startDate.getText().toString().length() == 5) {
                         startDate.setText(startDate.getText() + "/");
                     }
                 }
             }
         });
+
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
                         Connection con = DBConnection.getConnection()
                 ) {
-
+                    //sql query which gets data from appropriate tables
+                    //gets data which will be used to generate and display individual interline  report
                     PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                             "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
                             "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' AND ticket_sales.StaffID = ? " +
                             "AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?");
 
-ps.setString(1,Login.getUserId());
-if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
-    JTable table = interlineIndividual;
-    DefaultTableModel dm = (DefaultTableModel)table.getModel();
-    dm.setRowCount(0);
-    showReport();
-    return;
-}
+                    //set the appropriate values for sql query
+                    ps.setString(1, Login.getUserId());
+                    //do not allow date field to be empty
+                    if (startDate.getText().isEmpty() && endDate.getText().isEmpty()) {
+                        //if date text fields are empty do not display anything, clear the jtable
+                        JTable table = interlineIndividual;
+                        DefaultTableModel dm = (DefaultTableModel) table.getModel();
+                        dm.setRowCount(0);
+                        showReport();
+                        return;
+                    }
 
-
+//format date for sql for start txt field
                     String inputDateString = startDate.getText();
                     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
-
+//format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString = outputFormatter.format(inputDate);
                     System.out.println(outputDateString);
-                    ps.setString(2,outputDateString);
+                    ps.setString(2, outputDateString);
 
-
-
+                    //format date for sql for end date text field
                     String inputDateString2 = endDate.getText();
                     DateTimeFormatter inputFormatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate2 = LocalDate.parse(inputDateString2, inputFormatter2);
-
+                    //format date for sql from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString2 = outputFormatter2.format(inputDate2);
                     System.out.println(outputDateString2);
@@ -181,10 +193,13 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
 
                     //refresh the db //repaint it
                     JTable table = interlineIndividual;
-                    DefaultTableModel dm = (DefaultTableModel)table.getModel();
+                    DefaultTableModel dm = (DefaultTableModel) table.getModel();
+                    //refresh the jtable to avoid duplication of values
+                    //set the row count to 0
                     dm.setRowCount(0);
                     ResultSet resultSet = ps.executeQuery();
                     ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                    //add the newly generatred dataset
                     DefaultTableModel model = (DefaultTableModel) interlineIndividual.getModel();
                     interlineIndividual.setRowHeight(25);
 
@@ -200,6 +215,7 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                     //getting data
                     String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price;
                     while (resultSet.next()) {
+                        //retrieve the values and put them as placeholders to be used
                         StaffID = resultSet.getString(1);
                         FirstName = resultSet.getString(2);
                         blank_id = resultSet.getString(3);
@@ -210,6 +226,7 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                         Price = resultSet.getString(8);
 
                         String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
+                        //add placeholder to jtable row
                         model.addRow(row);
                     }
 
@@ -221,13 +238,14 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                     int columnIndex3 = 5;
                     int rowCount = model.getRowCount(); // Get the number of rows in the table
 
+                    //index through the table storing required data for report.
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
                         Object value = model.getValueAt(rowIndex, columnIndex);// Get the value at the current row and column
                         Object value2 = model.getValueAt(rowIndex, columnIndex2);
                         Object value3 = model.getValueAt(rowIndex, columnIndex3);
 
                         total_price += Double.parseDouble(value.toString());
-                        totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString())/100);
+                        totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString()) / 100);
                         total_grand_total += Double.parseDouble(value3.toString());
 
 
@@ -235,13 +253,18 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                         // Do something with the value (e.g. print it to the console)
                         System.out.println(total_price);
                     }
+                    //round to two decimal places
                     double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
 
+
+                    //set text field with correct data for summary report
+                    //shows total commission, total spent by customers, total amount sent to airvia
                     netAmount.setText(String.valueOf(total_grand_total - roundedNum));
                     totalPaid.setText(String.valueOf(total_grand_total));
                     subTotal.setText(String.valueOf(total_price));
                     totalComAmount.setText(String.valueOf(roundedNum));
 
+                    //handle exceptions
                 } catch (SQLException | ClassNotFoundException throwables) {
                     dialog(throwables.toString());
                     throwables.printStackTrace();
@@ -251,9 +274,10 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
         });
     }
 
-    public void dialog(String s){
-        JOptionPane.showMessageDialog(this,s);
+    public void dialog(String s) {
+        JOptionPane.showMessageDialog(this, s);
     }
+
     public void showReport() {
         try (
                 Connection con = DBConnection.getConnection()
@@ -262,7 +286,7 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                     "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
                     "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' AND ticket_sales.StaffID = ? ");
-                    ps.setString(1,Login.getUserId());
+            ps.setString(1, Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) interlineIndividual.getModel();
@@ -307,9 +331,8 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                 Object value3 = model.getValueAt(rowIndex, columnIndex3);
 
                 total_price += Double.parseDouble(value.toString());
-                totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString())/100);
+                totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString()) / 100);
                 total_grand_total += Double.parseDouble(value3.toString());
-
 
 
                 // Do something with the value (e.g. print it to the console)
@@ -323,20 +346,18 @@ if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
             totalComAmount.setText(String.valueOf(roundedNum));
 
 
-
+            //handle and catch exception
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-
-
-
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
 
+    //getters and setters
     public JPanel getPanel1() {
         return panel1;
     }

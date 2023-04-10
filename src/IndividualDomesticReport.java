@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 
 public class IndividualDomesticReport extends JFrame {
+    //fields
     private JPanel panel1;
     private JButton printReportButton;
     private JTable domesticIndividual;
@@ -28,9 +29,12 @@ public class IndividualDomesticReport extends JFrame {
     private JButton generateReportButton;
 
 
+    //constructor
     public IndividualDomesticReport() {
 
         showReport();
+
+        //function for print button
         printReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,7 +42,7 @@ public class IndividualDomesticReport extends JFrame {
             }
         });
 
-
+        //format date
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -53,6 +57,7 @@ public class IndividualDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            //format date
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -66,7 +71,7 @@ public class IndividualDomesticReport extends JFrame {
                 super.replace(fb, offset, length, filteredString, attr);
             }
         });
-
+        //format date
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -81,6 +86,7 @@ public class IndividualDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            //format date
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -95,23 +101,24 @@ public class IndividualDomesticReport extends JFrame {
             }
         });
 
-
+        //format end date field
         endDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
 
-                if (endDate.getText().toString().length() > 10){
+                if (endDate.getText().toString().length() > 10) {
                     e.consume();
                 }
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
                     if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-
+                        //add / where appropriate
                         if (endDate.getText().toString().length() == 2) {
 
                             endDate.setText(endDate.getText() + "/");
                         }
+                        //add / where appropriate
                         if (endDate.getText().toString().length() == 5) {
                             endDate.setText(endDate.getText() + "/");
                         }
@@ -120,16 +127,18 @@ public class IndividualDomesticReport extends JFrame {
             }
 
         });
+
+        //format start date field
         startDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-
+//add / where appropriate
                     if (startDate.getText().toString().length() == 2) {
 
                         startDate.setText(startDate.getText() + "/");
-                    }
+                    }//add / where appropriate
                     if (startDate.getText().toString().length() == 5) {
                         startDate.setText(startDate.getText() + "/");
                     }
@@ -140,39 +149,43 @@ public class IndividualDomesticReport extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
+                        //db connection
                         Connection con = DBConnection.getConnection()
                 ) {
-
+                    //sql query to get data from various tables to generate individual domestic report
                     PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                             "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
                             "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' AND ticket_sales.StaffID = ? " +
                             "AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?");
 
-                    ps.setString(1,Login.getUserId());
-                    if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
+                    ps.setString(1, Login.getUserId());
+
+                    //do not allow date field to be empty
+                    //show blank table if no date is inputted
+                    if (startDate.getText().isEmpty() && endDate.getText().isEmpty()) {
                         JTable table = domesticIndividual;
-                        DefaultTableModel dm = (DefaultTableModel)table.getModel();
+                        DefaultTableModel dm = (DefaultTableModel) table.getModel();
                         dm.setRowCount(0);
                         showReport();
                         return;
                     }
 
-
+//format date for sql for start date text field
                     String inputDateString = startDate.getText();
                     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
-
+//format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString = outputFormatter.format(inputDate);
                     System.out.println(outputDateString);
-                    ps.setString(2,outputDateString);
+                    ps.setString(2, outputDateString);
 
 
-
+//format date for sql for end date text field
                     String inputDateString2 = endDate.getText();
                     DateTimeFormatter inputFormatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate2 = LocalDate.parse(inputDateString2, inputFormatter2);
-
+//format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString2 = outputFormatter2.format(inputDate2);
                     System.out.println(outputDateString2);
@@ -180,7 +193,7 @@ public class IndividualDomesticReport extends JFrame {
 
                     //refresh the db //repaint it
                     JTable table = domesticIndividual;
-                    DefaultTableModel dm = (DefaultTableModel)table.getModel();
+                    DefaultTableModel dm = (DefaultTableModel) table.getModel();
                     dm.setRowCount(0);
                     ResultSet resultSet = ps.executeQuery();
                     ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -211,7 +224,7 @@ public class IndividualDomesticReport extends JFrame {
                         String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
                         model.addRow(row);
                     }
-
+//initial values to be used in report
                     double total_price = 0.0;
                     double totalCommAmount = 0.0;
                     double total_grand_total = 0.0;
@@ -226,21 +239,22 @@ public class IndividualDomesticReport extends JFrame {
                         Object value3 = model.getValueAt(rowIndex, columnIndex3);
 
                         total_price += Double.parseDouble(value.toString());
-                        totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString())/100);
+                        totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString()) / 100);
                         total_grand_total += Double.parseDouble(value3.toString());
-
 
 
                         // Do something with the value (e.g. print it to the console)
                         System.out.println(total_price);
                     }
                     double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
-
+//set text field with correct data for summary report
+                    //shows total commission, total spent by customers, total amount sent to airvia
                     netAmount.setText(String.valueOf(total_grand_total - roundedNum));
                     totalPaid.setText(String.valueOf(total_grand_total));
                     subTotal.setText(String.valueOf(total_price));
                     totalComAmount.setText(String.valueOf(roundedNum));
 
+                    //handle exceptions
                 } catch (SQLException | ClassNotFoundException throwables) {
                     dialog(throwables.toString());
                     throwables.printStackTrace();
@@ -250,18 +264,19 @@ public class IndividualDomesticReport extends JFrame {
         });
     }
 
-    public void dialog(String s){
-        JOptionPane.showMessageDialog(this,s);
+    public void dialog(String s) {
+        JOptionPane.showMessageDialog(this, s);
     }
+
     public void showReport() {
         try (
                 Connection con = DBConnection.getConnection()
         ) {
-
+            //sql query to get data from various tables to generate individual domestic report
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
                     "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
                     "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' AND ticket_sales.StaffID = ? ");
-            ps.setString(1,Login.getUserId());
+            ps.setString(1, Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) domesticIndividual.getModel();
@@ -306,9 +321,8 @@ public class IndividualDomesticReport extends JFrame {
                 Object value3 = model.getValueAt(rowIndex, columnIndex3);
 
                 total_price += Double.parseDouble(value.toString());
-                totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString())/100);
+                totalCommAmount += Double.parseDouble(value.toString()) * (Double.parseDouble(value2.toString()) / 100);
                 total_grand_total += Double.parseDouble(value3.toString());
-
 
 
                 // Do something with the value (e.g. print it to the console)
@@ -322,14 +336,10 @@ public class IndividualDomesticReport extends JFrame {
             totalComAmount.setText(String.valueOf(roundedNum));
 
 
-
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
 
     private void createUIComponents() {

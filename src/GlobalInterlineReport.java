@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 
 
 public class GlobalInterlineReport extends JFrame {
+
+    //fields
     private JPanel panel1;
     private JButton printReportButton;
     private JTable interlineGlobal;
@@ -28,6 +30,7 @@ public class GlobalInterlineReport extends JFrame {
     private JButton generateReportButton;
 
 
+    //constructor
     public GlobalInterlineReport() {
 
         //showReport();
@@ -39,6 +42,7 @@ public class GlobalInterlineReport extends JFrame {
         });
 
 
+        //formating text field
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -66,7 +70,7 @@ public class GlobalInterlineReport extends JFrame {
                 super.replace(fb, offset, length, filteredString, attr);
             }
         });
-
+//formate for end date text field
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -96,6 +100,7 @@ public class GlobalInterlineReport extends JFrame {
         });
 
 
+        //format end date field
         endDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -104,14 +109,16 @@ public class GlobalInterlineReport extends JFrame {
                 if (endDate.getText().toString().length() > 10){
                     e.consume();
                 }
+
+                //dont allow backspace to registered as a character
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
                     if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
 
                         if (endDate.getText().toString().length() == 2) {
-
+                            //add / where required
                             endDate.setText(endDate.getText() + "/");
-                        }
+                        } //add / where required
                         if (endDate.getText().toString().length() == 5) {
                             endDate.setText(endDate.getText() + "/");
                         }
@@ -120,16 +127,18 @@ public class GlobalInterlineReport extends JFrame {
             }
 
         });
+
+        //format start date text field
         startDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-
+                    //add / where required
                     if (startDate.getText().toString().length() == 2) {
 
                         startDate.setText(startDate.getText() + "/");
-                    }
+                    } //add / where required
                     if (startDate.getText().toString().length() == 5) {
                         startDate.setText(startDate.getText() + "/");
                     }
@@ -140,9 +149,12 @@ public class GlobalInterlineReport extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
+                        //connect to db
                         Connection con = DBConnection.getConnection()
                 ) {
 
+
+                    //sql query to get data from various tables to generate global interline report
                     PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
                             "       SUM(ticket_sales.tax_total) as total_tax, \n" +
                             "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
@@ -154,7 +166,8 @@ public class GlobalInterlineReport extends JFrame {
                             "WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
                             "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
 
-
+                    //do not allow date field to be empty
+                    //show blank table if no date is inputted
                     if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
                         JTable table = interlineGlobal;
                         DefaultTableModel dm = (DefaultTableModel)table.getModel();
@@ -163,25 +176,26 @@ public class GlobalInterlineReport extends JFrame {
                         return;
                     }
 
-
+                    //format date for sql for start txt field
                     String inputDateString = startDate.getText();
                     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
-
+                    //format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString = outputFormatter.format(inputDate);
                     System.out.println(outputDateString);
                     ps.setString(1,outputDateString);
 
 
-
+                    //format date for sql for end date text field
                     String inputDateString2 = endDate.getText();
                     DateTimeFormatter inputFormatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate inputDate2 = LocalDate.parse(inputDateString2, inputFormatter2);
-
+//format date for sql. from dd/mm/yyyy to yyyy-mm--dd
                     DateTimeFormatter outputFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String outputDateString2 = outputFormatter2.format(inputDate2);
                     System.out.println(outputDateString2);
+                    //set the correct value for sql query statement
                     ps.setString(2, outputDateString2);
 
                     //refresh the db //repaint it
@@ -217,7 +231,7 @@ public class GlobalInterlineReport extends JFrame {
                         String[] row = {StaffID, FirstName, total_tax, Total_New, totalPrice, total_commission};
                         model.addRow(row);
                     }
-
+//initial values to be used in report
                     double total_price = 0.0;
                     double totalCommAmount = 0.0;
                     double total_grand_total = 0.0;
@@ -244,15 +258,18 @@ public class GlobalInterlineReport extends JFrame {
                         tax += Double.parseDouble(value4.toString());
 
                     }
-
+                    //set text field with correct data for summary report
+                    //shows total commission, total spent by customers, total amount sent to airvia
 
                     double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
+                    //set to two decimal places
 
                     netAmount.setText(String.valueOf(total_grand_total - roundedNum));
                     totalPaid.setText(String.valueOf(total_grand_total));
                     subTotal.setText(String.valueOf(total_grand_total-tax));
                     totalComAmount.setText(String.valueOf(totalCommAmount));
 
+                    //handle exceptions
                 } catch (SQLException | ClassNotFoundException throwables) {
                     dialog(throwables.toString());
                     throwables.printStackTrace();
@@ -269,7 +286,8 @@ public class GlobalInterlineReport extends JFrame {
         try (
                 Connection con = DBConnection.getConnection()
         ) {
-
+//sql query to get data from various tables to generate global interline report
+            //combines data fromm various database tables and puts it into a organised table
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
                     "       SUM(ticket_sales.tax_total) as total_tax, \n" +
                     "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
@@ -331,14 +349,17 @@ public class GlobalInterlineReport extends JFrame {
                 // Do something with the value (e.g. print it to the console)
                 System.out.println(totalPrice);
             }
+            //round to two decimal places
             double roundedNum = Math.round(totalCommAmount * 100.0) / 100.0;
 
+            //set text field with correct data for summary report
+            //shows total commission, total spent by customers, total amount sent to airvia
             netAmount.setText(String.valueOf(total_grand_total - roundedNum));
             totalPaid.setText(String.valueOf(total_grand_total));
             subTotal.setText(String.valueOf(totalPrice));
             totalComAmount.setText(String.valueOf(resultSet.getString(5)));
 
-
+            //handle exceptions
 
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
