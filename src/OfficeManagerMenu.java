@@ -480,7 +480,7 @@ public class OfficeManagerMenu extends JFrame {
 
         //connect to db
         try (Connection con = DBConnection.getConnection()) {
-
+        // Prepared statement used to select all the blanks types within a blank range between a specific date
             PreparedStatement ps = con.prepareStatement("SELECT \n" +
                     "  CASE \n" +
                     "    WHEN blanks_received LIKE '444%' THEN '444'\n" +
@@ -506,20 +506,24 @@ public class OfficeManagerMenu extends JFrame {
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
 
+            //Output in yyyy-mm-dd
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputDateString = outputFormatter.format(inputDate);
             System.out.println(outputDateString);
             ps.setString(1,outputDateString);
 
+            //format date for sql query as they accept yyyy-mm-dd
             String inputEndDateString = endDateTf.getText();
             DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
 
+            //Output in yyyy-mm-dd
             DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputEndDateString = outputEndFormatter.format(inputEndDate);
             System.out.println(outputEndDateString);
             ps.setString(2,outputEndDateString);
 
+            //Result set is stored and executed
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
@@ -557,31 +561,35 @@ public class OfficeManagerMenu extends JFrame {
     public void showTicketTurnoverReport3() {
 
         try (Connection con = DBConnection.getConnection()) {
-
+            // Select statement which displays all unassigned blanks within a certain range of dates
             PreparedStatement ps = con.prepareStatement("SELECT date, blanks_received, status\n" +
                     "FROM blank_stock\n" +
                     "WHERE status = 'unassigned' AND STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
                     "ORDER BY date ASC;\n");
 
-
+            //format date for sql query as they accept yyyy-mm-d
             String inputDateString = startDateTf.getText();
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
 
+            //Output in yyyy-mm-dd
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputDateString = outputFormatter.format(inputDate);
             System.out.println(outputDateString);
             ps.setString(1,outputDateString);
 
+            //format date for sql query as they accept yyyy-mm-d
             String inputEndDateString = endDateTf.getText();
             DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
 
+            //Output in yyyy-mm-dd
             DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputEndDateString = outputEndFormatter.format(inputEndDate);
             System.out.println(outputEndDateString);
             ps.setString(2,outputEndDateString);
 
+            //Result set is stored and executed
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table3.getModel();
@@ -599,7 +607,7 @@ public class OfficeManagerMenu extends JFrame {
             //getting data
             String date, blank_received, status;
             while (resultSet.next()) {
-
+                //populate the jtable with data received from db
                 date = resultSet.getString(1);
                 blank_received = resultSet.getString(2);
                 status = resultSet.getString(3);
@@ -608,7 +616,7 @@ public class OfficeManagerMenu extends JFrame {
                 String[] row = {date, blank_received, status};
                 model.addRow(row);
             }
-
+        //Error handling
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -619,30 +627,35 @@ public class OfficeManagerMenu extends JFrame {
     public void showTicketTurnoverReport4() {
 
         try (Connection con = DBConnection.getConnection()) {
-
+            // Prepared statement where the advisor ID, minimum blanks and maximum blanks are shown in a range depending on the dates the user searches
             PreparedStatement ps = con.prepareStatement("SELECT advisor_id, CONCAT(MIN(blanks), '-', MAX(blanks)) AS blanks_range\n" +
                     "FROM advisor_blanks \n" +
                     "WHERE STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ? \n" +
                     "GROUP BY advisor_id;");
 
+            //format date for sql query as they accept yyyy-mm-d
             String inputDateString = startDateTf.getText();
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
 
+            // The output is formatted in yyyy-mm-dd
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputDateString = outputFormatter.format(inputDate);
             System.out.println(outputDateString);
             ps.setString(1,outputDateString);
 
+            //format date for sql query as they accept yyyy-mm-d
             String inputEndDateString = endDateTf.getText();
             DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
 
+            // The output is formatted in yyyy-mm-dd
             DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputEndDateString = outputEndFormatter.format(inputEndDate);
             System.out.println(outputEndDateString);
             ps.setString(2,outputEndDateString);
 
+            //Result set is stored and executed
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table2.getModel();
@@ -660,7 +673,7 @@ public class OfficeManagerMenu extends JFrame {
             //getting data
             String advisor_id, blanks;
             while (resultSet.next()) {
-
+                //populate the jtable with data received from db
                 advisor_id = resultSet.getString(1);
                 blanks = resultSet.getString(2);
 
@@ -668,7 +681,7 @@ public class OfficeManagerMenu extends JFrame {
                 String[] row = {advisor_id, blanks};
                 model.addRow(row);
             }
-
+        // Exception handling
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -679,30 +692,35 @@ public class OfficeManagerMenu extends JFrame {
     public void showTicketTurnoverReport5() {
 
         try (Connection con = DBConnection.getConnection()) {
-
+            // Select statement which displays the advisor id and the number of unused blanks as the alias final amount which the advisors haven't used
             PreparedStatement ps = con.prepareStatement("SELECT advisor_id, COUNT(blanks) AS Final_Amount \n" +
                     "FROM advisor_blanks \n" +
                     "WHERE status = 'Unused'  AND STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
                     "GROUP BY advisor_id;");
 
+            //format date for sql query as they accept yyyy-mm-dd
             String inputDateString = startDateTf.getText();
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
 
+            // The output is formatted in yyyy-mm-dd
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputDateString = outputFormatter.format(inputDate);
             System.out.println(outputDateString);
             ps.setString(1,outputDateString);
 
+            //format date for sql query as they accept yyyy-mm-d
             String inputEndDateString = endDateTf.getText();
             DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
 
+            // The output is formatted in yyyy-mm-dd
             DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String outputEndDateString = outputEndFormatter.format(inputEndDate);
             System.out.println(outputEndDateString);
             ps.setString(2,outputEndDateString);
 
+            //Result set is stored and executed
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table4.getModel();
@@ -720,7 +738,7 @@ public class OfficeManagerMenu extends JFrame {
             //getting data
             String advisor_id, blanks;
             while (resultSet.next()) {
-
+                //populate the jtable with data received from db
                 advisor_id = resultSet.getString(1);
                 blanks = resultSet.getString(2);
 
@@ -728,7 +746,7 @@ public class OfficeManagerMenu extends JFrame {
                 String[] row = {advisor_id, blanks};
                 model.addRow(row);
             }
-
+        //Error handling
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
