@@ -60,7 +60,6 @@ public class AdvisorMenu extends JFrame {
     private JTextField destinationTextField;
     private JTextField ticketPriceField;
     private JTextField taxTotalField;
-    private JTextField grandTotalField;
     private JComboBox latePayment;
     private JTextField exchangeRateField;
     private JTextField ticketDateField;
