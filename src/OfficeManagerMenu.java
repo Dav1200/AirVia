@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -70,10 +71,6 @@ public class OfficeManagerMenu extends JFrame {
         dDiscountType.setEnabled(false);
         showLatepaymentTable();
         addToLatePayment();
-        showTicketTurnoverReport2();
-        showTicketTurnoverReport3();
-        showTicketTurnoverReport4();
-        showTicketTurnoverReport5();
         cardtxt.setEditable(false);
 
         workButton.addActionListener(new ActionListener() {
@@ -309,6 +306,15 @@ public class OfficeManagerMenu extends JFrame {
                 }
             }
         });
+        generateReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTicketTurnoverReport2();
+                showTicketTurnoverReport3();
+                showTicketTurnoverReport4();
+                showTicketTurnoverReport5();
+            }
+        });
     }
 
 
@@ -450,17 +456,43 @@ public class OfficeManagerMenu extends JFrame {
         try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT \n" +
-                    "  CASE WHEN blanks_received LIKE '444%' THEN '444' \n" +
-                    "       WHEN blanks_received LIKE '420%' THEN '420' \n" +
-                    "       WHEN blanks_received LIKE '440%' THEN '440' \n" +
-                    "       WHEN blanks_received LIKE '201%' THEN '201' \n" +
-                    "       WHEN blanks_received LIKE '101%' THEN '101' \n" +
+                    "  CASE \n" +
+                    "    WHEN blanks_received LIKE '444%' THEN '444'\n" +
+                    "    WHEN blanks_received LIKE '420%' THEN '420'\n" +
+                    "    WHEN blanks_received LIKE '440%' THEN '440'\n" +
+                    "    WHEN blanks_received LIKE '201%' THEN '201'\n" +
+                    "    WHEN blanks_received LIKE '101%' THEN '101'\n" +
                     "  END AS blank_type,\n" +
                     "  CONCAT(MIN(blanks_received), '-', MAX(blanks_received)) AS blank_range\n" +
                     "FROM blank_stock\n" +
-                    "WHERE blanks_received LIKE '444%' OR blanks_received LIKE '420%' OR blanks_received LIKE '440%' OR blanks_received LIKE '201%' OR blanks_received LIKE '101%'\n" +
-                    "GROUP BY blank_type  \n" +
-                    "ORDER BY blank_type DESC;\n");
+                    "WHERE (blanks_received LIKE '444%' \n" +
+                    "  OR blanks_received LIKE '420%' \n" +
+                    "  OR blanks_received LIKE '440%' \n" +
+                    "  OR blanks_received LIKE '201%' \n" +
+                    "  OR blanks_received LIKE '101%')\n" +
+                    "  AND STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
+                    "GROUP BY blank_type\n" +
+                    "ORDER BY blank_type DESC;");
+
+
+            String inputDateString = startDateTf.getText();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputDateString = outputFormatter.format(inputDate);
+            System.out.println(outputDateString);
+            ps.setString(1,outputDateString);
+
+            String inputEndDateString = endDateTf.getText();
+            DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
+
+            DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputEndDateString = outputEndFormatter.format(inputEndDate);
+            System.out.println(outputEndDateString);
+            ps.setString(2,outputEndDateString);
+
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
@@ -500,8 +532,28 @@ public class OfficeManagerMenu extends JFrame {
 
             PreparedStatement ps = con.prepareStatement("SELECT date, blanks_received, status\n" +
                     "FROM blank_stock\n" +
-                    "WHERE status = 'unassigned'\n" +
-                    "ORDER BY date ASC");
+                    "WHERE status = 'unassigned' AND STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
+                    "ORDER BY date ASC;\n");
+
+
+            String inputDateString = startDateTf.getText();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputDateString = outputFormatter.format(inputDate);
+            System.out.println(outputDateString);
+            ps.setString(1,outputDateString);
+
+            String inputEndDateString = endDateTf.getText();
+            DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
+
+            DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputEndDateString = outputEndFormatter.format(inputEndDate);
+            System.out.println(outputEndDateString);
+            ps.setString(2,outputEndDateString);
+
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table3.getModel();
@@ -540,9 +592,29 @@ public class OfficeManagerMenu extends JFrame {
 
         try (Connection con = DBConnection.getConnection()) {
 
-            PreparedStatement ps = con.prepareStatement("SELECT advisor_id, CONCAT(MIN(blanks), '-', MAX(blanks)) AS blanks_range \n" +
-                    "FROM advisor_blanks \n" +
+            PreparedStatement ps = con.prepareStatement("SELECT advisor_id, CONCAT(MIN(blanks), '-', MAX(blanks)) AS blanks_range\n" +
+                    "FROM advisor_blanks\n" +
+                    "WHERE STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ? \n" +
                     "GROUP BY advisor_id;");
+
+            String inputDateString = startDateTf.getText();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputDateString = outputFormatter.format(inputDate);
+            System.out.println(outputDateString);
+            ps.setString(1,outputDateString);
+
+            String inputEndDateString = endDateTf.getText();
+            DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
+
+            DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputEndDateString = outputEndFormatter.format(inputEndDate);
+            System.out.println(outputEndDateString);
+            ps.setString(2,outputEndDateString);
+
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table2.getModel();
@@ -582,8 +654,27 @@ public class OfficeManagerMenu extends JFrame {
 
             PreparedStatement ps = con.prepareStatement("SELECT advisor_id, COUNT(blanks) AS Final_Amount \n" +
                     "FROM advisor_blanks \n" +
-                    "WHERE status = 'Unused'\n" +
+                    "WHERE status = 'Unused'  AND STR_TO_DATE(date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
                     "GROUP BY advisor_id;");
+
+            String inputDateString = startDateTf.getText();
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputDate = LocalDate.parse(inputDateString, inputFormatter);
+
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputDateString = outputFormatter.format(inputDate);
+            System.out.println(outputDateString);
+            ps.setString(1,outputDateString);
+
+            String inputEndDateString = endDateTf.getText();
+            DateTimeFormatter inputEndFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate inputEndDate = LocalDate.parse(inputEndDateString, inputEndFormatter);
+
+            DateTimeFormatter outputEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String outputEndDateString = outputEndFormatter.format(inputEndDate);
+            System.out.println(outputEndDateString);
+            ps.setString(2,outputEndDateString);
+
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             DefaultTableModel model = (DefaultTableModel) table4.getModel();
