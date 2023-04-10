@@ -574,7 +574,7 @@ public class AdvisorMenu extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias;
+            String ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias,total;
             while (resultSet.next()) {
                 //get the info and add it as a row in the jtable
                 ID = resultSet.getString(1);
@@ -588,8 +588,9 @@ public class AdvisorMenu extends JFrame {
                 TotalTickets = resultSet.getString(9);
                 StaffID = resultSet.getString(10);
                 Alias = resultSet.getString(11);
+                total = resultSet.getString(12);
 
-                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias};
+                String[] row = {ID, Firstname, Lastname, Email, CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID, Alias,total};
                 model.addRow(row);
 
 
@@ -623,8 +624,8 @@ public class AdvisorMenu extends JFrame {
         emailTextField.setText(null);
         discountAmountTf.setText(null);
         addressTf.setText(null);
-        totalTicketsTf.setText(null);
-        staffIDTf.setText(null);
+        //totalTicketsTf.setText(null);
+        //staffIDTf.setText(null);
     }
 
     public void registerCustomer() {
@@ -654,8 +655,8 @@ public class AdvisorMenu extends JFrame {
                     String discountType = discType.getSelectedItem().toString();
                     String discountAmount = discountAmountTf.getText();
                     String address = addressTf.getText();
-                    String totalTickets = totalTicketsTf.getText();
-                    String staffID = staffIDTf.getText();
+
+
 
 
                     // Establishes a connection the database
@@ -664,7 +665,7 @@ public class AdvisorMenu extends JFrame {
 
                     // INSERT INTO statement with values from JTextFields
                     PreparedStatement ps = con.prepareStatement("INSERT INTO Customer(FirstName, LastName, Email, " +
-                            "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID) VALUES(?,?,?,?,?,?,?,?,?)");
+                            "CustomerType, DiscountType, DiscountAmount, Address, TotalTickets, StaffID,Alias,TotalPayment) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
                     ps.setString(1, firstName);
                     ps.setString(2, lastName);
                     ps.setString(3, email);
@@ -672,13 +673,14 @@ public class AdvisorMenu extends JFrame {
                     ps.setString(5, discountType);
                     ps.setString(6, discountAmount);
                     ps.setString(7, address);
-                    ps.setString(8, totalTickets);
-                    ps.setString(9, staffID);
-
+                    ps.setString(8, "0");
+                    ps.setString(9, Login.getUserId());
+                    ps.setString(10, staffIDTf.getText());
+                    ps.setString(11,"0" );
                     System.out.println(ticketType);
 
                     //showing error message if any of the text fields are empty
-                    if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || customerType.isEmpty() || totalTickets.isEmpty() || staffID.isEmpty()) {
+                    if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || customerType.isEmpty() || staffIDTf.getText().isEmpty()) {
 
                         errorLabel.setVisible(true);
                     }
