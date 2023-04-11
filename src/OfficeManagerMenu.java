@@ -382,6 +382,44 @@ public class OfficeManagerMenu extends JFrame {
 
             }
         });
+
+        //set new discount plan for customers
+        //when set rate button is pressed
+        setRateButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try (Connection con = DBConnection.getConnection()) {
+
+                    //retrieve information for textfields/comboboxes
+                    String ID = dCustomer.getSelectedItem().toString();
+                    ID = ID.substring(ID.length()-1);
+                    String customerType = dCustomerType.getSelectedItem().toString();
+                    String discountType = dDiscountType.getSelectedItem().toString();
+                    String rate = dsetDiscount.getText();
+
+                    //update data for customer table
+                    //sets new discount plan for selected customer
+                    PreparedStatement ps = con.prepareStatement("UPDATE Customer SET CustomerType =?, DiscountType =?, DiscountAmount = ? WHERE ID = ?");
+                    ps.setString(1,customerType);
+                    ps.setString(2,discountType);
+                    ps.setString(3,rate);
+                    ps.setString(4,ID);
+
+                    //execute the sql query
+                    ps.executeUpdate();
+
+                    //Prompt the user the set-discount for customer was successful
+                    dialog("Successful");
+
+
+                    //handle exceptions
+                } catch (SQLException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
     }
 
 

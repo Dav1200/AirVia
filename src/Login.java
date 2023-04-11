@@ -1,6 +1,6 @@
-import javax.swing. * ;
-import java.awt. * ;
-import java.awt.event. * ;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Random;
 
@@ -64,10 +66,9 @@ public class Login extends JFrame {
         //write to text file for every login attempt
         try {
             myWriter = new FileWriter("login_records.txt", true);
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
 
         //generate a random 2fa password
@@ -80,7 +81,6 @@ public class Login extends JFrame {
         role = "";
 
 
-
         //default start up for login frame/forms
         error.setVisible(false);
         this.setContentPane(this.Hello);
@@ -89,7 +89,6 @@ public class Login extends JFrame {
         //this.add(ImgLabel);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 
 
         //when login button is pressed perform the follwing actions
@@ -117,7 +116,7 @@ public class Login extends JFrame {
 
                     try {
                         encrpPass = encryptString(password);
-                    } catch(NoSuchAlgorithmException ex) {
+                    } catch (NoSuchAlgorithmException ex) {
                         System.out.println(ex);
                     }
 
@@ -152,17 +151,18 @@ public class Login extends JFrame {
                         //email
                         auth.getEmailButton().addActionListener(new ActionListener() {
                             @Override
-                        public void actionPerformed(ActionEvent e) {
-                            //to send email line below
-                            boolean b = gEmailSender.sendEmail(to, from, subject, codestr);
-                            auth.getCodeSentTxt().setVisible(true);
-                        }
+                            public void actionPerformed(ActionEvent e) {
+                                //to send email line below
+                                boolean b = gEmailSender.sendEmail(to, from, subject, codestr);
+                                auth.getCodeSentTxt().setVisible(true);
+                            }
                         });
 
 
                         //phone sms
-                        auth.getsMSButton().addActionListener(new ActionListener() {@Override
-                        public void actionPerformed(ActionEvent e) {
+                        auth.getsMSButton().addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
                 /* to send mobile text
                         Twilio.init("AC2b2098fa2669b835feb2b72bf50c01b0", "2628c89c04b3fc37188b2c927dd2c95a");
                         Message message = Message.creator(
@@ -176,101 +176,107 @@ public class Login extends JFrame {
 auth.getCodeSentTxt().setVisible(true);
 
  */
-                        }
+                            }
                         });
 
 
                         //when 2fa submit button is pressed
-                        auth.getSubmitButton().addActionListener(new ActionListener() {@Override
-                         public void actionPerformed(ActionEvent e) {
-                             if (auth.getCodeTextField().getText().equals(codestr)) {
-                                 //check if 2fa code mathces
-                                 System.out.println(auth.getCodeTextField().getText());
-                                 check = true;
-                                 dispose();
-                                 //close forms
-                                 auth.dispose();
+                        auth.getSubmitButton().addActionListener(new ActionListener() {
+                                                                     @Override
+                                                                     public void actionPerformed(ActionEvent e) {
+                                                                         if (auth.getCodeTextField().getText().equals(codestr)) {
+                                                                             //check if 2fa code mathces
+                                                                             System.out.println(auth.getCodeTextField().getText());
+                                                                             check = true;
+                                                                             dispose();
+                                                                             //close forms
+                                                                             auth.dispose();
 
-                             } else {
-                                 //If 2fa code is wrong somethign happens?
-                                 //CODE HERE
+                                                                         } else {
+                                                                             //If 2fa code is wrong somethign happens?
+                                                                             //CODE HERE
 
-                             }
-                             //find the appropriate role for login credentials
-                             role = role.toLowerCase();
-                            System.out.println(role);
+                                                                         }
+                                                                         //find the appropriate role for login credentials
+                                                                         role = role.toLowerCase();
+                                                                         System.out.println(role);
 
 
-                            //proceed to login as 2fa code is correct
-                             if (check) {
-                                 //switch to the appropriate role
-                                 //switch and open the correct panel based on the role received from db
-                                 switch (role.toLowerCase()) {
+                                                                         //proceed to login as 2fa code is correct
+                                                                         if (check) {
 
-                                     //open admin form
-                                     case "admin":
-                                         try {
-                                             //write to logs file that admin logged in
-                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                             myWriter.flush();
-                                             myWriter.close();
-                                         } catch(IOException ex) {
-                                             throw new RuntimeException(ex);
-                                         }
-                                         //create admin panel
-                                         AdminMenu admin = new AdminMenu();
-                                         admin.setContentPane(admin.getAplane());
-                                         admin.setVisible(true);
-                                         admin.setSize(800, 600);
-                                         admin.setLocationRelativeTo(null);
-                                         admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                         dispose();
-                                         break;
-                                         //create advisor form
-                                     case "travel advisor":
-                                         try {
-                                             //write to log file that adviosr logged in succesfully
-                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                             myWriter.flush();
-                                             myWriter.close();
-                                         } catch(IOException ex) {
-                                             throw new RuntimeException(ex);
-                                         }
+                                                                             //call to update discountplans for customers
+                                                                             setAutoDiscount();
 
-                                         //create advisor panel
-                                         AdvisorMenu advisor = new AdvisorMenu();
-                                         advisor.setContentPane(advisor.getAdPlane());
-                                         advisor.setVisible(true);
-                                         advisor.setSize(800, 600);
-                                         advisor.setLocationRelativeTo(null);
-                                         advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                         dispose();
-                                         break;
+                                                                             //switch to the appropriate role
+                                                                             //switch and open the correct panel based on the role received from db
+                                                                             switch (role.toLowerCase()) {
 
-                                         //create office manager form
-                                     case "office manager":
-                                         try {
-                                             //write to logs file for successful login
-                                             myWriter.write("User " + userName + " successful " + new Date() + "\n");
-                                             myWriter.flush();
-                                             myWriter.close();
-                                         } catch(IOException ex) {
-                                             throw new RuntimeException(ex);
-                                         }
-                                         //create panel
-                                         OfficeManagerMenu manager = new OfficeManagerMenu();
-                                         manager.setContentPane(manager.getoPlane());
-                                         manager.setVisible(true);
-                                         manager.setSize(800, 600);
-                                         manager.setLocationRelativeTo(null);
-                                         manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                                         dispose();
-                                         break;
-                                 }
-                             }
+                                                                                 //open admin form
+                                                                                 case "admin":
+                                                                                     try {
+                                                                                         //write to logs file that admin logged in
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
+                                                                                     //create admin panel
+                                                                                     AdminMenu admin = new AdminMenu();
+                                                                                     admin.setContentPane(admin.getAplane());
+                                                                                     admin.setVisible(true);
+                                                                                     admin.setSize(800, 600);
+                                                                                     admin.setLocationRelativeTo(null);
+                                                                                     admin.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
+                                                                                     break;
+                                                                                 //create advisor form
+                                                                                 case "travel advisor":
+                                                                                     try {
+                                                                                         //write to log file that adviosr logged in succesfully
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
 
-                         }
-                         }
+                                                                                     //create advisor panel
+                                                                                     AdvisorMenu advisor = new AdvisorMenu();
+                                                                                     advisor.setContentPane(advisor.getAdPlane());
+                                                                                     advisor.setVisible(true);
+                                                                                     advisor.setSize(800, 600);
+                                                                                     advisor.setLocationRelativeTo(null);
+                                                                                     advisor.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
+                                                                                     break;
+
+                                                                                 //create office manager form
+                                                                                 case "office manager":
+                                                                                     try {
+                                                                                         //write to logs file for successful login
+                                                                                         myWriter.write("User " + userName + " successful " + new Date() + "\n");
+                                                                                         myWriter.flush();
+                                                                                         myWriter.close();
+                                                                                     } catch (IOException ex) {
+                                                                                         throw new RuntimeException(ex);
+                                                                                     }
+                                                                                     //create panel
+                                                                                     OfficeManagerMenu manager = new OfficeManagerMenu();
+                                                                                     manager.setContentPane(manager.getoPlane());
+                                                                                     manager.setVisible(true);
+                                                                                     manager.setSize(800, 600);
+                                                                                     manager.setLocationRelativeTo(null);
+                                                                                     manager.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                                                                                     dispose();
+                                                                                     break;
+                                                                             }
+
+                                                                         }
+
+                                                                     }
+                                                                 }
 
                         );
 
@@ -294,7 +300,7 @@ auth.getCodeSentTxt().setVisible(true);
                     }
 
                     //handle exceptions
-                } catch(SQLException | NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
+                } catch (SQLException | NoSuchAlgorithmException | ClassNotFoundException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -313,32 +319,36 @@ auth.getCodeSentTxt().setVisible(true);
         //when user presses enter it should automatically press the login button
         //styling and layout
 
-        passwordField1.addKeyListener(new KeyAdapter() {@Override
-        public void keyPressed(KeyEvent e) {
-            super.keyPressed(e);
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                loginButton.doClick();
+        passwordField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButton.doClick();
+                }
             }
-        }
         });
-        userNameText.addKeyListener(new KeyAdapter() {@Override
-        public void keyPressed(KeyEvent e) {
-            super.keyPressed(e);
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                loginButton.doClick();
+        userNameText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButton.doClick();
+                }
             }
-        }
         });
         //styling and layout when hovering over it
         //set the font bigger and make the button larger
-        userNameText.addFocusListener(new FocusAdapter() {@Override
-        public void focusGained(FocusEvent e) {
-            super.focusGained(e);
-            //custom font and size
-            uNameJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
-            uNameJLabel.setForeground(new Color(40, 40, 40));
+        userNameText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                //custom font and size
+                uNameJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+                uNameJLabel.setForeground(new Color(40, 40, 40));
 
-        }
+            }
+
             //styling and layout when hovering over it
             //reset style when not hovered above it
             @Override
@@ -350,14 +360,16 @@ auth.getCodeSentTxt().setVisible(true);
         });
         //styling and layout when hovering over it
         //set the font bigger and make the button larger
-        passwordField1.addFocusListener(new FocusAdapter() {@Override
-        public void focusGained(FocusEvent e) {
-            super.focusGained(e);
-            //custom font and size
-            passJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
-            passJLabel.setForeground(new Color(40, 40, 40));
+        passwordField1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                //custom font and size
+                passJLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+                passJLabel.setForeground(new Color(40, 40, 40));
 
-        }
+            }
+
             //styling and layout when hovering over it
             //reset style when not hovered above it
             @Override
@@ -369,12 +381,14 @@ auth.getCodeSentTxt().setVisible(true);
             }
         }); //styling and layout when hovering over it
         //set the font bigger and make the button larger
-        loginButton.addMouseListener(new MouseAdapter() {@Override
-        public void mouseEntered(MouseEvent e) {
-            super.mouseEntered(e);
-            //custom font and size
-            loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
-        }
+        loginButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                //custom font and size
+                loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+            }
+
             //styling and layout when hovering over it
             //set the font bigger and make the button larger
             @Override
@@ -386,12 +400,13 @@ auth.getCodeSentTxt().setVisible(true);
             }
         }); //styling and layout
         //set the font bigger and make the button larger
-        resetButton.addMouseListener(new MouseAdapter() {@Override
-        public void mouseEntered(MouseEvent e) {
-            super.mouseEntered(e);
-            //custom font and size
-            resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
-        }
+        resetButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                //custom font and size
+                resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
+            }
 
             @Override
             public void mouseExited(MouseEvent e) {
@@ -402,45 +417,46 @@ auth.getCodeSentTxt().setVisible(true);
         });
 
         //will prompt the user locating their sqldump file on their hardware
-        resetButton.addActionListener(new ActionListener() {@Override
-        public void actionPerformed(ActionEvent e) {
-            String[] commands = {
-                    "cmd",
-                    "/c",
-                    "where",
-                    "mysqldump.exe"
-            };
-            Process process = null;
-            try {
-                process = Runtime.getRuntime().exec(commands);
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] commands = {
+                        "cmd",
+                        "/c",
+                        "where",
+                        "mysqldump.exe"
+                };
+                Process process = null;
+                try {
+                    process = Runtime.getRuntime().exec(commands);
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line = reader.readLine();
-
-                if (line != null) {
-                    String mysqldumpPath = line.trim();
-                    String versionCommand = mysqldumpPath + " --version";
-                    process = Runtime.getRuntime().exec(versionCommand);
-                    reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    line = reader.readLine();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String line = reader.readLine();
 
                     if (line != null) {
-                        showDialog(mysqldumpPath);
-                        //System.out.println(mysqldumpPath);
+                        String mysqldumpPath = line.trim();
+                        String versionCommand = mysqldumpPath + " --version";
+                        process = Runtime.getRuntime().exec(versionCommand);
+                        reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        line = reader.readLine();
+
+                        if (line != null) {
+                            showDialog(mysqldumpPath);
+                            //System.out.println(mysqldumpPath);
+                        }
+                    } else {
+                        System.err.println("Could not find mysqldump");
                     }
-                } else {
-                    System.err.println("Could not find mysqldump");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch(IOException ex) {
-                throw new RuntimeException(ex);
             }
-        }
         });
     }
 
     //show custom prompt for user
-    public void showDialog(String s){
-        JOptionPane.showMessageDialog(this,s);
+    public void showDialog(String s) {
+        JOptionPane.showMessageDialog(this, s);
     }
 
 
@@ -458,10 +474,95 @@ auth.getCodeSentTxt().setVisible(true);
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger bigint = new BigInteger(1, messageDigest);
             return bigint.toString(16);
-        } catch(NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             System.out.println(ex);
         }
         return null;
+    }
+
+
+    //set the discount for flexible customers according to their total spent.
+    public void setAutoDiscount() {
+        try (Connection con = DBConnection.getConnection()) {
+
+            //get month and year so each calendar month the sales are checked for customers discount plan
+            Date date = new Date();
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int month = localDate.getMonthValue();
+            int year = localDate.getYear();
+
+
+            //query to update customer according to the discount plan
+             /*
+             SELECT * FROM ticket_sales WHERE MONTH(STR_TO_DATE(ticket_date, '%d/%m/%Y')) = 4 AND YEAR(STR_TO_DATE(ticket_date, '%d/%m/%Y')) = 2023;
+
+UPDATE Customer
+SET DiscountAmount =
+  CASE
+    WHEN TotalPayment < 1000 THEN 0
+    WHEN TotalPayment >= 1000 AND TotalPayment < 2000 THEN 0.01
+    WHEN TotalPayment >= 2000 THEN 0.02
+
+  END
+  WHERE DiscountType = 'Flexible';
+             Modify the Total payment to your liking
+              */
+
+
+            //SELECT * FROM ticket_sales WHERE RIGHT(customer, 1) = 4
+
+            PreparedStatement ps1 = con.prepareStatement("SELECT ID from Customer WHERE DiscountType = 'Flexible';");
+            ResultSet rs = ps1.executeQuery();
+
+
+            //first get list of customer with flexible discount plan
+            while (rs.next()) {
+                PreparedStatement ps2 = con.prepareStatement("SELECT SUM(grand_total) FROM ticket_sales WHERE RIGHT(customer, 1) = ? AND MONTH(STR_TO_DATE(ticket_date, '%d/%m/%Y')) = ? AND YEAR(STR_TO_DATE(ticket_date, '%d/%m/%Y')) = ?");
+                ps2.setString(1, rs.getString("ID"));
+                ps2.setString(2, String.valueOf(month));
+                ps2.setString(3, String.valueOf(year));
+                //store the result of customers with plan
+                ResultSet rs1 = ps2.executeQuery();
+
+
+                //check if there is atleast a customer and has bought a ticket
+                if(rs1.next() && rs1.getString(1) != null){
+                    String amount =  rs1.getString(1);
+
+                    //if they have check for total payment they made in calendar month and update
+                    //the discount is reset each month
+                    PreparedStatement ps = con.prepareStatement("UPDATE Customer\n" +
+                            "SET DiscountAmount = \n" +
+                            "  CASE \n" +
+                            "    WHEN ? < 1000 THEN 0\n" +
+                            "    WHEN ? >= 1000 AND ? < 2000 THEN 0.01 \n" +
+                            "    WHEN ? >= 2000 THEN 0.02 \n" +
+                            "    \n" +
+                            "  END\n" +
+                            "  WHERE DiscountType = 'Flexible' ");
+                    ps.setString(1,amount);
+                    ps.setString(2,amount);
+                    ps.setString(3,amount);
+                    ps.setString(4,amount);
+                    ps.executeUpdate();
+
+                }
+                //if customer didnt buy any tickets in the calendar month reset the discount anmount
+                else{
+                    PreparedStatement ps = con.prepareStatement("UPDATE Customer SET DiscountAmount = '0.00' WHERE DiscountType = 'Flexible';");
+                    ps.executeUpdate();
+                }
+
+
+
+            }
+
+
+
+            //handle exceptions
+        } catch (SQLException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static void main(String[] args) {
@@ -498,7 +599,6 @@ auth.getCodeSentTxt().setVisible(true);
     public void onExit() {
         this.dispose();
     }
-
 
 
 }
