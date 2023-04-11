@@ -1,0 +1,6 @@
+StaffID             FirstName           blank_id            customer            tax_total           grand_total         commission_amount   Price               ticket_date         
+250                 Penelope            44400000003         Chris 1             2.00                57.44               9.00                55.44               08/04/2023          
+250                 Penelope            44400000004         Chris 1             0.00                109.89              9.00                109.89              09/03/2023          
+250                 Penelope            44400000005         SarahB 3            14.00               92.40               9.00                78.40               09/04/2023          
+211                 Dennis              44400000020         Casual              15.00               71.00               9.00                56.00               10/04/2023          
+250                 Penelope            44400000007         DaveD 2             12.00               21351.00            0.10                21339.00            11/04/2023          

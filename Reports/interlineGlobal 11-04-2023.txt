@@ -1,0 +1,3 @@
+StaffID             FirstName           total_tax           Total_New           total_price         total_commission    
+250                 Penelope            32.00               190.6200            321.00              17.94300000         
+322                 test1               12.00               74.9112             121.77              10.95930000         
