@@ -34,7 +34,7 @@ public class IndividualInterlineReport extends JFrame {
     public IndividualInterlineReport() {
 
         //display report on table
-        showReport();
+        //showReport();
 
         //functionality for printing report
         printReportButton.addActionListener(new ActionListener() {
@@ -213,7 +213,7 @@ public class IndividualInterlineReport extends JFrame {
                     model.setColumnIdentifiers(colName);
 
                     //getting data
-                    String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price;
+                    String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date;
                     while (resultSet.next()) {
                         //retrieve the values and put them as placeholders to be used
                         StaffID = resultSet.getString(1);
@@ -224,8 +224,9 @@ public class IndividualInterlineReport extends JFrame {
                         grand_total = resultSet.getString(6);
                         commission_amount = resultSet.getString(7);
                         Price = resultSet.getString(8);
+                        ticket_Date = resultSet.getString(9);
 
-                        String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
+                        String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date};
                         //add placeholder to jtable row
                         model.addRow(row);
                     }
@@ -302,7 +303,7 @@ public class IndividualInterlineReport extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price;
+            String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date;
             while (resultSet.next()) {
                 StaffID = resultSet.getString(1);
                 FirstName = resultSet.getString(2);
@@ -312,8 +313,9 @@ public class IndividualInterlineReport extends JFrame {
                 grand_total = resultSet.getString(6);
                 commission_amount = resultSet.getString(7);
                 Price = resultSet.getString(8);
+                ticket_Date = resultSet.getString(9);
 
-                String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
+                String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date};
                 model.addRow(row);
             }
 

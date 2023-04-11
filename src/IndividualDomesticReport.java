@@ -32,7 +32,7 @@ public class IndividualDomesticReport extends JFrame {
     //constructor
     public IndividualDomesticReport() {
 
-        showReport();
+        //showReport();
 
         //function for print button
         printReportButton.addActionListener(new ActionListener() {
@@ -210,7 +210,7 @@ public class IndividualDomesticReport extends JFrame {
                     model.setColumnIdentifiers(colName);
 
                     //getting data
-                    String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price;
+                    String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date;
                     while (resultSet.next()) {
                         StaffID = resultSet.getString(1);
                         FirstName = resultSet.getString(2);
@@ -220,8 +220,9 @@ public class IndividualDomesticReport extends JFrame {
                         grand_total = resultSet.getString(6);
                         commission_amount = resultSet.getString(7);
                         Price = resultSet.getString(8);
+                        ticket_Date = resultSet.getString(9);
 
-                        String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
+                        String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date};
                         model.addRow(row);
                     }
 //initial values to be used in report
@@ -274,7 +275,7 @@ public class IndividualDomesticReport extends JFrame {
         ) {
             //sql query to get data from various tables to generate individual domestic report
             PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, ticket_sales.blank_id, ticket_sales.customer, " +
-                    "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price , ticket_sales.ticket_date " +
+                    "ticket_sales.tax_total, ticket_sales.grand_total, ticket_sales.commission_amount, ticket_sales.grand_total - tax_total as Price, ticket_sales.ticket_date " +
                     "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' AND ticket_sales.StaffID = ? ");
             ps.setString(1, Login.getUserId());
             ResultSet resultSet = ps.executeQuery();
@@ -292,7 +293,7 @@ public class IndividualDomesticReport extends JFrame {
             model.setColumnIdentifiers(colName);
 
             //getting data
-            String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price;
+            String StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date;
             while (resultSet.next()) {
                 StaffID = resultSet.getString(1);
                 FirstName = resultSet.getString(2);
@@ -302,8 +303,9 @@ public class IndividualDomesticReport extends JFrame {
                 grand_total = resultSet.getString(6);
                 commission_amount = resultSet.getString(7);
                 Price = resultSet.getString(8);
+                ticket_Date = resultSet.getString(9);
 
-                String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price};
+                String[] row = {StaffID, FirstName, blank_id, customer, tax_total, grand_total, commission_amount, Price, ticket_Date};
                 model.addRow(row);
             }
 
