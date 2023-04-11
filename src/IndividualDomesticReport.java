@@ -9,8 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -261,6 +264,38 @@ public class IndividualDomesticReport extends JFrame {
                     throwables.printStackTrace();
                 }
 
+            }
+        });
+        generateReportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String formattedDateTime = now.format(formatter);
+                try {
+                    FileWriter writer = new FileWriter("Reports\\domesticIndividual "+formattedDateTime+".txt");
+                    int numRows = domesticIndividual.getRowCount();
+                    int numCols = domesticIndividual.getColumnCount();
+
+                    // Write column names to file
+                    for (int col = 0; col < numCols; col++) {
+                        String colName = domesticIndividual.getColumnName(col);
+                        writer.write(String.format("%-20s", colName));
+                    }
+                    writer.write("\n");
+
+                    // Write data to file
+                    for (int row = 0; row < numRows; row++) {
+                        for (int col = 0; col < numCols; col++) {
+                            Object value = domesticIndividual.getValueAt(row, col);
+                            writer.write(String.format("%-20s", value.toString()));
+                        }
+                        writer.write("\n");
+                    }
+                    writer.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
