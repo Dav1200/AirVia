@@ -203,7 +203,7 @@ public class OfficeManagerMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 //set frame preferences
-                IndividualInterlineReport Iil = new IndividualInterlineReport();
+                IndividualInterlineReportOM Iil = new IndividualInterlineReportOM();
                 Iil.setContentPane(Iil.getPanel1());
                 Iil.setVisible(true);
                 Iil.setSize(1000, 600);
@@ -236,7 +236,7 @@ public class OfficeManagerMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //set frame preferences
-                IndividualDomesticReport Idr = new IndividualDomesticReport();
+                IndividualDomesticReportOM Idr = new IndividualDomesticReportOM();
                 Idr.setContentPane(Idr.getPanel1());
                 Idr.setVisible(true);
                 Idr.setSize(1000, 600);
