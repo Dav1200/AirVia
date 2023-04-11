@@ -155,16 +155,12 @@ public class GlobalInterlineReport extends JFrame {
 
 
                     //sql query to get data from various tables to generate global interline report
-                    PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
-                            "       SUM(ticket_sales.tax_total) as total_tax, \n" +
-                            "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
-                            "\t   SUM(ticket_sales.grand_total - tax_total) as total_price,\n" +
-                            "       SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission, \n" +
-                            "       ticket_sales.ticket_date \n" +
-                            "FROM ticket_sales \n" +
-                            "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID \n" +
-                            "WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
-                            "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
+                    PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, " +
+                            "SUM(ticket_sales.tax_total) as total_tax, SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, " +
+                            "SUM(ticket_sales.grand_total - tax_total) as total_price, SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission " +
+                            "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' " +
+                            "AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?  " +
+                            "GROUP BY ticket_sales.StaffID, Staff.FirstName");
 
                     //do not allow date field to be empty
                     //show blank table if no date is inputted
@@ -288,16 +284,11 @@ public class GlobalInterlineReport extends JFrame {
         ) {
 //sql query to get data from various tables to generate global interline report
             //combines data fromm various database tables and puts it into a organised table
-            PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
-                    "       SUM(ticket_sales.tax_total) as total_tax, \n" +
-                    "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
-                    "\t   SUM(ticket_sales.grand_total - tax_total) as total_price,\n" +
-                    "       SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission, \n" +
-                    "       ticket_sales.ticket_date \n" +
-                    "FROM ticket_sales \n" +
-                    "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID \n" +
-                    "WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' \n" +
-                    "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
+            PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, " +
+                    "SUM(ticket_sales.tax_total) as total_tax, SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, " +
+                    "SUM(ticket_sales.grand_total - tax_total) as total_price, SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission " +
+                    "FROM ticket_sales LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Interline' " +
+                    "GROUP BY ticket_sales.StaffID, Staff.FirstName");
 
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();

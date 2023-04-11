@@ -30,7 +30,7 @@ public class GlobalDomesticReport extends JFrame {
 
     public GlobalDomesticReport () {
 
-        //showReport();
+        showReport();
         printReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,17 +156,12 @@ public class GlobalDomesticReport extends JFrame {
 
                     //sql query which gets data from appropriate tables
                     //gets data which will be used to generate and dispaly globaldomestic report
-                    PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
-                            "       SUM(ticket_sales.tax_total) as total_tax, \n" +
-                            "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
-                            "\t   SUM(ticket_sales.grand_total - tax_total) as total_price,\n" +
-                            "       SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission, \n" +
-                            "       ticket_sales.ticket_date \n" +
-                            "FROM ticket_sales \n" +
-                            "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID \n" +
-                            "WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ?\n" +
-                            "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
-
+                    PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, SUM(ticket_sales.tax_total) as total_tax, " +
+                            "SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, SUM(ticket_sales.grand_total - tax_total) as total_price, " +
+                            "SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission FROM ticket_sales " +
+                            "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' " +
+                            "AND STR_TO_DATE(ticket_sales.ticket_date, '%d/%m/%Y') BETWEEN ? AND ? " +
+                            "GROUP BY ticket_sales.StaffID, Staff.FirstName");
 
                     //do not allow date field to be empty
                     if(startDate.getText().isEmpty() && endDate.getText().isEmpty()){
@@ -297,16 +292,11 @@ public class GlobalDomesticReport extends JFrame {
 
             //sql query which gets data from appropriate tables
             //gets data which will be used to generate and dispaly globaldomestic report
-            PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, \n" +
-                    "       SUM(ticket_sales.tax_total) as total_tax, \n" +
-                    "       SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, \n" +
-                    "\t   SUM(ticket_sales.grand_total - tax_total) as total_price,\n" +
-                    "       SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission, \n" +
-                    "       ticket_sales.ticket_date \n" +
-                    "FROM ticket_sales \n" +
-                    "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID \n" +
-                    "WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' \n" +
-                    "GROUP BY ticket_sales.StaffID, Staff.FirstName, ticket_sales.ticket_date");
+            PreparedStatement ps = con.prepareStatement("SELECT ticket_sales.StaffID, Staff.FirstName, SUM(ticket_sales.tax_total) as total_tax, " +
+                    "SUM(ticket_sales.grand_total * ticket_sales.exchange_rate) as Total_New, SUM(ticket_sales.grand_total - tax_total) as total_price, " +
+                    "SUM(ticket_sales.commission_amount/100 * (ticket_sales.grand_total - tax_total)) as total_commission FROM ticket_sales " +
+                    "LEFT JOIN Staff ON ticket_sales.StaffID = Staff.StaffID WHERE Staff.Role = 'Travel Advisor' AND ticket_sales.report_type = 'Domestic' " +
+                    "GROUP BY ticket_sales.StaffID, Staff.FirstName");
 
             ResultSet resultSet = ps.executeQuery();
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -335,7 +325,7 @@ public class GlobalDomesticReport extends JFrame {
                 String[] row = {StaffID, FirstName, total_tax, Total_New, total_price, total_commission};
                 model.addRow(row);
             }
-
+/*
             double totalPrice = 0.0;
             double totalCommAmount = 0.0;
             double total_grand_total = 0.0;
@@ -367,6 +357,8 @@ public class GlobalDomesticReport extends JFrame {
             totalComAmount.setText(String.valueOf(resultSet.getString(5)));
 
 
+
+ */
 
             //handle exceptions
         } catch (SQLException | ClassNotFoundException e) {
