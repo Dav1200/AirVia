@@ -1,13 +1,21 @@
 import javax.swing.RowFilter;
 import java.security.KeyStore;
 
-public class myRowFilter extends RowFilter {
+/**
+ * class to search
+ */
+public class Search extends RowFilter {
     private final String searchText;
 
-    myRowFilter(String searchText){
+    Search(String searchText){
         this.searchText = searchText;
     }
 
+    /**
+     * searches a specific column in the table
+     * @param entry
+     * @return all the entries of the specified search text
+     */
     @Override
     public boolean include(Entry entry) {
 

@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.RowFilter;
         import java.security.KeyStore;
 
+/**
+ * class to search blanks
+ */
 public class RowFilterBlanks extends RowFilter {
     private final String searchText;
 
@@ -11,6 +14,11 @@ public class RowFilterBlanks extends RowFilter {
         this.searchText = searchText;
     }
 
+    /**
+     * searches a specific column in the table
+     * @param entry
+     * @return all the blanks of the specified search text
+     */
     @Override
     public boolean include(Entry entry) {
 

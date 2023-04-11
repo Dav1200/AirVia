@@ -16,7 +16,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * class for admin staff
+ */
 public class AdvisorMenu extends JFrame {
 
     public JPanel getAdPlane() {
@@ -78,7 +80,12 @@ public class AdvisorMenu extends JFrame {
     private JTextField rtotal;
     private JButton refundButton;
     private JButton updateButton;
+    private JComboBox mcoComboBox;
 
+
+    /**
+     * calls functions needed to display the advisor menu
+     */
 
     //Constructor
     public AdvisorMenu() {
@@ -103,8 +110,15 @@ public class AdvisorMenu extends JFrame {
         String formattedDateTime = now.format(formatter);
         payDateTxt.setText(formattedDateTime);
 
-        //if logout button is pressed
+
+        /**
+         * if logout button is pressed
+         */
         logoutButton.addActionListener(new ActionListener() {
+            /**
+             * if the logout button is pressed, close the panel and return to the login screen
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 //close the current form and open a login form.
@@ -114,8 +128,14 @@ public class AdvisorMenu extends JFrame {
         });
 
 
-        //select the appropriate commission rate for the blank type selected.
+        /**
+         * select the appropriate commission rate for the blank type selected.
+         */
         ticketType.addActionListener(new ActionListener() {
+            /**
+             *
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -169,8 +189,10 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
+        /**
+         * output the row selected in customer table
+         */
 
-        //output the row selected in customer table
         CustomerTable.getModel().addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
@@ -178,10 +200,16 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
+        /**
+         * List all the customers registered in the system.
+         * selects the discount associated with the customer
+         */
 
-        //List all the customers registered in the system.
-        //selects the discount associated with the customer
         customerComboBox.addActionListener(new ActionListener() {
+            /**
+             * make sure that fields can not be empty
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -222,9 +250,19 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
+        /**
+         * format card txt to 16 digits
+         */
 
-        //format card txt to 16 digits
         ((AbstractDocument) cardtxt.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -238,6 +276,15 @@ public class AdvisorMenu extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace the string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -252,9 +299,20 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
-        //date format dd/mm/yyyy
-        //only allows digits to be inputted
+
+        /**
+         * date format dd/mm/yyyy
+         * only allows digits to be inputted
+         */
         ((AbstractDocument) ticketDateField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to format the ticket date of field
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -268,7 +326,17 @@ public class AdvisorMenu extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
-            //replace the appropriate characters and only allows digits to be inputted
+            //
+
+            /**
+             * replace the appropriate characters and only allows digits to be inputted
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -284,8 +352,15 @@ public class AdvisorMenu extends JFrame {
         });
 
 
-        //listener for typing in date field, add / where appropriate dd/nn/yyyy
+
+        /**
+         * listener for typing in date field, add / where appropriate dd/nn/yyyy
+         */
         ticketDateField.addKeyListener(new KeyAdapter() {
+            /**
+             * putting / in date field, when numbers are entered
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -306,12 +381,19 @@ public class AdvisorMenu extends JFrame {
         });
 
 
-        //drop down menu which allows the user to pick their payment type
+        /**
+         * drop down menu which allows the user to pick their payment type
+         */
+
         paymentType.addActionListener(new ActionListener() {
+            /**
+             * chooses type of payment
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //if card is selected uulock the card detail textfield.
+                //if card is selected unlock the card detail textfield.
                 if (paymentType.getSelectedItem().toString().equals("Card")) {
                     cardtxt.setEditable(true);
                 } else {
@@ -333,24 +415,35 @@ public class AdvisorMenu extends JFrame {
                 }
             }
         });
-        //only allow card length to be 16 digits
+        /**
+         * only allow card length to be 16 digits
+         */
         cardtxt.addKeyListener(new KeyAdapter() {
+            /**
+             * make sure to not get more than 16 chars including space
+             * @param e
+             */
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
-
 
                 if (cardtxt.getText().toString().length() > 19) {
                     //dont allow the user to input after length is more than 16
                     e.consume();
                 }
-
-
             }
         });
 
-        //create a new frame when individual report needs to be generated.
+        /**
+         * create a new frame when individual report needs to be generated.
+         */
+
         createIndividualReportButton.addActionListener(new ActionListener() {
+            /**
+             * making individual interline report page when the button is pressed
+             * @param e
+             */
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 IndividualInterlineReport Iir = new IndividualInterlineReport();
@@ -362,8 +455,14 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
-        //list all the blanks available for refund
+        /**
+         * list all the blanks available for refund
+         */
         ticketListCombo.addActionListener(new ActionListener() {
+            /**
+             * check which type of blank is selected in the combobox and if it is able to be refunded.
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 //db connecttion
@@ -391,8 +490,14 @@ public class AdvisorMenu extends JFrame {
         });
 
 
-        //process of processing customer refund.
+        /**
+         * process of processing customer refund.
+         */
         refundButton.addActionListener(new ActionListener() {
+            /**
+             * choosing which tickets to refund and check if they are assigned or not
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 //db connection
@@ -462,8 +567,14 @@ public class AdvisorMenu extends JFrame {
         });
 
 
-        //force update the combobox
+        /**
+         * force update the combobox
+         */
         updateButton.addActionListener(new ActionListener() {
+            /**
+             * removes all items then add them back
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 ticketListCombo.removeAllItems();
@@ -472,8 +583,14 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
-        //when domestic report button is pressed make a new frame for appropriate class
+        /**
+         * when domestic report button is pressed make a new frame for appropriate class
+         */
         DomesticReportButton.addActionListener(new ActionListener() {
+            /**
+             * removes all items then add them back
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                     //call consturctor and set essential values
@@ -494,8 +611,9 @@ public class AdvisorMenu extends JFrame {
     }
 
 
-
-    //list all blanks available for the advisor to sell to customers
+    /**
+     * list all blanks available for the advisor to sell to customers
+     */
     public void showBlankComboBox() {
 
         try (Connection con = DBConnection.getConnection()
@@ -528,9 +646,10 @@ public class AdvisorMenu extends JFrame {
     }
 
 
+    /**
+     * add all customer in the db to combo box
+     */
 
-
-    //add all customer in the db to combo box
     public void showCombobox() {
         //connect to db
         try (Connection con = DBConnection.getConnection()
@@ -551,7 +670,9 @@ public class AdvisorMenu extends JFrame {
 
     }
 
-    //show all customers registered in the system in a table format
+    /**
+     * show all customers registered in the system in a table format
+     */
     public void showCustomer() {
         try (//connect to to db
                 Connection con = DBConnection.getConnection()
@@ -603,7 +724,7 @@ public class AdvisorMenu extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String searchText = searchCustomerTextField.getText();
-                        tableRowSorter.setRowFilter(new myRowFilter(searchText));
+                        tableRowSorter.setRowFilter(new Search(searchText));
                     }
                 });
 
@@ -615,7 +736,9 @@ public class AdvisorMenu extends JFrame {
         }
     }
 
-    //clear the customer details after it has been registered, error handling for accident spam button
+    /**
+     * clear the customer details after it has been registered, error handling for accident spam button
+     */
     private void clearRegisterCustomer() {
         //set text field to empty
         firstNameTextField.setText(null);
@@ -627,8 +750,13 @@ public class AdvisorMenu extends JFrame {
         //staffIDTf.setText(null);
     }
 
+    /**
+     * register customer to the system
+     */
     public void registerCustomer() {
-        //if clear button pressed, clear all text fields
+        /**
+         * if clear button pressed, clear all text fields
+         */
         clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -636,8 +764,15 @@ public class AdvisorMenu extends JFrame {
             }
         });
 
-        //register a new customer in database
+        /**
+         * register a new customer in database
+         */
         registerButton.addActionListener(new ActionListener() {
+            /**
+             * take in customer details from the text fields, and add them to the database
+             * make sure that the text fields which cannot be empty are not empty
+             * @param e
+             */
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -702,15 +837,24 @@ public class AdvisorMenu extends JFrame {
         });
 
     }
-        //general code for all prompts
-    //called when prompt needs to be shown
+
+    /**
+     * general code for all prompts
+     * called when prompt needs to be shown
+     * @param s
+     */
+
     public void dialog(String s) {
         JOptionPane.showMessageDialog(this, s
         );
     }
 
-    //update the commission rate for advisor form
-    //returns the commission rate for blank provided in parameter
+    /**
+     * update the commission rate for advisor form
+     * returns the commission rate for blank provided in parameter
+     * @param blankType
+     * @return commission amount
+     */
     public String getCommissionRate(String blankType) {
         try (Connection con = DBConnection.getConnection()) {
             PreparedStatement ps = con.prepareStatement("SELECT CommissionRate FROM CommissionRate WHERE BlankType = ?");
@@ -727,13 +871,17 @@ public class AdvisorMenu extends JFrame {
         }
     }
 
-    //error label
+    /**
+     * error label
+     */
     public void showerrorblanks() {
         JOptionPane.showMessageDialog(this, "No Assigned Blanks");
     }
 
 
-    //register a sale in the database
+    /**
+     * register a sale in the database
+     */
     public void registerSalesReport() {
         //get local date essential for recording when sale was recorded
         LocalDateTime now = LocalDateTime.now();
@@ -743,7 +891,14 @@ public class AdvisorMenu extends JFrame {
         ticketDateField.setText(formattedDateTime);
         staffIDField.setText(Login.getUserId());
 
+        /**
+         * button to register ticket
+         */
         registerTicketButton.addActionListener(new ActionListener() {
+            /**
+             *  check if requirements are met and add to the database
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -883,9 +1038,16 @@ public class AdvisorMenu extends JFrame {
         clearRegisterCustomer();
     }
 
-    //add to refund combo box, list all blanks which can be returned
+
+    /**
+     * add to refund combo box, list all blanks which can be returned
+     */
+
     public void addtoRefundCombo() {
 
+        /**
+         * adding item from combobox
+         */
         try (Connection con = DBConnection.getConnection()) {
 
             PreparedStatement ps = con.prepareStatement("SELECT blank_id FROM ticket_sales WHERE refund = ?");

@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for admin staff
+ */
 public class AdminMenu extends JFrame {
 
     // field list used throughout the AdminMenu
@@ -60,6 +63,9 @@ public class AdminMenu extends JFrame {
         errorLabel.setVisible(false);
 
         //logout button functionality
+        /**
+         * logs the user out
+         */
         workButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,10 +74,17 @@ public class AdminMenu extends JFrame {
             }
         });
 
-        //Restore DB functionality
+        /**
+         * Restore DB functionality
+         */
         restoreDatabaseButton.addActionListener(new ActionListener() {
             //running a script which works in terminal, to do it.  script is below i just made it into a processbuilder
             // Get-Content backup.sql | mysql -h smcse-stuproj00.city.ac.uk -u in2018g04_a -pbx5jmkL5 in2018g04
+
+            /**
+             * choosing the file wanted to restore and then it will restore, when the button is pressed
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean cancel = false;
@@ -162,8 +175,14 @@ public class AdminMenu extends JFrame {
             }
         });
 
-        //backup DB functionality
+        /**
+         * backup DB functionality
+         */
         backupDatabaseButton.addActionListener(new ActionListener() {
+            /**
+             * choose file to backup when the button is pressed
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -247,8 +266,14 @@ public class AdminMenu extends JFrame {
         showLog();
 
 
-        // Read the login information from the file and add it to the table model
+        /**
+         * Read the login information from the file and add it to the table model
+         */
         addBlankStockButton.addActionListener(new ActionListener() {
+            /**
+             * opening a new panel when button is pressed
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -263,8 +288,14 @@ public class AdminMenu extends JFrame {
         });
 
 
-        //this check which ticket type is selected in the combo box for registering blanks to the database
+        /**
+         * this check which ticket type is selected in the combo box for registering blanks to the database
+         */
         comboBox1.addActionListener(new ActionListener() {
+            /**
+             * checks blank stock for each ticket type
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 stockAmount.setText("");
@@ -299,8 +330,14 @@ public class AdminMenu extends JFrame {
             }
         });
 
-        //save stocks returned and requested stock.
+        /**
+         * save stocks returned and requested stock.
+         */
         saveButton.addActionListener(new ActionListener() {
+            /**
+             * checking blanks returned are valid
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -354,7 +391,10 @@ public class AdminMenu extends JFrame {
     }
 
 
-    //show logs of which user logged in in a table format
+    /**
+     * show logs of which user logged in a table format
+     */
+
     public void showLog() {
 
         //create a table with appropriate columns
@@ -388,7 +428,10 @@ public class AdminMenu extends JFrame {
         logsTable.setModel(dTable);
     }
 
-    //shows all staff members in a table format with their corresponding details.
+    /**
+     * shows all staff members in a table format with their corresponding details.
+     */
+
     public void showStaff() {
         //get connection to database
         try (Connection con = DBConnection.getConnection()) {
@@ -438,15 +481,20 @@ public class AdminMenu extends JFrame {
 
     }
 
-    //convenience method for showing pop messages
+    /**
+     * //convenient method for showing pop messages
+     * @param s
+     */
     //prompts
     public void dialog(String s) {
         JOptionPane.showMessageDialog(this, s);
     }
-//Clear table fields
 
 
-    //clear the text fields after a new staff is registered to avoid duplication or spam press
+    /**
+     * clear the text fields after a new staff is registered to avoid duplication or spam press
+     */
+
     private void clearRegisterStaffField() {
 
         //clear each individual fields.
@@ -457,10 +505,17 @@ public class AdminMenu extends JFrame {
         passwordTf.setText(null);
     }
 
-    //Register staff member to database.
+    /**
+     * //Register staff member to database.
+     */
+
     public void registerMember() {
         //if clear button is pressed remove details
         clearButton.addActionListener(new ActionListener() {
+            /**
+             * clears the register staff field when the button was pressed
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 clearRegisterStaffField();
@@ -468,8 +523,15 @@ public class AdminMenu extends JFrame {
         });
 
 
-        //if register button is pressed perform the follwing actions of
+        /**
+         * if register button is pressed perform the follwing actions of
+         */
+
         registerStaffBtn.addActionListener(new ActionListener() {
+            /**
+             * when register staff button is pressed, register staff into the database with valid details
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -557,11 +619,19 @@ public class AdminMenu extends JFrame {
     }
 
 
-    //Getters and Setters for fields
+    /**
+     * Getters for JPanel
+     * @return aplane
+     */
+
     public JPanel getAplane() {
         return aplane;
     }
 
+    /**
+     * Setters for JPanel
+     * @param aplane
+     */
     public void setAplane(JPanel aplane) {
         this.aplane = aplane;
     }

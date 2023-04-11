@@ -4,8 +4,19 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.util.Properties;
 
+/**
+ * class to connect to SMTP to send an email
+ */
 public class GEmailSender {
 
+    /**
+     * send email to reciepent, from sender, with subject text and information
+     * @param to
+     * @param from
+     * @param subject
+     * @param text
+     * @return flag
+     */
     public boolean sendEmail(String to, String from, String subject, String text) {
         boolean flag = false;
         //logic
