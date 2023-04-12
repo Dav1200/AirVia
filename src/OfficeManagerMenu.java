@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * shows the office manager UI
+ */
 public class OfficeManagerMenu extends JFrame {
     //fields
     private JTabbedPane tabbedPane1;
@@ -26,10 +29,18 @@ public class OfficeManagerMenu extends JFrame {
     private JButton generateReportButton;
     private JTable turnoverReport;
 
+    /**
+     * getter for JPanel
+     * @return oPlane
+     */
     public JPanel getoPlane() {
         return oPlane;
     }
 
+    /**
+     * setter for JPanel
+     * @param oPlane
+     */
     public void setoPlane(JPanel oPlane) {
         this.oPlane = oPlane;
     }
@@ -67,6 +78,10 @@ public class OfficeManagerMenu extends JFrame {
 
 
     //constructor
+
+    /**
+     * holds all the functions to show the Office Manager UI
+     */
     public OfficeManagerMenu() {
        // showTicketTurnoverReport();
         showCombobox();
@@ -77,8 +92,15 @@ public class OfficeManagerMenu extends JFrame {
         cardtxt.setEditable(false);
 
 
-        //if logout button is pressed close the form
+        /**
+         * if logout button is pressed close the form
+         */
         workButton.addActionListener(new ActionListener() {
+            /**
+             * close form
+             * open login screen
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 Login a = new Login();
@@ -86,16 +108,28 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //set the updated commission rate
+        /**
+         * set the updated commission rate
+         */
         setRateButton.addActionListener(new ActionListener() {
+            /**
+             * update commission rate
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateCommissionRate();
             }
         });
 
-        //make a panel/form to assign blanks if assign button pressed
+        /**
+         * make a panel/form to assign blanks if assign button pressed
+         */
         assignBlanksButton.addActionListener(new ActionListener() {
+            /**
+             * opens assign blanks form
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 AssignBlanks a = new AssignBlanks();
@@ -107,8 +141,14 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //if reassign button pressed open a new form
+        /**
+         * //if reassign button pressed open a new form
+         */
         reassignButton.addActionListener(new ActionListener() {
+            /**
+             * opens reassign blanks form
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 ReassignBlank a = new ReassignBlank();
@@ -122,7 +162,6 @@ public class OfficeManagerMenu extends JFrame {
 
 
 
-
         dCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,8 +172,14 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //default values for setting discount
+        /**
+         * default values for setting discount
+         */
         dCustomerType.addActionListener(new ActionListener() {
+            /**
+             * choosing customer type
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -164,8 +209,14 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //make text field editable if card is selected otherwise false
+        /**
+         * make text field editable if card is selected otherwise false
+         */
         paymentComboBox.addActionListener(new ActionListener() {
+            /**
+             * if payment type is card, make text box editable
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(paymentComboBox.getSelectedItem().toString().equals("Card")){
@@ -179,10 +230,15 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
-
-        //when global report button is pressed
-        //make a new panel and form
+        /**
+         * when global report button is pressed
+         * make a new panel and form
+         */
         globalReportButton.addActionListener(new ActionListener() {
+            /**
+             * open Global Interline panel
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -197,8 +253,14 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //if individual report button is pressed open a panel
+        /**
+         * if individual report button is pressed open a panel
+         */
         individualReport.addActionListener(new ActionListener() {
+            /**
+             * open Individual Interline panel
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -214,9 +276,15 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
-        //if global report button is clicked
-        //open a new panel and form for global reports
+        /**
+         * if global report button is clicked
+         * open a new panel and form for global reports
+         */
         globalButton.addActionListener(new ActionListener() {
+            /**
+             * open Global Domestic panel
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 //set frame preferences
@@ -230,9 +298,15 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //if individual domestic report button clicked
-        //shows panel and forms corresponding
+        /**
+         * if individual domestic report button clicked
+         * shows panel and forms corresponding
+         */
         individualButton.addActionListener(new ActionListener() {
+            /**
+             * open Individual Domestic Report panel
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 //set frame preferences
@@ -247,8 +321,14 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
-        //register payments for customers
+        /**
+         * register payments for customers
+         */
         registerButton.addActionListener(new ActionListener() {
+            /**
+             * register late payments process
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -309,9 +389,18 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
-
-        //format card text field
+        /**
+         * format card text field
+         */
         ((AbstractDocument) cardtxt.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -325,6 +414,15 @@ public class OfficeManagerMenu extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace the index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -340,22 +438,28 @@ public class OfficeManagerMenu extends JFrame {
         });
 
 
-
-
-        //check if the length is less than 19
+        /**
+         * //check if the length is less than 16
+         */
         cardtxt.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
-                if(cardtxt.getText().toString().length() > 19){
+                if(cardtxt.getText().toString().length() > 16){
                     //dont allow the user to input after length is more than 16
                     e.consume();
                 }
             }
         });
 
-        //if ticket turnover button is pressed, refresh the tables and show updated jtables
+        /**
+         * if ticket turnover button is pressed, refresh the tables and show updated jtables
+         */
         generateReportButton.addActionListener(new ActionListener() {
+            /**
+             * update tables
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -383,9 +487,15 @@ public class OfficeManagerMenu extends JFrame {
             }
         });
 
-        //set new discount plan for customers
-        //when set rate button is pressed
+        /**
+         * set new discount plan for customers
+         * when set rate button is pressed
+         */
         setRateButton1.addActionListener(new ActionListener() {
+            /**
+             * setting new discount
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -423,7 +533,9 @@ public class OfficeManagerMenu extends JFrame {
     }
 
 
-    //add to customer combobox
+    /**
+     * add to customer combobox
+     */
     public void showCombobox(){
         try (Connection con = DBConnection.getConnection()
         ){
@@ -444,7 +556,9 @@ public class OfficeManagerMenu extends JFrame {
     }
 
 
-    //show all blanks assigned to advisors in a jtable
+    /**
+     * show all blanks assigned to advisors in a jtable
+     */
     public void showAllocatedBlanks() {
         try (//connect to to db
              Connection con = DBConnection.getConnection()
@@ -485,9 +599,15 @@ public class OfficeManagerMenu extends JFrame {
                 TableRowSorter tableRowSorter = new TableRowSorter(model);
                 dbBlanks.setRowSorter(tableRowSorter);
 
-                //search customer
-                //if search button is pressed, search the customer via ID
+                /**
+                 * search customer
+                 * if search button is pressed, search the customer via ID
+                 */
                 searchButton.addActionListener(new ActionListener() {
+                    /**
+                     * searching customer
+                     * @param e
+                     */
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String searchText = tfSearchBlank.getText();
@@ -505,15 +625,19 @@ public class OfficeManagerMenu extends JFrame {
         }
 
 
-
-        //prompt for custom msg error or success
+    /**
+     * //prompt for custom msg error or success
+     * @param s
+     */
     public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);
     }
 
 
-    //generate sub table for ticket turnvoer report to show how many blanks were received from airvia
-    //sorted by blank types and largest to smallest
+    /**
+     * generate sub table for ticket turnvoer report to show how many blanks were received from airvia
+     * sorted by blank types and largest to smallest
+     */
     public void showTicketTurnoverReport2() {
 
         //connect to db
@@ -596,6 +720,9 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    /**
+     * show ticket turnover report3
+     */
     public void showTicketTurnoverReport3() {
 
         try (Connection con = DBConnection.getConnection()) {
@@ -662,6 +789,9 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    /**
+     * show ticket turnover report4
+     */
     public void showTicketTurnoverReport4() {
 
         try (Connection con = DBConnection.getConnection()) {
@@ -727,6 +857,9 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    /**
+     * show ticket turnover report5
+     */
     public void showTicketTurnoverReport5() {
 
         try (Connection con = DBConnection.getConnection()) {
@@ -793,7 +926,9 @@ public class OfficeManagerMenu extends JFrame {
     }
 
 
-    //update commission rates for each type of blank
+    /**
+     * update commission rates for each type of blank
+     */
     public void updateCommissionRate() {
 
         int blankType = 0;
@@ -834,8 +969,10 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
-        //this function populates the latepayment table withh customers details who are yet to make payment for their
-    //ticket
+    /**
+     * populates the latepayment table with customers details who are yet to make payment for their
+     * ticket
+     */
     public void showLatepaymentTable(){
         //connect to db
         try (Connection con = DBConnection.getConnection()) {
@@ -899,6 +1036,9 @@ public class OfficeManagerMenu extends JFrame {
 
     }
 
+    /**
+     * adding to late payment combo box
+     */
     public void addToLatePayment() {
         //adds all id which are in latepayment table to the jcombobox.
 

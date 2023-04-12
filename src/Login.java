@@ -17,6 +17,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Random;
 
+/**
+ * login screen
+ */
 public class Login extends JFrame {
 
     //fields
@@ -37,7 +40,10 @@ public class Login extends JFrame {
     private String role;
     private boolean check;
 
-    //getters and setters
+    /**
+     * getter for String
+     * @return userID
+     */
     public static String getUserId() {
         return userId;
     }
@@ -45,6 +51,10 @@ public class Login extends JFrame {
     private static String userId;
 
     //constructors
+
+    /**
+     * holds all the functions to show the Login UI
+     */
     public Login() {
 
         //designing
@@ -91,12 +101,20 @@ public class Login extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
-        //when login button is pressed perform the follwing actions
-        //check for correct user
-        //validate the user
-        //open 2fa form
-        //check the encrypted password
+        /**
+         *when login button is pressed perform the follwing actions
+         *check for correct user
+         *validate the user
+         *open 2fa form
+         *check the encrypted password
+         */
         loginButton.addActionListener(new ActionListener() {
+
+            /**
+             * checks if correct password
+             * opens 2fa popup is password is correct
+             * @param e
+             */
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,8 +165,10 @@ public class Login extends JFrame {
                         auth.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 
-                        //check which option the user selected to receive their 2fa code
-                        //email
+                        /**
+                         * check which option the user selected to receive their 2fa code
+                         * email
+                         */
                         auth.getEmailButton().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -159,7 +179,9 @@ public class Login extends JFrame {
                         });
 
 
-                        //phone sms
+                        /**
+                         * phone SMS
+                         */
                         auth.getsMSButton().addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -180,8 +202,15 @@ auth.getCodeSentTxt().setVisible(true);
                         });
 
 
-                        //when 2fa submit button is pressed
+                        /**
+                         * when 2fa submit button is pressed
+                         */
                         auth.getSubmitButton().addActionListener(new ActionListener() {
+                            /**
+                             * checks if the 2fa code is correct
+                             * if code is correct, then link user to their respective form
+                             * @param e
+                             */
                                                                      @Override
                                                                      public void actionPerformed(ActionEvent e) {
                                                                          if (auth.getCodeTextField().getText().equals(codestr)) {
@@ -316,9 +345,10 @@ auth.getCodeSentTxt().setVisible(true);
         });
 
 
-        //when user presses enter it should automatically press the login button
-        //styling and layout
-
+        /**
+         * when user presses enter it should automatically press the login button
+         * styling and layout
+         */
         passwordField1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -328,6 +358,10 @@ auth.getCodeSentTxt().setVisible(true);
                 }
             }
         });
+        /**
+         * when user presses enter it should automatically press the login button
+         * styling and layout
+         */
         userNameText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -337,8 +371,11 @@ auth.getCodeSentTxt().setVisible(true);
                 }
             }
         });
-        //styling and layout when hovering over it
-        //set the font bigger and make the button larger
+
+        /**
+         * styling and layout when hovering over it
+         * set the font bigger and make the button larger
+         */
         userNameText.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -349,8 +386,11 @@ auth.getCodeSentTxt().setVisible(true);
 
             }
 
-            //styling and layout when hovering over it
-            //reset style when not hovered above it
+            /**
+             * styling and layout when hovering over it
+             * reset style when not hovered above it
+             * @param e
+             */
             @Override
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
@@ -358,8 +398,11 @@ auth.getCodeSentTxt().setVisible(true);
                 uNameJLabel.setFont(new Font("Helvetica", Font.PLAIN, 14));
             }
         });
-        //styling and layout when hovering over it
-        //set the font bigger and make the button larger
+
+        /**
+         * styling and layout when hovering over it
+         * set the font bigger and make the button larger
+         */
         passwordField1.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -370,8 +413,11 @@ auth.getCodeSentTxt().setVisible(true);
 
             }
 
-            //styling and layout when hovering over it
-            //reset style when not hovered above it
+            /**
+             * styling and layout when hovering over it
+             * reset style when not hovered above it
+             * @param e
+             */
             @Override
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
@@ -379,8 +425,12 @@ auth.getCodeSentTxt().setVisible(true);
                 passJLabel.setFont(new Font("Helvetica", Font.PLAIN, 14));
 
             }
-        }); //styling and layout when hovering over it
-        //set the font bigger and make the button larger
+        });
+
+        /**
+         * styling and layout when hovering over it
+         * set the font bigger and make the button larger
+         */
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -389,8 +439,11 @@ auth.getCodeSentTxt().setVisible(true);
                 loginButton.setFont(new Font("Helvetica", Font.BOLD, 27));
             }
 
-            //styling and layout when hovering over it
-            //set the font bigger and make the button larger
+            /**
+             * styling and layout when hovering over it
+             * set the font bigger and make the button larger
+             * @param e
+             */
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
@@ -398,8 +451,12 @@ auth.getCodeSentTxt().setVisible(true);
                 loginButton.setFont((new Font("Helvetica ", Font.BOLD, 18)));
 
             }
-        }); //styling and layout
-        //set the font bigger and make the button larger
+        });
+
+        /**
+         * styling and layout
+         * set the font bigger and make the button larger
+         */
         resetButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -408,6 +465,11 @@ auth.getCodeSentTxt().setVisible(true);
                 resetButton.setFont(new Font("Helvetica", Font.BOLD, 27));
             }
 
+            /**
+             * styling and layout
+             * set the font bigger and make the button larger
+             * @param e
+             */
             @Override
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
@@ -416,8 +478,14 @@ auth.getCodeSentTxt().setVisible(true);
             }
         });
 
-        //will prompt the user locating their sqldump file on their hardware
+        /**
+         * will prompt the user locating their sqldump file on their hardware
+         */
         resetButton.addActionListener(new ActionListener() {
+            /**
+             * checks where the SQL dump is stored
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] commands = {
@@ -454,18 +522,29 @@ auth.getCodeSentTxt().setVisible(true);
         });
     }
 
-    //show custom prompt for user
+    /**
+     * show custom prompt
+     * @param s
+     */
     public void showDialog(String s) {
         JOptionPane.showMessageDialog(this, s);
     }
 
 
-    //get 2fa code
+    /**
+     * get 2fa code
+     * @return
+     */
     public static String getCodestr() {
         return codestr;
     }
 
-    //password encryption
+    /**
+     * password encryption
+     * @param input
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public static String encryptString(String input) throws NoSuchAlgorithmException {
 
         try {
@@ -481,7 +560,9 @@ auth.getCodeSentTxt().setVisible(true);
     }
 
 
-    //set the discount for flexible customers according to their total spent.
+    /**
+     * //set the discount for flexible customers according to their total spent.
+     */
     public void setAutoDiscount() {
         try (Connection con = DBConnection.getConnection()) {
 
@@ -596,6 +677,9 @@ SET DiscountAmount =
     }
 
 
+    /**
+     * close the program
+     */
     public void onExit() {
         this.dispose();
     }

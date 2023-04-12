@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * shows panel for reassign blank
+ */
 public class ReassignBlank  extends JFrame{
 
     //fields
@@ -17,7 +20,10 @@ public class ReassignBlank  extends JFrame{
     private JComboBox newAdvisor;
     private JButton saveButton;
 
-    //getters setters
+    /**
+     * getter for JPanel
+     * @return pane
+     */
     public JPanel getPane() {
         return Pane;
     }
@@ -26,13 +32,22 @@ public class ReassignBlank  extends JFrame{
 
 
     //constructor
+
+    /**
+     * holds the functions to show reassign blanks
+     */
     ReassignBlank(){
         addAdvisor();
 
 
-
-        //check which blank type the user wants to reassign
+        /**
+         * check which blank type the user wants to reassign
+         */
         blankType.addActionListener(new ActionListener() {
+            /**
+             * update blanks
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -74,8 +89,9 @@ public class ReassignBlank  extends JFrame{
         });
 
 
-
-
+        /**
+         * from this advisor to the other advisor
+         */
         oldAdvisor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,6 +99,10 @@ public class ReassignBlank  extends JFrame{
                 blankType.setSelectedIndex(0);
             }
         });
+
+        /**
+         * perform the action
+         */
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,7 +112,9 @@ reAssign();
     }
 
 
-    //add all available advisors registered in the system with their corresponding assigned blanks
+    /**
+     * add all available advisors registered in the system with their corresponding assigned blanks
+     */
     public void addAdvisor(){
         try(Connection con = DBConnection.getConnection()) {
 
@@ -115,7 +137,10 @@ reAssign();
 
     }
 
-    //add the available blanks to jcomobbox dispalying it.
+
+    /**
+     * add the available blanks to jcomobbox displaying it.
+     */
     public void addBlankList(){
 
         //connect to db to perform sql operations
@@ -149,8 +174,10 @@ reAssign();
     }
 
 
-    //reassign blanks
-    //process of assignning it from one advisor to an another
+    /**
+     * reassign blanks
+     * process of assignning it from one advisor to an another
+     */
     public void reAssign(){
 
 //add a range specific for reassigning  blanks.
@@ -195,8 +222,10 @@ reAssign();
 
     }
 
-
-public void clear(){
+    /**
+     * reset the combo boxes
+     */
+    public void clear(){
 
         //clear comboboxes
     //sets them as default values

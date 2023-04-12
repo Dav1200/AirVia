@@ -46,6 +46,10 @@ public class IndividualDomesticReport extends JFrame {
          * print reports
          */
         printReportButton.addActionListener(new ActionListener() {
+            /**
+             * shows printing message
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Printing ");
@@ -154,6 +158,10 @@ public class IndividualDomesticReport extends JFrame {
          * no larger than 10 digits
          */
         endDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
@@ -183,6 +191,10 @@ public class IndividualDomesticReport extends JFrame {
          * check each key inputted by the user, add / where appropriate for date format
          */
         startDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
 

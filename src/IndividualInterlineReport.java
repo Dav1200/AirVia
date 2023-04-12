@@ -16,7 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * shows individual interline report
+ */
 public class IndividualInterlineReport extends JFrame {
     //fields
     private JPanel panel1;
@@ -34,21 +36,40 @@ public class IndividualInterlineReport extends JFrame {
 
 
     //constructor
+    /**
+     * holds all the functions to show the Individual Interline Report UI
+     */
     public IndividualInterlineReport() {
 
         //display report on table
         //showReport();
 
-        //functionality for printing report
+        /**
+         * printing report
+         */
         printReportButton.addActionListener(new ActionListener() {
+            /**
+             * shows printing message
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Printing ");
             }
         });
 
-//format date
+        /**
+         * formatting start date
+         */
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -62,6 +83,15 @@ public class IndividualInterlineReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -75,8 +105,19 @@ public class IndividualInterlineReport extends JFrame {
                 super.replace(fb, offset, length, filteredString, attr);
             }
         });
-//format date
+
+        /**
+         * formatting end date
+         */
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -90,6 +131,15 @@ public class IndividualInterlineReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace the index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -104,8 +154,15 @@ public class IndividualInterlineReport extends JFrame {
             }
         });
 
-        //check each key inputted by the user, add / where appropriate for date format
+        /**
+        * check each key inputted by the user, add / where appropriate for date format
+        * no larger than 10 digits
+        */
         endDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
@@ -131,8 +188,14 @@ public class IndividualInterlineReport extends JFrame {
 
         });
 
-        //check each key inputted by the user, add / where appropriate for date format
+        /**
+         * check each key inputted by the user, add / where appropriate for date format
+         */
         startDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -149,7 +212,14 @@ public class IndividualInterlineReport extends JFrame {
             }
         });
 
+        /**
+         * search functionality
+         */
         search.addActionListener(new ActionListener() {
+            /**
+             * uses SQL query to get the data needed to make the report using the dates inputted
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
@@ -276,7 +346,14 @@ public class IndividualInterlineReport extends JFrame {
 
             }
         });
+        /**
+         * generate report
+         */
         generateReportButton.addActionListener(new ActionListener() {
+            /**
+             * generate report by turning JTable into txt file
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 LocalDateTime now = LocalDateTime.now();
@@ -311,10 +388,17 @@ public class IndividualInterlineReport extends JFrame {
         });
     }
 
+    /**
+     * show custom prompt
+     * @param s
+     */
     public void dialog(String s) {
         JOptionPane.showMessageDialog(this, s);
     }
 
+    /**
+     * process of showing the report
+     */
     public void showReport() {
         try (
                 Connection con = DBConnection.getConnection()
@@ -395,7 +479,10 @@ public class IndividualInterlineReport extends JFrame {
         // TODO: place custom component creation code here
     }
 
-    //getters and setters
+    /**
+     * getter for JPanel
+     * @return panel1
+     */
     public JPanel getPanel1() {
         return panel1;
     }

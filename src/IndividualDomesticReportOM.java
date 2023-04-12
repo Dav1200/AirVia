@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * shows individual domestic report
+ * shows individual domestic report for office manager
  */
 public class IndividualDomesticReportOM extends JFrame {
     //fields
@@ -37,7 +37,7 @@ public class IndividualDomesticReportOM extends JFrame {
     //constructor
 
     /**
-     * holds all the functions to show the Global Domestic Report UI
+     * holds all the functions to show the Individual Domestic Report UI
      */
     public IndividualDomesticReportOM() {
 
@@ -47,6 +47,10 @@ public class IndividualDomesticReportOM extends JFrame {
          * printing report
          */
         printReportButton.addActionListener(new ActionListener() {
+            /**
+             * shows printing message
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Printing ");
@@ -155,6 +159,10 @@ public class IndividualDomesticReportOM extends JFrame {
          * no larger than 10 digits
          */
         endDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
@@ -184,6 +192,10 @@ public class IndividualDomesticReportOM extends JFrame {
          * check each key inputted by the user, add / where appropriate for date format
          */
         startDate.addKeyListener(new KeyAdapter() {
+            /**
+             * add / in the correct place
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -205,6 +217,10 @@ public class IndividualDomesticReportOM extends JFrame {
          * when search button is pressed with valid date format
          */
         search.addActionListener(new ActionListener() {
+            /**
+             * uses SQL query to get the data needed to make the report using the dates inputted
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
