@@ -1,7 +1,10 @@
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -46,7 +49,6 @@ public class AdvisorMenu extends JFrame {
     private JTextField discountAmountTf;
     private JTextField addressTf;
     private JTextField staffIDTf;
-    private JButton printButton;
     private JTextField totalTicketsTf;
     private JTextField customerTypeTf;
     private JTextField discountTypeTf;
@@ -81,6 +83,7 @@ public class AdvisorMenu extends JFrame {
     private JButton refundButton;
     private JButton updateButton;
     private JComboBox mcoComboBox;
+    private JPanel test;
 
 
     /**
@@ -103,6 +106,9 @@ public class AdvisorMenu extends JFrame {
         incompleteEntry.setVisible(false);
         discountTxt.setEditable(false);
         cardtxt.setEditable(false);
+        discType.setEnabled(false);
+        discountAmountTf.setText("0");
+        discountAmountTf.setEditable(false);
 
         //get local date set it for a paydatetxt field
         LocalDateTime now = LocalDateTime.now();
@@ -392,6 +398,7 @@ public class AdvisorMenu extends JFrame {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
+                cardtxt.setText("");
 
                 //if card is selected unlock the card detail textfield.
                 if (paymentType.getSelectedItem().toString().equals("Card")) {
@@ -427,7 +434,7 @@ public class AdvisorMenu extends JFrame {
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
 
-                if (cardtxt.getText().toString().length() > 19) {
+                if (cardtxt.getText().toString().length() > 15) {
                     //dont allow the user to input after length is more than 16
                     e.consume();
                 }
@@ -603,6 +610,21 @@ public class AdvisorMenu extends JFrame {
                 Idr.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             }
         });
+        cusType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cusType.getSelectedItem().toString().equals("Regular")){
+                    discType.setEnabled(false);
+                    discountAmountTf.setText("0");
+                    discountAmountTf.setEditable(false);
+                }
+                else{
+                    discType.setEnabled(true);
+                    discountAmountTf.setEditable(true);
+                }
+            }
+        });
+
     }
 
 

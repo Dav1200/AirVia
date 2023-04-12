@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -24,7 +25,6 @@ public class AdminMenu extends JFrame {
     private JTable DB;
     private JButton restoreDatabaseButton;
     private JButton backupDatabaseButton;
-    private JButton updateDatabaseButton;
     private JTextField fnameTf;
     private JTextField lnameTf;
     private JTextField emailTf;
@@ -39,10 +39,12 @@ public class AdminMenu extends JFrame {
     private JTable logsTable;
     private JComboBox comboBox1;
     private JTextField stockAmount;
-    private JTextField requestStock;
     private JTextField returnStock;
     private JButton saveButton;
     private JButton addBlankStockButton;
+    private JTextField idTXT;
+    private JTextField searchtextField1;
+    private JButton Searchbutton1;
 
     private DefaultTableModel dTable;
     private DBConnection db;
@@ -388,6 +390,17 @@ public class AdminMenu extends JFrame {
 
             }
         });
+
+        Searchbutton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel) DB.getModel();
+                TableRowSorter tableRowSorter = new TableRowSorter(model);
+                DB.setRowSorter(tableRowSorter);
+                String searchText = searchtextField1.getText();
+                tableRowSorter.setRowFilter(new Search(searchText));
+            }
+        });
     }
 
 
@@ -537,6 +550,7 @@ public class AdminMenu extends JFrame {
                 try {
 
                     //get the text fields and store them in a variable for easier access
+                    String ID = idTXT.getText();
                     String firstName = fnameTf.getText();
                     String lastName = lnameTf.getText();
                     String email = emailTf.getText();
@@ -548,7 +562,7 @@ public class AdminMenu extends JFrame {
                     // INSERT INTO statement with values from JTextFields
 
                     //prepared statement add staff members in the correct tables foreign key constraints
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(FirstName, LastName, Email, Address," + " Role, Password) VALUES(?,?,?,?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO Staff(StaffID,FirstName, LastName, Email, Address," + " Role, Password) VALUES(?,?,?,?,?,?,?)");
                     PreparedStatement ps2 = con.prepareStatement("INSERT INTO Admin(StaffID) VALUES (?)");
                     PreparedStatement ps3 = con.prepareStatement("INSERT INTO TravelAdvisor(StaffID) VALUES (?)");
                     PreparedStatement ps4 = con.prepareStatement("INSERT INTO OfficeManager(StaffID) VALUES (?)");
@@ -565,27 +579,28 @@ public class AdminMenu extends JFrame {
                     }
                     System.out.println(nextAutoIncrement);
                     //appropriate variables for placeholders in sql statement.
-                    ps.setString(1, firstName);
-                    ps.setString(2, lastName);
-                    ps.setString(3, email);
-                    ps.setString(4, address);
+                    ps.setString(1, ID);
+                    ps.setString(2, firstName);
+                    ps.setString(3, lastName);
+                    ps.setString(4, email);
+                    ps.setString(5, address);
 
 
                     //check which radiobutton is selected
                     //select the role for the new staff member
                     //select the appropriate if statement
                     if (adminRadioButton.isSelected()) {
-                        ps.setString(5, adminRadioButton.getText());
-                        ps2.setInt(1, nextAutoIncrement);
+                        ps.setString(6, adminRadioButton.getText());
+                        ps2.setInt(1, Integer.parseInt(ID));
 
 
                     } else if (officeManagerRadioButton.isSelected()) {
-                        ps.setString(5, officeManagerRadioButton.getText());
-                        ps4.setInt(1, nextAutoIncrement);
+                        ps.setString(6, officeManagerRadioButton.getText());
+                        ps4.setInt(1, Integer.parseInt(ID));
 
                     } else {
-                        ps.setString(5, travelAdvisorRadioButton.getText());
-                        ps3.setInt(1, nextAutoIncrement);
+                        ps.setString(6, travelAdvisorRadioButton.getText());
+                        ps3.setInt(1, Integer.parseInt(ID));
                     }
 
 
@@ -594,7 +609,7 @@ public class AdminMenu extends JFrame {
                         errorLabel.setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Staff Member Added");
-                        ps.setString(6, password);
+                        ps.setString(7, password);
 
                         //exectue SQL queries
                         ps.executeUpdate();
@@ -613,6 +628,7 @@ public class AdminMenu extends JFrame {
                 }
                 //refresh the staff table to display the new user.
                 showStaff();
+                clearRegisterStaffField();
 
             }
         });

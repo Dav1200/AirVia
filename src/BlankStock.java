@@ -67,7 +67,7 @@ public class BlankStock extends JFrame {
                 //if user only inputted data in start column
                 //only want to assign one blank
                 //make end the beginning as well
-                long End;
+                long End  = 0;
                 long Start = Long.parseLong(startTxt.getText());
                 if(endTxt.getText().isEmpty()){
                     End = Start;
@@ -86,12 +86,12 @@ public class BlankStock extends JFrame {
 
                 //check if result set is produced for database
                 if(rs1.next()){
-                    if (rs1.getString(1) == null) {
+
                     //get the values
                     Start = Long.parseLong(startTxt.getText());
                     End = Start + Long.parseLong(endTxt.getText());}
 
-                }
+
 
                 //set the default value if no result set is produced
                 else{

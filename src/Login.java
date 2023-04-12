@@ -13,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
 
@@ -36,6 +38,8 @@ public class Login extends JFrame {
     private JButton loginButton;
     private JLabel uNameJLabel;
     private JLabel passJLabel;
+    private JLabel Time;
+    private JLabel Hours;
     private AdminMenu ad;
     private String role;
     private boolean check;
@@ -58,7 +62,23 @@ public class Login extends JFrame {
     public Login() {
 
         //designing
+        Timer SimpleTimer = new Timer(0, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocalDateTime now1 = LocalDateTime.now();
+                DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("hh:mm:ss");
+                String formattedDateTime1 = now1.format(formatter1);
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                String formattedDateTime = now.format(formatter);
+                Time.setText(formattedDateTime1);
 
+
+                Hours.setText(formattedDateTime);
+
+            }
+        });
+        SimpleTimer.start();
         //
         //default constructor values to send mail
         GEmailSender gEmailSender = new GEmailSender();
@@ -520,6 +540,10 @@ auth.getCodeSentTxt().setVisible(true);
                 }
             }
         });
+
+
+
+
     }
 
     /**
