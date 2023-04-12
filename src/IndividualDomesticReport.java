@@ -16,7 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * shows individual domestic report
+ */
 public class IndividualDomesticReport extends JFrame {
     //fields
     private JPanel panel1;
@@ -33,11 +35,16 @@ public class IndividualDomesticReport extends JFrame {
 
 
     //constructor
+    /**
+     * holds all the functions to show the Individual Domestic Report UI
+     */
     public IndividualDomesticReport() {
 
         //showReport();
 
-        //function for print button
+        /**
+         * print reports
+         */
         printReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,8 +52,18 @@ public class IndividualDomesticReport extends JFrame {
             }
         });
 
-        //format date
+        /**
+         * format start date
+         */
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -60,7 +77,15 @@ public class IndividualDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
-            //format date
+            /**
+             * used to replace the string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -74,8 +99,19 @@ public class IndividualDomesticReport extends JFrame {
                 super.replace(fb, offset, length, filteredString, attr);
             }
         });
-        //format date
+
+        /**
+         * formatting the end date
+         */
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -89,7 +125,15 @@ public class IndividualDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
-            //format date
+            /**
+             * used to replace the string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -104,7 +148,11 @@ public class IndividualDomesticReport extends JFrame {
             }
         });
 
-        //format end date field
+
+        /**
+         * check each key inputted by the user, add / where appropriate for date format
+         * no larger than 10 digits
+         */
         endDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -131,7 +179,9 @@ public class IndividualDomesticReport extends JFrame {
 
         });
 
-        //format start date field
+        /**
+         * check each key inputted by the user, add / where appropriate for date format
+         */
         startDate.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -148,7 +198,16 @@ public class IndividualDomesticReport extends JFrame {
                 }
             }
         });
+
+        /**
+         * search data for the global domestic report
+         * when search button is pressed with valid date format
+         */
         search.addActionListener(new ActionListener() {
+            /**
+             * uses SQL query to get the data needed to make the report using the dates inputted
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
@@ -266,7 +325,15 @@ public class IndividualDomesticReport extends JFrame {
 
             }
         });
+
+        /**
+         * generate report
+         */
         generateReportButton.addActionListener(new ActionListener() {
+            /**
+             * generate reports by turning table into txt file
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 LocalDateTime now = LocalDateTime.now();
@@ -300,10 +367,17 @@ public class IndividualDomesticReport extends JFrame {
         });
     }
 
+    /**
+     * show prompt with custom text
+     * @param s
+     */
     public void dialog(String s) {
         JOptionPane.showMessageDialog(this, s);
     }
 
+    /**
+     * process to show the reports in jtable.
+     */
     public void showReport() {
         try (
                 Connection con = DBConnection.getConnection()
@@ -383,6 +457,10 @@ public class IndividualDomesticReport extends JFrame {
         // TODO: place custom component creation code here
     }
 
+    /**
+     * getter for JPanel
+     * @return panel1
+     */
     public JPanel getPanel1() {
         return panel1;
     }

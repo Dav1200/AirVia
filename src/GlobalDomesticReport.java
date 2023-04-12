@@ -151,6 +151,7 @@ public class GlobalDomesticReport extends JFrame {
 
         /**
          * check each key inputted by the user, add / where appropriate for date format
+         * no larger than 10 digits
          */
         endDate.addKeyListener(new KeyAdapter() {
             /**
@@ -402,7 +403,7 @@ public class GlobalDomesticReport extends JFrame {
 
 
     /**
-     * process to show the reports in jtable same as previous.
+     * process to show the reports in jtable.
      */
     public void showReport() {
         try (
