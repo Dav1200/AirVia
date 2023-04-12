@@ -400,6 +400,8 @@ public class AdvisorMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 cardtxt.setText("");
 
+
+
                 //if card is selected unlock the card detail textfield.
                 if (paymentType.getSelectedItem().toString().equals("Card")) {
                     cardtxt.setEditable(true);
@@ -411,6 +413,7 @@ public class AdvisorMenu extends JFrame {
                 if (paymentType.getSelectedItem().toString().equals("LatePayment")) {
                     payDateTxt.setEditable(false);
                     payDateTxt.setText("");
+
                 } else {
 
                     //set the current date in the pay date field.

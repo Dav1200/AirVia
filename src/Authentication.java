@@ -96,7 +96,7 @@ public class Authentication extends JFrame {
         codeSentTxt.setVisible(false);
         
         //remove this AT THE END
-        codeTextField.setText(Login.getCodestr());
+        //codeTextField.setText(Login.getCodestr());
 
 
         codeTextField.addKeyListener(new KeyAdapter() {
