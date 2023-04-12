@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * assigning blanks to travel advisors
+ */
 public class AssignBlanks extends JFrame {
     private JTextField Idtxt;
     private JTextField nameTxt;
@@ -20,6 +23,9 @@ public class AssignBlanks extends JFrame {
     private JComboBox idcombo;
     private JTextField textField1;
 
+    /**
+     * calls functions needed to assign blanks and contains action listeners
+     */
     AssignBlanks(){
 
         // Sets the text to unused and the user cannot edit the field
@@ -28,7 +34,9 @@ public class AssignBlanks extends JFrame {
 
         addToComboBoxId();
 
-        // if save button is pressed perform the following actions of
+        /**
+         * if save button is pressed perform the following actions of
+         */
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,6 +117,9 @@ public class AssignBlanks extends JFrame {
 
         });}
 
+    /**
+     * clear the fields
+     */
     public void clear(){
         // clears all the fields after a certain action is performed
         dateTxt.setText(null);
@@ -116,7 +127,9 @@ public class AssignBlanks extends JFrame {
         Endblank.setText(null);
     }
 
-
+    /**
+     * adding to the combo box so the user can make a selection
+     */
     public void addToComboBoxId()
     {
         // establishes a connection to the database
@@ -138,13 +151,18 @@ public class AssignBlanks extends JFrame {
 
     }
 
-    // displays an error message if the blanks are already assigned
+    /**
+     * displays an error message if the blanks are already assigned
+     */
     public void error(){
         JOptionPane.showMessageDialog(this, "Error: Blank Already Assigned ");
     }
 
-        //Getters for fields
-        public JPanel getPane() {
+    /**
+    * getter for JPanel
+    * @return pane
+    */
+    public JPanel getPane() {
         return pane;
     }
     }

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * class for admin staff
+ * class for advisor staff
  */
 public class AdvisorMenu extends JFrame {
 
@@ -133,7 +133,7 @@ public class AdvisorMenu extends JFrame {
          */
         ticketType.addActionListener(new ActionListener() {
             /**
-             *
+             * choosing blank type
              * @param e
              */
             @Override

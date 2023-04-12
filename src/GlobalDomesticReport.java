@@ -16,7 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+/**
+ * shows the Global Domestic Report
+ */
 public class GlobalDomesticReport extends JFrame {
     private JPanel panel1;
     private JButton printReportButton;
@@ -30,19 +32,39 @@ public class GlobalDomesticReport extends JFrame {
     private JButton search;
     private JButton generateReportButton;
 
-
+    /**
+     * holds all the functions to show the Global Domestic Report UI
+     */
     public GlobalDomesticReport () {
 
-        showReport();
+        //showReport();
+
+        /**
+         * printing the report
+         */
         printReportButton.addActionListener(new ActionListener() {
+            /**
+             * displays that the report is printing
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Printing ");
             }
         });
 
-
+        /**
+         * formatting the start date
+         */
         ((AbstractDocument) startDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -56,6 +78,15 @@ public class GlobalDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace the string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -70,7 +101,18 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
 
+        /**
+         * formatting the end date
+         */
         ((AbstractDocument) endDate.getDocument()).setDocumentFilter(new DocumentFilter() {
+            /**
+             * used to insert string into specific index
+             * @param fb
+             * @param offset
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -84,6 +126,15 @@ public class GlobalDomesticReport extends JFrame {
                 super.insertString(fb, offset, filteredString, attr);
             }
 
+            /**
+             * used to replace the string index
+             * @param fb
+             * @param offset
+             * @param length
+             * @param string
+             * @param attr
+             * @throws BadLocationException
+             */
             @Override
             public void replace(FilterBypass fb, int offset, int length, String string, AttributeSet attr) throws BadLocationException {
                 // Allow only numeric characters and "-" to be entered
@@ -98,8 +149,14 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
 
-        //check each key inputted by the user, add / where appropriate for date format
+        /**
+         * check each key inputted by the user, add / where appropriate for date format
+         */
         endDate.addKeyListener(new KeyAdapter() {
+            /**
+             * check if date format is correct and no larger than 10 digits
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyTyped(e);
@@ -128,8 +185,15 @@ public class GlobalDomesticReport extends JFrame {
             }
 
         });
-        //check each key inputted by the user, add / where appropriate for date format
+
+        /**
+         * check each key inputted by the user, add / where appropriate for date format
+         */
         startDate.addKeyListener(new KeyAdapter() {
+            /**
+             * putting / in the correct positions
+             * @param e
+             */
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -147,9 +211,15 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
 
-        //search data for the global domestic report
-        //when search button is pressed with valid date format
+        /**
+         * search data for the global domestic report
+         * when search button is pressed with valid date format
+         */
         search.addActionListener(new ActionListener() {
+            /**
+             * uses SQL query to get the data needed to make the report using the dates inputted
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (
@@ -279,7 +349,16 @@ public class GlobalDomesticReport extends JFrame {
 
             }
         });
+
+        /**
+         * generate reports
+         */
         generateReportButton.addActionListener(new ActionListener() {
+            /**
+             * generate reports by turning it into a txt file
+             * puts date and time
+             * @param e
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 LocalDateTime now = LocalDateTime.now();
@@ -312,13 +391,19 @@ public class GlobalDomesticReport extends JFrame {
             }
         });
     }
-        //show prompt with custom text
+
+    /**
+     * show prompt with custom text
+     * @param s
+     */
     public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);
     }
 
 
-    //process to show the reports in jtable same as previous.
+    /**
+     * process to show the reports in jtable same as previous.
+     */
     public void showReport() {
         try (
                 //connect to db
@@ -409,6 +494,10 @@ public class GlobalDomesticReport extends JFrame {
         // TODO: place custom component creation code here
     }
 
+    /**
+     * getter for JPanel
+     * @return panel1
+     */
     public JPanel getPanel1() {
         return panel1;
     }

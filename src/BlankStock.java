@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * the GUI to show blank stock
+ */
 public class BlankStock extends JFrame {
     public JPanel getPanel() {
         return Panel;
@@ -26,6 +29,9 @@ public class BlankStock extends JFrame {
 
 
     //constructor
+    /**
+     * calls the functions needed for the blank stock GUI
+     */
     public BlankStock()  {
 
         //predefined variables
@@ -40,10 +46,14 @@ public class BlankStock extends JFrame {
         datetxt.setText(formattedDateTime);
 
 
-        //save button
-        //insert blanks received from airvia into the database
-        //checks  validity - if they already exist
+        /**
+         * calls the functions needed for the blank stock GUI
+         */
         saveButton.addActionListener(new ActionListener() {
+            /**
+             *  the process for saving blanks assigned
+             * @param e
+             */
         @Override
         public void actionPerformed(ActionEvent e) {
             //coonect to database
@@ -128,8 +138,14 @@ public class BlankStock extends JFrame {
 
     });
 
-        //add to jucombobox
+        /**
+         * checking the ticket type in the combo box
+         */
         ticketTypeBox.addActionListener(new ActionListener() {
+            /**
+             * when reading the ticket type from the combo box,
+             * it adds the rest of the ID to the end of the blank
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 try (Connection con = DBConnection.getConnection()) {
@@ -161,15 +177,20 @@ public class BlankStock extends JFrame {
     }
 
 
-    //clear the text fields
+    /**
+     * clear the text fields
+     */
     public void clear(){
         datetxt.setText(null);
         startTxt.setText(null);
         endTxt.setText(null);
         }
 
-        //prompt dialog with custom fields
-        public void dialog(String s){
+    /**
+     * prompt dialog with custom fields
+     * @param s
+     */
+    public void dialog(String s){
         JOptionPane.showMessageDialog(this,s);
         }
 
