@@ -445,7 +445,7 @@ public class OfficeManagerMenu extends JFrame {
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
-                if(cardtxt.getText().toString().length() > 16){
+                if(cardtxt.getText().toString().length() > 15){
                     //dont allow the user to input after length is more than 16
                     e.consume();
                 }
