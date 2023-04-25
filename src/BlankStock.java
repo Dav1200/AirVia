@@ -12,6 +12,10 @@ import java.time.format.DateTimeFormatter;
  * the GUI to show blank stock
  */
 public class BlankStock extends JFrame {
+    /**
+     * getter for Jpanel
+     * @return Panel
+     */
     public JPanel getPanel() {
         return Panel;
     }

@@ -24,6 +24,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class AdvisorMenu extends JFrame {
 
+    /**
+     * getter for Adplane
+     * @return adPlane
+     */
     public JPanel getAdPlane() {
         return adPlane;
     }

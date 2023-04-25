@@ -673,6 +673,10 @@ SET DiscountAmount =
         }
     }
 
+    /**
+     * run the system
+     * @param args
+     */
     public static void main(String[] args) {
     /*
         try (//Get connection to the database

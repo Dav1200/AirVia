@@ -635,7 +635,7 @@ public class OfficeManagerMenu extends JFrame {
 
 
     /**
-     * generate sub table for ticket turnvoer report to show how many blanks were received from airvia
+     * generate sub table for ticket turnover report to show how many blanks were received from Airvia
      * sorted by blank types and largest to smallest
      */
     public void showTicketTurnoverReport2() {
@@ -721,7 +721,7 @@ public class OfficeManagerMenu extends JFrame {
     }
 
     /**
-     * show ticket turnover report3
+     * generate sub table for unassigned blanks
      */
     public void showTicketTurnoverReport3() {
 
@@ -790,7 +790,7 @@ public class OfficeManagerMenu extends JFrame {
     }
 
     /**
-     * show ticket turnover report4
+     * shows a sub table for all the assigned blanks
      */
     public void showTicketTurnoverReport4() {
 
@@ -858,7 +858,7 @@ public class OfficeManagerMenu extends JFrame {
     }
 
     /**
-     * show ticket turnover report5
+     * shows a sub table for final amount of blanks each advisor has
      */
     public void showTicketTurnoverReport5() {
 
